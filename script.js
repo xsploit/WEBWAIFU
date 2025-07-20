@@ -23,6 +23,15 @@ var isTTSPlaying = false;
 var isProcessingTTS = false;
 var isBrowserTTSActive = false;
 
+// Live Speech Recognition for TTS Audio Capture
+var ttsRecognition = null;
+var isLiveTTSRecognizing = false;
+var liveSubtitleText = '';
+var recognitionTimeout = null;
+var ttsAudioStream = null;
+var ttsMediaRecorder = null;
+var ttsAudioChunks = [];
+
 // TTS Audio Processing Function
 function setupTTSAudioProcessing(audioElement) {
   if (!ttsAudioContext) {
@@ -69,6 +78,11 @@ function setupTTSAudioProcessing(audioElement) {
     const currentText = audioElement.getAttribute('data-text') || 'AI is speaking...';
     showSpeechBubble(currentText);
     
+    // Start TTS audio capture for subtitles if enabled
+    if (document.getElementById('showSubtitles').checked) {
+      startLiveTTSRecognition();
+    }
+    
     console.log('TTS audio started playing');
   };
   
@@ -77,6 +91,9 @@ function setupTTSAudioProcessing(audioElement) {
     ttsInputVolume = 0;
     isProcessingTTS = false;
     updateButtonStates();
+    
+    // Stop live TTS recognition
+    stopLiveTTSRecognition();
     
     // Hide speech bubble and subtitles when TTS ends
     hideSpeechBubble();
@@ -762,6 +779,146 @@ function hideinfo() {
   load( url );
   }
 
+// TTS Speech Recognition Setup
+function setupTTSSpeechRecognition() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    console.warn('Speech Recognition not supported for TTS subtitles');
+    return;
+  }
+  
+  try {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    ttsRecognition = new SpeechRecognition();
+    
+    ttsRecognition.continuous = true;
+    ttsRecognition.interimResults = true;
+    ttsRecognition.lang = 'en-US';
+    
+    ttsRecognition.onstart = () => {
+      isLiveTTSRecognizing = true;
+      console.log('TTS Speech Recognition started');
+    };
+    
+    ttsRecognition.onresult = (event) => {
+      let interimTranscript = '';
+      let finalTranscript = '';
+      
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      
+      const displayText = finalTranscript || interimTranscript;
+      if (displayText.trim()) {
+        updateLiveSubtitle(displayText);
+      }
+    };
+    
+    ttsRecognition.onerror = (event) => {
+      console.log('TTS Speech Recognition error:', event.error);
+      if (event.error !== 'no-speech' && event.error !== 'audio-capture') {
+        stopTTSSpeechRecognition();
+      }
+    };
+    
+    ttsRecognition.onend = () => {
+      isLiveTTSRecognizing = false;
+      console.log('TTS Speech Recognition ended');
+      
+      // Restart if TTS is still playing and subtitles enabled
+      if (isTTSPlaying && document.getElementById('showSubtitles').checked) {
+        setTimeout(startTTSSpeechRecognition, 100);
+      }
+    };
+    
+    console.log('TTS Speech Recognition setup complete');
+  } catch (error) {
+    console.error('Error setting up TTS Speech Recognition:', error);
+  }
+}
+
+function startTTSSpeechRecognition() {
+  if (!ttsRecognition) {
+    setupTTSSpeechRecognition();
+  }
+  
+  if (ttsRecognition && !isLiveTTSRecognizing) {
+    try {
+      ttsRecognition.start();
+      console.log('Started TTS Speech Recognition');
+    } catch (error) {
+      console.error('Error starting TTS Speech Recognition:', error);
+    }
+  }
+}
+
+function stopTTSSpeechRecognition() {
+  if (ttsRecognition && isLiveTTSRecognizing) {
+    try {
+      ttsRecognition.stop();
+      console.log('Stopped TTS Speech Recognition');
+    } catch (error) {
+      console.error('Error stopping TTS Speech Recognition:', error);
+    }
+  }
+}
+
+// Live TTS Speech Recognition Functions
+function startLiveTTSRecognition() {
+  // Only start if subtitles are enabled
+  if (!document.getElementById('showSubtitles').checked) {
+    console.log('Subtitles disabled - not starting TTS speech recognition');
+    return;
+  }
+  
+  // Start Web Speech Recognition to listen to TTS audio
+  startTTSSpeechRecognition();
+}
+
+function stopLiveTTSRecognition() {
+  stopTTSSpeechRecognition();
+  
+  if (recognitionTimeout) {
+    clearTimeout(recognitionTimeout);
+    recognitionTimeout = null;
+  }
+  
+  isLiveTTSRecognizing = false;
+  liveSubtitleText = '';
+}
+
+function updateLiveSubtitle(text) {
+  const subtitleContainer = document.getElementById('subtitleContainer');
+  const subtitleText = document.getElementById('subtitleText');
+  const subtitleProgress = document.getElementById('subtitleProgress');
+  
+  if (!subtitleContainer || !subtitleText || !subtitleProgress) {
+    return;
+  }
+  
+  // Check if subtitles are enabled
+  if (!document.getElementById('showSubtitles').checked) {
+    // Hide subtitles if they're disabled
+    subtitleContainer.classList.remove('show');
+    subtitleProgress.classList.remove('animate');
+    return;
+  }
+  
+  // Set the live recognition text
+  subtitleText.textContent = text;
+  
+  // Show subtitle container and start progress animation
+  if (!subtitleContainer.classList.contains('show')) {
+    subtitleContainer.classList.add('show');
+    subtitleProgress.style.transitionDuration = '10000ms';
+    subtitleProgress.classList.add('animate');
+  }
+}
+
 // Background functions
 function loadBackground() {
   const fileInput = document.getElementById('backgroundFile');
@@ -951,7 +1108,29 @@ function setBackground(mediaUrl, isVideo = false, fileObject = null) {
     
     video.addEventListener('error', (e) => {
       console.error('Video loading error:', e);
-      updateStatus('❌', 'Video loading failed');
+      console.error('Error details:', e.target.error);
+      updateStatus('❌', `Video loading failed: ${e.target.error?.message || 'Unknown error'}`);
+      
+      // Try to reload the video once if it's a network error
+      if (e.target.error?.code === e.target.error?.MEDIA_ERR_NETWORK) {
+        console.log('Network error detected, attempting to reload video...');
+        setTimeout(() => {
+          video.load();
+        }, 1000);
+      }
+    });
+    
+    video.addEventListener('stalled', () => {
+      console.warn('Video stalled - network issues or invalid source');
+    });
+    
+    video.addEventListener('abort', () => {
+      console.warn('Video loading aborted');
+    });
+    
+    video.addEventListener('canplay', () => {
+      console.log('Video can start playing');
+      video.play().catch(err => console.error('Video play failed:', err));
     });
     
     video.load();
@@ -2093,6 +2272,7 @@ async function getGeminiResponse(message) {
   }
 
   const data = await response.json();
+  console.log('Full Gemini API response:', JSON.stringify(data, null, 2));
   
   // Check if response has expected structure
   if (!data.candidates) {
@@ -2100,17 +2280,50 @@ async function getGeminiResponse(message) {
     throw new Error(`Gemini API returned no candidates. Response: ${JSON.stringify(data)}`);
   }
   
+  if (!Array.isArray(data.candidates) || data.candidates.length === 0) {
+    console.error('Candidates is not an array or is empty:', data.candidates);
+    throw new Error('Gemini API returned invalid or empty candidates array');
+  }
+  
   if (!data.candidates[0]) {
     console.error('No first candidate in Gemini API response:', data);
     throw new Error('Gemini API returned empty candidates array');
   }
   
-  if (!data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0]) {
-    console.error('Invalid content structure in Gemini API response:', data.candidates[0]);
-    throw new Error('Gemini API candidate missing content or parts');
+  const candidate = data.candidates[0];
+  if (!candidate.content) {
+    console.error('Candidate missing content:', candidate);
+    throw new Error('Gemini API candidate missing content');
   }
   
-  const aiResponse = data.candidates[0].content.parts[0].text;
+  console.log('Candidate content structure:', JSON.stringify(candidate.content, null, 2));
+  
+  // Handle different possible content structures
+  let aiResponse = '';
+  
+  if (candidate.content.parts && Array.isArray(candidate.content.parts) && candidate.content.parts.length > 0) {
+    // Standard structure: content.parts[0].text
+    const part = candidate.content.parts[0];
+    if (part.text || part.text === '') {
+      aiResponse = part.text;
+    } else {
+      console.error('Part missing text property:', part);
+      throw new Error('Gemini API response part missing text');
+    }
+  } else if (candidate.content.text) {
+    // Alternative structure: content.text
+    aiResponse = candidate.content.text;
+  } else if (typeof candidate.content === 'string') {
+    // Direct string content
+    aiResponse = candidate.content;
+  } else if (candidate.content.role === 'model') {
+    // Empty model response - Gemini sometimes returns this when blocked or filtered
+    console.warn('Gemini returned empty model response - content may have been filtered');
+    aiResponse = "I apologize, but I couldn't generate a response. Please try rephrasing your message.";
+  } else {
+    console.error('Candidate content missing parts and text:', candidate.content);
+    throw new Error('Gemini API candidate content has unknown structure');
+  }
 
   // Add to conversation history
   conversationHistory.push({ role: 'user', content: message });
@@ -2228,6 +2441,11 @@ async function speakWithBrowserTTS(text) {
       // Show speech bubble when browser TTS starts
       showSpeechBubble(text);
       
+      // Start TTS audio capture for subtitles if enabled
+      if (document.getElementById('showSubtitles').checked) {
+        startLiveTTSRecognition();
+      }
+      
       console.log('Browser TTS started');
     };
     
@@ -2237,6 +2455,9 @@ async function speakWithBrowserTTS(text) {
       ttsInputVolume = 0;
       isProcessingTTS = false;
       updateButtonStates();
+      
+      // Stop live TTS recognition
+      stopLiveTTSRecognition();
       
       // Hide speech bubble and subtitles when browser TTS ends
       hideSpeechBubble();
@@ -3165,47 +3386,10 @@ function updateStatus(icon, text) {
   }
 }
 
-// Subtitle System
+// Subtitle System - Now uses live speech recognition
 function showSubtitle(text, duration = null) {
-  const subtitleContainer = document.getElementById('subtitleContainer');
-  const subtitleText = document.getElementById('subtitleText');
-  const subtitleProgress = document.getElementById('subtitleProgress');
-  
-  // Check if subtitles are enabled
-  if (!document.getElementById('showSubtitles').checked) {
-    return;
-  }
-  
-  // Calculate duration based on character count and slider value
-  if (duration === null) {
-    const baseDurationPerSecond = parseFloat(document.getElementById('subtitleDuration').value) || 5;
-    const characterCount = text.length;
-    
-    // Calculate duration: base reading time + slider multiplier
-    // Roughly 15 characters per second reading speed
-    const readingTimeSeconds = Math.max(2, characterCount / 15);
-    const sliderMultiplier = baseDurationPerSecond / 5; // Normalize slider value (5 is default)
-    
-    duration = Math.max(2000, readingTimeSeconds * 1000 * sliderMultiplier);
-  }
-  
-  // Set text
-  subtitleText.textContent = text;
-  
-  // Show subtitle
-  subtitleContainer.classList.add('show');
-  
-  // Start progress animation
-  subtitleProgress.style.transitionDuration = duration + 'ms';
-  subtitleProgress.classList.add('animate');
-  
-  // Hide after duration (only if not controlled by TTS)
-  if (!isTTSPlaying) {
-    setTimeout(() => {
-      subtitleContainer.classList.remove('show');
-      subtitleProgress.classList.remove('animate');
-    }, duration);
-  }
+  // Always start live recognition - the recognition function will check if subtitles are enabled
+  startLiveTTSRecognition();
 }
 
 function hideSubtitles() {
@@ -3223,7 +3407,20 @@ function hideSubtitles() {
 // Display Options Toggles
 function toggleSubtitles() {
   const enabled = document.getElementById('showSubtitles').checked;
-  updateStatus('📺', enabled ? 'Subtitles enabled' : 'Subtitles disabled');
+  
+  if (enabled) {
+    // If TTS is currently playing, start audio capture
+    if (isTTSPlaying) {
+      startLiveTTSRecognition();
+    }
+    updateStatus('📺', 'Subtitles enabled');
+  } else {
+    // Stop audio capture and hide subtitles
+    stopLiveTTSRecognition();
+    hideSubtitles();
+    updateStatus('📺', 'Subtitles disabled');
+  }
+  
   saveUISettings();
 }
 
