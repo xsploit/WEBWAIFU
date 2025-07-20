@@ -206,83 +206,6 @@ canvas:active {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Subtitle System */
-.subtitle-container {
-    position: fixed;
-    bottom: 120px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 80%;
-    z-index: 900;
-    opacity: 0;
-    transition: all 0.5s ease;
-}
-
-.subtitle-container.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-20px);
-}
-
-.subtitle-text {
-    background: rgba(0, 0, 0, 0.8);
-    color: #ff1493;
-    padding: 15px 25px;
-    border-radius: 25px;
-    font-size: 18px;
-    -webkit-text-stroke: 1px white;
-    text-stroke: 1px white;
-    text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
-    font-weight: 500;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    animation: subtitlePulse 2s ease-in-out infinite;
-}
-
-@keyframes subtitlePulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-}
-
-.live-indicator {
-    color: #ff4444;
-    font-weight: bold;
-    font-size: 12px;
-    background: rgba(255, 68, 68, 0.2);
-    padding: 2px 6px;
-    border-radius: 10px;
-    margin-right: 8px;
-    animation: livePulse 1s ease-in-out infinite;
-}
-
-@keyframes livePulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-.subtitle-progress {
-    width: 100%;
-    height: 3px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    margin-top: 10px;
-    overflow: hidden;
-}
-
-.subtitle-progress::after {
-    content: '';
-    display: block;
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
-    border-radius: 10px;
-    transition: width linear;
-}
-
-.subtitle-progress.animate::after {
-    width: 100%;
-}
 
 /* Chat Bubble */
 .chat-bubble {
@@ -1248,15 +1171,6 @@ textarea:focus {
         right: -100%;
     }
     
-    .subtitle-container {
-        max-width: 90%;
-        bottom: 100px;
-    }
-    
-    .subtitle-text {
-        font-size: 16px;
-        padding: 12px 20px;
-    }
     
     .app-footer {
         padding: 8px 20px;

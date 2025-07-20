@@ -38,11 +38,6 @@
         </div>
     </header>
 
-    <!-- AI Response Subtitles -->
-    <div class="subtitle-container" id="subtitleContainer">
-        <div class="subtitle-text" id="subtitleText"></div>
-        <div class="subtitle-progress" id="subtitleProgress"></div>
-    </div>
 
     <!-- Speech Bubble (appears when AI responds) -->
     <div class="speech-bubble-overlay" id="speechBubbleOverlay" style="display: none;">
@@ -732,20 +727,9 @@ Remember: You're not just an assistant - you're a devoted companion who genuinel
                     </div>
                     <div class="control-group">
                         <label>
-                            <input type="checkbox" id="showSubtitles" checked="" onchange="toggleSubtitles()">
-                            Show AI Response Subtitles
-                        </label>
-                    </div>
-                    <div class="control-group">
-                        <label>
                             <input type="checkbox" id="showChatBubble" checked="" onchange="toggleChatBubble()">
                             Show Chat Bubble
                         </label>
-                    </div>
-                    <div class="control-group">
-                        <label>Subtitle Duration</label>
-                        <input type="range" id="subtitleDuration" min="2" max="10" value="5">
-                        <span class="range-value" id="subtitleDurationValue">5s</span>
                     </div>
                 </div>
             </div>

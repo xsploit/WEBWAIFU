@@ -23,14 +23,6 @@ var isTTSPlaying = false;
 var isProcessingTTS = false;
 var isBrowserTTSActive = false;
 
-// Live Speech Recognition for TTS Audio Capture
-var ttsRecognition = null;
-var isLiveTTSRecognizing = false;
-var liveSubtitleText = '';
-var recognitionTimeout = null;
-var ttsAudioStream = null;
-var ttsMediaRecorder = null;
-var ttsAudioChunks = [];
 
 // TTS Audio Processing Function
 function setupTTSAudioProcessing(audioElement) {
@@ -44,15 +36,8 @@ function setupTTSAudioProcessing(audioElement) {
   ttsAnalyser.smoothingTimeConstant = 0.5;
   ttsAnalyser.fftSize = 1024;
   
-  // Create audio destination for capturing TTS stream
-  const ttsStreamDestination = ttsAudioContext.createMediaStreamDestination();
-  
   ttsAudioSource.connect(ttsAnalyser);
-  ttsAudioSource.connect(ttsAudioContext.destination); // For speakers
-  ttsAudioSource.connect(ttsStreamDestination); // For stream capture
-  
-  // Store the TTS audio stream for recognition
-  ttsAudioStream = ttsStreamDestination.stream;
+  ttsAudioSource.connect(ttsAudioContext.destination);
   
   // Process TTS audio for mouth movement
   function processTTSAudio() {
@@ -95,12 +80,8 @@ function setupTTSAudioProcessing(audioElement) {
     isProcessingTTS = false;
     updateButtonStates();
     
-    // Stop live TTS recognition
-    stopLiveTTSRecognition();
-    
-    // Hide speech bubble and subtitles when TTS ends
+    // Hide speech bubble when TTS ends
     hideSpeechBubble();
-    hideSubtitles();
     
     console.log('TTS audio ended');
   };
@@ -782,126 +763,6 @@ function hideinfo() {
   load( url );
   }
 
-// TTS Stream Recognition Setup
-function setupTTSStreamRecognition() {
-  if (!ttsAudioStream) {
-    console.warn('No TTS audio stream available for recognition');
-    return;
-  }
-  
-  try {
-    // Use MediaRecorder to capture TTS audio in chunks
-    ttsMediaRecorder = new MediaRecorder(ttsAudioStream, {
-      mimeType: 'audio/webm'
-    });
-    
-    ttsMediaRecorder.ondataavailable = async (event) => {
-      if (event.data.size > 0) {
-        // Process audio chunk for transcription
-        await processTTSAudioChunk(event.data);
-      }
-    };
-    
-    ttsMediaRecorder.onstart = () => {
-      isLiveTTSRecognizing = true;
-      console.log('TTS stream capture started');
-    };
-    
-    ttsMediaRecorder.onstop = () => {
-      isLiveTTSRecognizing = false;
-      console.log('TTS stream capture stopped');
-    };
-    
-    // Start recording in small chunks for real-time processing
-    ttsMediaRecorder.start(500); // 500ms chunks
-    
-  } catch (error) {
-    console.error('Error setting up TTS stream recognition:', error);
-  }
-}
-
-async function processTTSAudioChunk(audioBlob) {
-  try {
-    // Convert blob to ArrayBuffer for processing
-    const arrayBuffer = await audioBlob.arrayBuffer();
-    
-    // Use Whisper to transcribe the TTS audio chunk
-    if (transcriber) {
-      const output = await transcriber(arrayBuffer);
-      const transcript = output.text ? output.text.trim() : '';
-      
-      if (transcript) {
-        console.log('TTS chunk transcribed:', transcript);
-        updateLiveSubtitle(transcript);
-      }
-    }
-  } catch (error) {
-    console.error('Error processing TTS audio chunk:', error);
-  }
-}
-
-function stopTTSStreamRecognition() {
-  if (ttsMediaRecorder && ttsMediaRecorder.state === 'recording') {
-    try {
-      ttsMediaRecorder.stop();
-      console.log('Stopped TTS stream recognition');
-    } catch (error) {
-      console.error('Error stopping TTS stream recognition:', error);
-    }
-  }
-}
-
-// TTS Audio Stream Capture for Subtitles
-function startTTSAudioStreamCapture() {
-  // Only start if subtitles are enabled
-  if (!document.getElementById('showSubtitles').checked) {
-    console.log('Subtitles disabled - not starting TTS audio stream capture');
-    return;
-  }
-  
-  // Set up audio stream capture from TTS
-  setupTTSStreamRecognition();
-}
-
-function stopTTSAudioStreamCapture() {
-  stopTTSStreamRecognition();
-  
-  if (recognitionTimeout) {
-    clearTimeout(recognitionTimeout);
-    recognitionTimeout = null;
-  }
-  
-  isLiveTTSRecognizing = false;
-  liveSubtitleText = '';
-}
-
-function updateLiveSubtitle(text) {
-  const subtitleContainer = document.getElementById('subtitleContainer');
-  const subtitleText = document.getElementById('subtitleText');
-  const subtitleProgress = document.getElementById('subtitleProgress');
-  
-  if (!subtitleContainer || !subtitleText || !subtitleProgress) {
-    return;
-  }
-  
-  // Check if subtitles are enabled
-  if (!document.getElementById('showSubtitles').checked) {
-    // Hide subtitles if they're disabled
-    subtitleContainer.classList.remove('show');
-    subtitleProgress.classList.remove('animate');
-    return;
-  }
-  
-  // Set the live recognition text
-  subtitleText.textContent = text;
-  
-  // Show subtitle container and start progress animation
-  if (!subtitleContainer.classList.contains('show')) {
-    subtitleContainer.classList.add('show');
-    subtitleProgress.style.transitionDuration = '10000ms';
-    subtitleProgress.classList.add('animate');
-  }
-}
 
 // Background functions
 function loadBackground() {
@@ -2436,12 +2297,8 @@ async function speakWithBrowserTTS(text) {
       isProcessingTTS = false;
       updateButtonStates();
       
-      // Stop live TTS recognition
-      stopLiveTTSRecognition();
-      
-      // Hide speech bubble and subtitles when browser TTS ends
+      // Hide speech bubble when browser TTS ends
       hideSpeechBubble();
-      hideSubtitles();
       
       console.log('Browser TTS ended');
       resolve();
@@ -2692,7 +2549,6 @@ function loadUISettings() {
     
     // Update display options
     if (settings.displayOptions) {
-      if (document.getElementById('showSubtitles')) document.getElementById('showSubtitles').checked = settings.displayOptions.showSubtitles !== false;
       if (document.getElementById('showChatBubble')) {
         document.getElementById('showChatBubble').checked = settings.displayOptions.showChatBubble !== false;
         // Apply speech bubble visibility based on setting
@@ -2701,7 +2557,6 @@ function loadUISettings() {
           speechBubbleOverlay.style.display = settings.displayOptions.showChatBubble !== false ? 'block' : 'none';
         }
       }
-      if (document.getElementById('subtitleDuration')) document.getElementById('subtitleDuration').value = settings.displayOptions.subtitleDuration || 5;
       if (document.getElementById('enableTTS')) document.getElementById('enableTTS').checked = settings.displayOptions.enableTTS !== false;
     }
 
@@ -3366,37 +3221,9 @@ function updateStatus(icon, text) {
   }
 }
 
-// Subtitle System - Uses TTS audio stream recognition
-function showSubtitle(text, duration = null) {
-  // Start TTS audio stream capture for live subtitles
-  startTTSAudioStreamCapture();
-}
-
-function hideSubtitles() {
-  const subtitleContainer = document.getElementById('subtitleContainer');
-  const subtitleProgress = document.getElementById('subtitleProgress');
-  
-  if (subtitleContainer && subtitleProgress) {
-    subtitleContainer.classList.remove('show');
-    subtitleProgress.classList.remove('animate');
-  }
-}
-
 // Chat Bubble System
 
 // Display Options Toggles
-function toggleSubtitles() {
-  const enabled = document.getElementById('showSubtitles').checked;
-  
-  if (enabled) {
-    updateStatus('📺', 'Subtitles enabled');
-  } else {
-    hideSubtitles();
-    updateStatus('📺', 'Subtitles disabled');
-  }
-  
-  saveUISettings();
-}
 
 function toggleChatBubble() {
   const enabled = document.getElementById('showChatBubble').checked;
@@ -3439,9 +3266,6 @@ async function testBrowserTTS() {
 
 // Enhanced AI Response Handler
 async function enhancedSpeakAIResponse(text) {
-  // Show subtitle with character-based duration
-  showSubtitle(text);
-  
   // Show speech bubble with AI response
   showSpeechBubble(text);
 
@@ -3467,8 +3291,7 @@ function updateRangeValues() {
     { id: 'bodythreshold', valueId: 'bodyThresholdValue' },
     { id: 'mouthboost', valueId: 'mouthBoostValue' },
     { id: 'bodymotion', valueId: 'bodyMotionValue' },
-    { id: 'expression', valueId: 'expressionValue' },
-    { id: 'subtitleDuration', valueId: 'subtitleDurationValue', suffix: 's' }
+    { id: 'expression', valueId: 'expressionValue' }
   ];
   
   ranges.forEach(range => {
@@ -3478,10 +3301,6 @@ function updateRangeValues() {
     if (element && valueElement) {
       element.addEventListener('input', () => {
         valueElement.textContent = element.value + (range.suffix || '');
-        // Save settings when subtitle duration changes
-        if (range.id === 'subtitleDuration') {
-          saveUISettings();
-        }
       });
     }
   });
@@ -3585,9 +3404,7 @@ function saveUISettings() {
     currentProvider: currentProvider,
     backgroundConfig: backgroundConfig,
     displayOptions: {
-      showSubtitles: document.getElementById('showSubtitles').checked,
       showChatBubble: document.getElementById('showChatBubble').checked,
-      subtitleDuration: document.getElementById('subtitleDuration').value,
       enableTTS: document.getElementById('enableTTS').checked
     },
     micGain: document.getElementById('micGain').value,
@@ -3611,7 +3428,6 @@ function loadUISettings() {
     
     // Update display options
     if (settings.displayOptions) {
-      if (document.getElementById('showSubtitles')) document.getElementById('showSubtitles').checked = settings.displayOptions.showSubtitles !== false;
       if (document.getElementById('showChatBubble')) {
         document.getElementById('showChatBubble').checked = settings.displayOptions.showChatBubble !== false;
         // Apply speech bubble visibility based on setting
@@ -3620,7 +3436,6 @@ function loadUISettings() {
           speechBubbleOverlay.style.display = settings.displayOptions.showChatBubble !== false ? 'block' : 'none';
         }
       }
-      if (document.getElementById('subtitleDuration')) document.getElementById('subtitleDuration').value = settings.displayOptions.subtitleDuration || 5;
       if (document.getElementById('enableTTS')) document.getElementById('enableTTS').checked = settings.displayOptions.enableTTS !== false;
     }
 
