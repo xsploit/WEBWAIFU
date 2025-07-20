@@ -109,13 +109,15 @@ function setupTTSAudioProcessing(audioElement) {
 }
 
   //interface values
-if (localStorage.localvalues) {
+const savedValues = localStorage.getItem('vrm-motion-settings');
+if (savedValues) {
+  const motionSettings = JSON.parse(savedValues);
   var initvalues = true;
-  var mouththreshold = Number(localStorage.mouththreshold) ;
-  var mouthboost = Number(localStorage.mouthboost) ;
-  var bodythreshold = Number(localStorage.bodythreshold) ;
-  var bodymotion = Number(localStorage.bodymotion) ;
-  var expression = Number(localStorage.expression) ;
+  var mouththreshold = Number(motionSettings.mouththreshold) || 10;
+  var mouthboost = Number(motionSettings.mouthboost) || 10;
+  var bodythreshold = Number(motionSettings.bodythreshold) || 10;
+  var bodymotion = Number(motionSettings.bodymotion) || 10;
+  var expression = Number(motionSettings.expression) || 80;
 } else {
   var mouththreshold = 10;
   var mouthboost = 10;
@@ -275,7 +277,7 @@ vrm.springBoneManager.reset();
 
 // beware of CORS errors when using this locally. If you can't https, import the required libraries.
 // Load saved model path from localStorage, or use default
-const savedModelPath = localStorage.getItem('vrmModelPath') || '1768080537824958249.vrm';
+const savedModelPath = localStorage.getItem('vrm-model-path') || '1768080537824958249.vrm';
 load( savedModelPath );
 
 // grid / axis helpers
@@ -732,12 +734,14 @@ function interface() {
     console.log("Expression mix " + expressionlimityay + " yay / " + expressionlimitoof + " oof");
 
     // store it too
-    localStorage.localvalues = 1;
-    localStorage.mouththreshold = mouththreshold;
-    localStorage.mouthboost = mouthboost;
-    localStorage.bodythreshold = bodythreshold;
-    localStorage.bodymotion = bodymotion;
-    localStorage.expression = expression;
+    const motionSettings = {
+      mouththreshold: mouththreshold,
+      mouthboost: mouthboost,
+      bodythreshold: bodythreshold,
+      bodymotion: bodymotion,
+      expression: expression
+    };
+    localStorage.setItem('vrm-motion-settings', JSON.stringify(motionSettings));
 
 }
 
@@ -775,7 +779,7 @@ function hideinfo() {
   const url = URL.createObjectURL( blob );
   
   // Save model path to localStorage
-  localStorage.setItem('vrmModelPath', url);
+  localStorage.setItem('vrm-model-path', url);
   
   load( url );
   }
@@ -812,7 +816,7 @@ function loadBackground() {
     };
     
     try {
-      localStorage.setItem('backgroundMedia', JSON.stringify(backgroundData));
+      localStorage.setItem('background-media', JSON.stringify(backgroundData));
     } catch (error) {
       console.warn('Could not save video info to localStorage:', error);
     }
@@ -834,7 +838,7 @@ function loadBackground() {
       };
       
       try {
-        localStorage.setItem('backgroundMedia', JSON.stringify(backgroundData));
+        localStorage.setItem('background-media', JSON.stringify(backgroundData));
         setBackground(imageUrl, false);
         updateStatus('🖼️', `Image background saved (${fileSizeMB.toFixed(1)}MB)`);
       } catch (error) {
@@ -850,7 +854,7 @@ function loadBackground() {
           name: file.name,
           temporary: true
         };
-        localStorage.setItem('backgroundMedia', JSON.stringify(tempData));
+        localStorage.setItem('background-media', JSON.stringify(tempData));
         updateStatus('⚠️', `Large image loaded temporarily (${fileSizeMB.toFixed(1)}MB)`);
       }
     };
@@ -1110,8 +1114,8 @@ function removeBackground() {
     scene.remove(existingBg);
     
     // Remove both old and new storage formats
-    localStorage.removeItem('backgroundImage');
-    localStorage.removeItem('backgroundMedia');
+    localStorage.removeItem('background-media');
+    localStorage.removeItem('background-media');
     
     updateStatus('🗑️', 'Background removed');
   }
@@ -1149,7 +1153,7 @@ function resetBackgroundSettings() {
 // Load saved background on startup
 function loadSavedBackground() {
   // Try new format first
-  const savedBackgroundMedia = localStorage.getItem('backgroundMedia');
+  const savedBackgroundMedia = localStorage.getItem('background-media');
   if (savedBackgroundMedia) {
     try {
       const backgroundData = JSON.parse(savedBackgroundMedia);
@@ -1161,7 +1165,7 @@ function loadSavedBackground() {
         updateStatus('⚠️', `Previous ${mediaType} was too large to save (${fileSizeMB}MB). Please reload it.`);
         
         // Clear the temporary entry
-        localStorage.removeItem('backgroundMedia');
+        localStorage.removeItem('background-media');
         return;
       }
       
@@ -1172,12 +1176,12 @@ function loadSavedBackground() {
       }
     } catch (error) {
       console.error('Error parsing background media data:', error);
-      localStorage.removeItem('backgroundMedia'); // Clear corrupted data
+      localStorage.removeItem('background-media'); // Clear corrupted data
     }
   }
   
   // Fallback to old format
-  const savedBackground = localStorage.getItem('backgroundImage');
+  const savedBackground = localStorage.getItem('background-media');
   if (savedBackground) {
     setBackground(savedBackground, false);
   }
@@ -1434,7 +1438,7 @@ async function enumerateMicrophones() {
     });
     
     // Load saved microphone from localStorage
-    const savedMicId = localStorage.getItem('selectedMicrophone');
+    const savedMicId = localStorage.getItem('audio-selected-microphone');
     if (savedMicId) {
       micSelect.value = savedMicId;
       selectedMicrophoneId = savedMicId;
@@ -1450,9 +1454,9 @@ function changeMicrophone() {
   
   // Save to localStorage
   if (selectedMicrophoneId) {
-    localStorage.setItem('selectedMicrophone', selectedMicrophoneId);
+    localStorage.setItem('audio-selected-microphone', selectedMicrophoneId);
   } else {
-    localStorage.removeItem('selectedMicrophone');
+    localStorage.removeItem('audio-selected-microphone');
   }
   
   console.log('Microphone changed to:', selectedMicrophoneId);
@@ -1478,9 +1482,6 @@ function updateMicGain() {
 }
 
 // Initialize microphone list on page load
-document.addEventListener('DOMContentLoaded', () => {
-  enumerateMicrophones();
-});
 
 // TTS and AI Integration Functions
 
@@ -1573,16 +1574,28 @@ var geminiConfig = {
 
 var currentProvider = 'gemini'; // 'ollama', 'openai', or 'gemini' - default to Gemini
 
-var userName = localStorage.getItem('userName') || 'Local User'; // Default user name
+var userName = localStorage.getItem('user-name') || 'Local User'; // Default user name
+var characterName = localStorage.getItem('character-name') || 'Neuro-sama'; // Default character name
 
 function updateUserName() {
   const userNameInput = document.getElementById('userName');
   if (userNameInput) {
     userName = userNameInput.value || 'User';
-    localStorage.setItem('userName', userName);
+    localStorage.setItem('user-name', userName);
     console.log('User name updated to:', userName);
     // Optionally, update any displayed user names immediately
     updateChatDisplayUserName();
+  }
+}
+
+function updateCharacterName() {
+  const characterNameInput = document.getElementById('characterName');
+  if (characterNameInput) {
+    characterName = characterNameInput.value || 'Neuro-sama';
+    localStorage.setItem('character-name', characterName);
+    console.log('Character name updated to:', characterName);
+    // Update any displayed character names immediately
+    updateChatDisplayCharacterName();
   }
 }
 
@@ -3159,49 +3172,6 @@ function updateOllamaRangeValues() {
   if (document.getElementById('ollamaThreadsValue')) document.getElementById('ollamaThreadsValue').textContent = ollamaConfig.threads;
 }
 
-function setOllamaPreset(preset) {
-  switch(preset) {
-    case 'creative':
-      setOllamaValues({
-        temperature: 0.9,
-        top_p: 0.9,
-        top_k: 40,
-        repeat_penalty: 1.0,
-        mirostat: 0
-      });
-      break;
-    case 'balanced':
-      setOllamaValues({
-        temperature: 0.7,
-        top_p: 0.9,
-        top_k: 40,
-        repeat_penalty: 1.1,
-        mirostat: 0
-      });
-      break;
-    case 'precise':
-      setOllamaValues({
-        temperature: 0.3,
-        top_p: 0.7,
-        top_k: 20,
-        repeat_penalty: 1.2,
-        mirostat: 2
-      });
-      break;
-    case 'fast':
-      setOllamaValues({
-        temperature: 0.5,
-        top_p: 0.8,
-        top_k: 30,
-        repeat_penalty: 1.1,
-        max_tokens: 256,
-        mirostat: 0
-      });
-      break;
-  }
-  
-  updateStatus('⚙️', `Applied ${preset} preset`);
-}
 
 function setOllamaValues(values) {
   Object.keys(values).forEach(key => {
@@ -3365,7 +3335,7 @@ async function refreshOllamaModels(force = false) {
         if (defaultOption) {
           modelSelect.value = defaultModel;
           ollamaConfig.model = defaultModel;
-          localStorage.setItem('ollamaSelectedModel', defaultModel);
+          localStorage.setItem('ai-ollama-model', defaultModel);
           console.log('Set default Ollama model to:', defaultModel);
         }
       }
@@ -3406,13 +3376,6 @@ function debouncedRefreshOllamaModels() {
   }, 500);
 }
 
-function saveUISettings() {
-  const settings = {
-    azureConfig: azureConfig,
-    ollamaConfig: ollamaConfig
-  };
-  localStorage.setItem('vu-vrm-ai-settings', JSON.stringify(settings));
-}
 
 
 
@@ -3781,135 +3744,15 @@ function saveUISettings() {
   localStorage.setItem('neurolink-vrm-settings', JSON.stringify(settings));
 }
 
-function loadUISettings() {
-  const saved = localStorage.getItem('neurolink-vrm-settings');
-  if (saved) {
-    const settings = JSON.parse(saved);
-    
-    // Update configs
-    if (settings.azureConfig) Object.assign(azureConfig, settings.azureConfig);
-    if (settings.ollamaConfig) Object.assign(ollamaConfig, settings.ollamaConfig);
-    if (settings.openaiConfig) Object.assign(openaiConfig, settings.openaiConfig);
-    if (settings.geminiConfig) Object.assign(geminiConfig, settings.geminiConfig);
-    if (settings.currentProvider) currentProvider = settings.currentProvider;
-    // aiPersonality removed - using global system prompt instead
-    
-    // Update display options
-    if (settings.displayOptions) {
-      if (document.getElementById('showChatBubble')) {
-        document.getElementById('showChatBubble').checked = settings.displayOptions.showChatBubble !== false;
-        // Apply speech bubble visibility based on setting
-        const speechBubbleOverlay = document.getElementById('speechBubbleOverlay');
-        if (speechBubbleOverlay) {
-          speechBubbleOverlay.style.display = settings.displayOptions.showChatBubble !== false ? 'block' : 'none';
-        }
-      }
-      if (document.getElementById('enableTTS')) document.getElementById('enableTTS').checked = settings.displayOptions.enableTTS !== false;
-    }
-
-    if (settings.micGain) {
-      if (document.getElementById('micGain')) document.getElementById('micGain').value = settings.micGain;
-      updateMicGain();
-    }
-    
-    // Restore conversation history
-    if (settings.conversationHistory && Array.isArray(settings.conversationHistory)) {
-      conversationHistory = settings.conversationHistory;
-    }
-    
-    // Restore background config
-    if (settings.backgroundConfig) {
-      Object.assign(backgroundConfig, settings.backgroundConfig);
-    }
-    
-    // Update UI elements
-    if (document.getElementById('azureKey')) document.getElementById('azureKey').value = azureConfig.key || '';
-    if (document.getElementById('azureRegion')) document.getElementById('azureRegion').value = azureConfig.region || 'eastus';
-    if (document.getElementById('voiceSelect')) document.getElementById('voiceSelect').value = azureConfig.voice || 'en-US-JennyNeural';
-    if (document.getElementById('ttsVolume')) document.getElementById('ttsVolume').value = azureConfig.volume || 0.9;
-    if (document.getElementById('ttsPitch')) document.getElementById('ttsPitch').value = azureConfig.pitch || 1.3;
-    if (document.getElementById('ttsRate')) document.getElementById('ttsRate').value = azureConfig.rate || 1.0;
-    
-    // Update AI provider selection - default to Gemini instead of Ollama
-    if (document.getElementById('aiProvider')) document.getElementById('aiProvider').value = currentProvider || 'gemini';
-    
-    // Update OpenAI UI elements
-    if (document.getElementById('openaiKey')) document.getElementById('openaiKey').value = openaiConfig.key || '';
-    if (document.getElementById('openaiModel')) document.getElementById('openaiModel').value = openaiConfig.model || 'gpt-4.1';
-    if (document.getElementById('openaiTemperature')) document.getElementById('openaiTemperature').value = openaiConfig.temperature || 0.7;
-    if (document.getElementById('openaiMaxTokens')) document.getElementById('openaiMaxTokens').value = openaiConfig.max_tokens || 512;
-    if (document.getElementById('openaiTopP')) document.getElementById('openaiTopP').value = openaiConfig.top_p || 1.0;
-    if (document.getElementById('openaiFreqPenalty')) document.getElementById('openaiFreqPenalty').value = openaiConfig.frequency_penalty || 0;
-    if (document.getElementById('openaiPresencePenalty')) document.getElementById('openaiPresencePenalty').value = openaiConfig.presence_penalty || 0;
-    
-    // Update Gemini UI elements
-    if (document.getElementById('geminiKey')) document.getElementById('geminiKey').value = geminiConfig.key || '';
-    if (document.getElementById('geminiModel')) document.getElementById('geminiModel').value = geminiConfig.model || 'gemini-2.5-flash';
-    if (document.getElementById('geminiTemperature')) document.getElementById('geminiTemperature').value = geminiConfig.temperature || 0.7;
-    if (document.getElementById('geminiMaxTokens')) document.getElementById('geminiMaxTokens').value = geminiConfig.max_output_tokens || 1024;
-    if (document.getElementById('geminiTopP')) document.getElementById('geminiTopP').value = geminiConfig.top_p || 0.95;
-    if (document.getElementById('geminiTopK')) document.getElementById('geminiTopK').value = geminiConfig.top_k || 40;
-    
-    // Update shared system prompt
-    if (document.getElementById('globalSystemMessage')) {
-        if (currentProvider === 'ollama') {
-            document.getElementById('globalSystemMessage').value = ollamaConfig.system_message || '';
-        } else if (currentProvider === 'openai') {
-            document.getElementById('globalSystemMessage').value = openaiConfig.system_message || '';
-        } else if (currentProvider === 'gemini') {
-            document.getElementById('globalSystemMessage').value = geminiConfig.system_instruction || '';
-        }
-    }
-
-    // Update Ollama UI elements
-    if (document.getElementById('ollamaUrl')) document.getElementById('ollamaUrl').value = ollamaConfig.url || 'http://localhost:11434';
-    if (document.getElementById('ollamaModel')) document.getElementById('ollamaModel').value = ollamaConfig.model || '';
-    if (document.getElementById('ollamaTemperature')) document.getElementById('ollamaTemperature').value = ollamaConfig.temperature || 0.7;
-    if (document.getElementById('ollamaTopP')) document.getElementById('ollamaTopP').value = ollamaConfig.top_p || 0.9;
-    if (document.getElementById('ollamaTopK')) document.getElementById('ollamaTopK').value = ollamaConfig.top_k || 40;
-    if (document.getElementById('ollamaRepeatPenalty')) document.getElementById('ollamaRepeatPenalty').value = ollamaConfig.repeat_penalty || 1.1;
-    if (document.getElementById('ollamaContextLength')) document.getElementById('ollamaContextLength').value = ollamaConfig.context_length || 2048;
-    if (document.getElementById('ollamaMaxTokens')) document.getElementById('ollamaMaxTokens').value = ollamaConfig.max_tokens || 512;
-    if (document.getElementById('ollamaSeed')) document.getElementById('ollamaSeed').value = ollamaConfig.seed || 0;
-    if (document.getElementById('ollamaMirostat')) document.getElementById('ollamaMirostat').value = ollamaConfig.mirostat || 0;
-    if (document.getElementById('ollamaMirostatTau')) document.getElementById('ollamaMirostatTau').value = ollamaConfig.mirostat_tau || 5.0;
-    if (document.getElementById('ollamaMirostatEta')) document.getElementById('ollamaMirostatEta').value = ollamaConfig.mirostat_eta || 0.1;
-    if (document.getElementById('ollamaGpuLayers')) document.getElementById('ollamaGpuLayers').value = ollamaConfig.gpu_layers || 0;
-    if (document.getElementById('ollamaThreads')) document.getElementById('ollamaThreads').value = ollamaConfig.threads || 4;
-
-    // Update background UI elements
-    if (document.getElementById('bgScale')) document.getElementById('bgScale').value = backgroundConfig.scale || 1.2;
-    if (document.getElementById('bgPosX')) document.getElementById('bgPosX').value = backgroundConfig.posX || 0;
-    if (document.getElementById('bgPosY')) document.getElementById('bgPosY').value = backgroundConfig.posY || 0.8;
-    if (document.getElementById('bgPosZ')) document.getElementById('bgPosZ').value = backgroundConfig.posZ || -4;
-    if (document.getElementById('bgRotation')) document.getElementById('bgRotation').value = backgroundConfig.rotation || 0;
-    if (document.getElementById('bgOpacity')) document.getElementById('bgOpacity').value = backgroundConfig.opacity || 0.85;
-    
-    // Update curve UI elements
-    if (document.getElementById('bgCurveX')) document.getElementById('bgCurveX').value = backgroundConfig.curveX || 0.5;
-    if (document.getElementById('bgCurveY')) document.getElementById('bgCurveY').value = backgroundConfig.curveY || 0.3;
-    if (document.getElementById('bgCurveDirection')) document.getElementById('bgCurveDirection').value = backgroundConfig.curveDirection || 'inward';
-    
-    // Update TTS range displays
-    updateTTSRangeValues();
-    
-    // Update Ollama range displays
-    updateOllamaRangeValues();
-    
-    // Update background displays
-    updateBackground();
-    
-    // Update AI provider visibility
-    updateAIProvider();
-  }
-}
-
 // Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🚀 Page loaded - Starting Whisper AI initialization...');
   
   // Initialize Whisper AI first for immediate speech recognition availability
   initializeTranscriber();
+  
+  // Initialize microphone enumeration
+  enumerateMicrophones();
   
   // Initialize other components
   loadUISettings();
@@ -3918,6 +3761,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadVRMConfig(); // Load VRM position settings
   loadArmConfig(); // Load arm position settings
   loadTwitchSettings(); // Load Twitch stream settings
+  
   // Initialize accordion sections
   // Close all accordion tabs by default
   document.querySelectorAll('.accordion-content').forEach(content => {
@@ -3926,6 +3770,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const icon = header.querySelector('.accordion-icon');
       if (icon) icon.textContent = '▼';
   });
+  
   // Expand the VRM Controls section by default
   const defaultSection = 'vrmControls';
   const content = document.getElementById(defaultSection);
@@ -3938,6 +3783,102 @@ document.addEventListener('DOMContentLoaded', () => {
       if (icon) icon.textContent = '▲';
       console.log('Initialized accordion with default section:', defaultSection);
   }
+  
+  // Setup range input listener for message accumulation
+  const messageAccumulationSlider = document.getElementById('messageAccumulation');
+  if (messageAccumulationSlider) {
+    messageAccumulationSlider.oninput = function() {
+      document.getElementById('messageAccumulationValue').textContent = this.value;
+      messageAccumulationTarget = parseInt(this.value);
+      document.getElementById('accumulationTarget').textContent = this.value;
+      saveTwitchSettings();
+    };
+  }
+  
+  // Initialize queue system for stream mode
+  setTimeout(addQueueControls, 500);
+  setInterval(() => {
+    if (queueProcessingEnabled && !isProcessingTTS && !isTTSPlaying) {
+      processQueue();
+    }
+  }, 1000); // Check every 1 second for faster response
+  
+  // Load saved AI provider (default to Gemini for reliability)
+  const savedProvider = localStorage.getItem('ai-selected-provider') || 'gemini';
+  const aiProviderSelect = document.getElementById('aiProvider');
+  if (aiProviderSelect) {
+      aiProviderSelect.value = savedProvider;
+      updateAIProviderFromHTML(); // Call the new function
+  }
+  
+  // Load saved Ollama model selection with fallback to llama3.1:8b
+  const savedModel = localStorage.getItem('ai-ollama-model');
+  setTimeout(() => {
+      const modelSelect = document.getElementById('ollamaModel');
+      if (modelSelect) {
+          if (savedModel) {
+              modelSelect.value = savedModel;
+              // Update the config
+              if (typeof ollamaConfig !== 'undefined') {
+                  ollamaConfig.model = savedModel;
+              }
+          } else {
+              // Try to set default model to llama3.1:8b if available
+              const defaultModel = 'llama3.1:8b';
+              const defaultOption = Array.from(modelSelect.options).find(opt => opt.value === defaultModel);
+              if (defaultOption) {
+                  modelSelect.value = defaultModel;
+                  if (typeof ollamaConfig !== 'undefined') {
+                      ollamaConfig.model = defaultModel;
+                  }
+                  localStorage.setItem('ai-ollama-model', defaultModel);
+                  console.log('Set default Ollama model to:', defaultModel);
+              }
+          }
+      }
+  }, 1000); // Wait for models to load
+  
+  // Load saved global system prompt
+  const savedPrompt = localStorage.getItem('ai-global-prompt');
+  if (savedPrompt) {
+      document.getElementById('globalSystemMessage').value = savedPrompt;
+      // No need to call updateGlobalSystemPrompt() during initialization - configs are already loaded
+  }
+  
+  // Initialize scroll indicators
+  initScrollIndicators();
+  
+  // Add keyboard navigation for accordion sections
+  document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key >= '1' && e.key <= '9') {
+          e.preventDefault();
+          const sections = document.querySelectorAll('.accordion-section');
+          const index = parseInt(e.key) - 1;
+          if (sections[index]) {
+              const header = sections[index].querySelector('.accordion-header');
+              header.click();
+              header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+      }
+  });
+  
+  // Initialize draggable elements
+  setTimeout(() => {
+    const twitchChatOverlay = document.getElementById('twitchChatOverlay');
+    makeElementDraggable(
+        twitchChatOverlay,
+        twitchChatOverlay?.querySelector('.chat-drag-header'),
+        'twitchChatPosition'
+    );
+
+    const speechBubbleOverlay = document.getElementById('speechBubbleOverlay');
+    makeElementDraggable(
+        speechBubbleOverlay,
+        speechBubbleOverlay?.querySelector('.chat-drag-header'),
+        'speechBubblePosition'
+    );
+  }, 1000);
+  
   setupGlobalHotkeyListeners(); // Setup always-active speech hotkeys
   updateChatToggleButtonState(); // Set initial chat toggle button state
   
@@ -4412,18 +4353,6 @@ function sendAccumulatedMessagesToAI() {
 }
 
 // Range input updates
-document.addEventListener('DOMContentLoaded', function() {
-  // Add range input listener for message accumulation
-  const messageAccumulationSlider = document.getElementById('messageAccumulation');
-  if (messageAccumulationSlider) {
-    messageAccumulationSlider.oninput = function() {
-      document.getElementById('messageAccumulationValue').textContent = this.value;
-      messageAccumulationTarget = parseInt(this.value);
-      document.getElementById('accumulationTarget').textContent = this.value;
-      saveTwitchSettings();
-    };
-  }
-});
 
 //ok
 
@@ -4746,17 +4675,6 @@ function addQueueControls() {
 }
 
 // Initialize queue system
-document.addEventListener('DOMContentLoaded', function() {
-  // Add queue controls to settings
-  setTimeout(addQueueControls, 500);
-  
-  // Initialize queue processing
-  setInterval(() => {
-    if (queueProcessingEnabled && !isProcessingTTS && !isTTSPlaying) {
-      processQueue();
-    }
-  }, 1000); // Check every 1 second for faster response
-});
 
 console.log('Enhanced Queue System loaded successfully!');
 
@@ -4781,7 +4699,7 @@ function updateAIProviderFromHTML() {
     }
     
     // Save selection
-    localStorage.setItem('selectedAIProvider', provider);
+    localStorage.setItem('ai-selected-provider', provider);
     
     // Trigger save of full settings if available
     if (typeof saveUISettings === 'function') {
@@ -4810,12 +4728,15 @@ function updateGlobalSystemPrompt() {
     // if (geminiSystem) geminiSystem.value = globalPrompt;
     
     // Save to localStorage
-    localStorage.setItem('globalSystemPrompt', globalPrompt);
+    localStorage.setItem('ai-global-prompt', globalPrompt);
     
-    // Trigger individual provider updates
-    updateOllamaConfig();
-    updateOpenAIConfig();
-    updateGeminiConfig();
+    // Update only the system prompt in each config without full refresh
+    if (ollamaConfig) ollamaConfig.system_message = globalPrompt;
+    if (openaiConfig) openaiConfig.system_message = globalPrompt;
+    if (geminiConfig) geminiConfig.system_instruction = globalPrompt;
+    
+    // Save the updated settings
+    saveUISettings();
 }
 
 function setOllamaPreset(preset) {
@@ -4849,6 +4770,7 @@ function setOllamaPreset(preset) {
     
     const config = presets[preset];
     if (config) {
+        // Update DOM elements
         document.getElementById('ollamaTemperature').value = config.temperature;
         document.getElementById('ollamaTemperatureValue').textContent = config.temperature;
         document.getElementById('ollamaTopP').value = config.topP;
@@ -4863,27 +4785,27 @@ function setOllamaPreset(preset) {
             document.getElementById('ollamaMaxTokensValue').textContent = config.maxTokens;
         }
         
-        updateOllamaConfig();
+        // Update config object directly instead of circular DOM read
+        ollamaConfig.temperature = config.temperature;
+        ollamaConfig.top_p = config.topP;
+        ollamaConfig.top_k = config.topK;
+        ollamaConfig.repeat_penalty = config.repeatPenalty;
+        if (config.maxTokens) {
+            ollamaConfig.max_tokens = config.maxTokens;
+        }
+        
+        // Save settings
+        saveUISettings();
     }
 }
 
-function togglePasswordVisibility(inputId, button) {
-    const input = document.getElementById(inputId);
-    if (input.type === 'password') {
-        input.type = 'text';
-        button.textContent = '🙈';
-    } else {
-        input.type = 'password';
-        button.textContent = '👁️';
-    }
-}
 
 function saveOllamaModelSelection() {
     const modelSelect = document.getElementById('ollamaModel');
     const selectedModel = modelSelect.value;
     
     // Save to localStorage for immediate persistence
-    localStorage.setItem('ollamaSelectedModel', selectedModel);
+    localStorage.setItem('ai-ollama-model', selectedModel);
     
     // Update the ollamaConfig if it exists
     if (typeof ollamaConfig !== 'undefined') {
@@ -4965,76 +4887,6 @@ function scrollToAccordion(sectionId) {
 }
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Close all accordion tabs by default
-    document.querySelectorAll('.accordion-content').forEach(content => {
-        content.style.display = 'none';
-        const header = content.previousElementSibling;
-        const icon = header.querySelector('.accordion-icon');
-        if (icon) icon.textContent = '▼';
-    });
-    
-    // Load saved AI provider (default to Gemini for reliability)
-    const savedProvider = localStorage.getItem('selectedAIProvider') || 'gemini';
-  const aiProviderSelect = document.getElementById('aiProvider');
-  if (aiProviderSelect) {
-      aiProviderSelect.value = savedProvider;
-      updateAIProviderFromHTML(); // Call the new function
-  }
-
-   // Call the new function
-    
-    // Load saved Ollama model selection with fallback to llama3.1:8b
-    const savedModel = localStorage.getItem('ollamaSelectedModel');
-    setTimeout(() => {
-        const modelSelect = document.getElementById('ollamaModel');
-        if (modelSelect) {
-            if (savedModel) {
-                modelSelect.value = savedModel;
-                // Update the config
-                if (typeof ollamaConfig !== 'undefined') {
-                    ollamaConfig.model = savedModel;
-                }
-            } else {
-                // Try to set default model to llama3.1:8b if available
-                const defaultModel = 'llama3.1:8b';
-                const defaultOption = Array.from(modelSelect.options).find(opt => opt.value === defaultModel);
-                if (defaultOption) {
-                    modelSelect.value = defaultModel;
-                    if (typeof ollamaConfig !== 'undefined') {
-                        ollamaConfig.model = defaultModel;
-                    }
-                    localStorage.setItem('ollamaSelectedModel', defaultModel);
-                    console.log('Set default Ollama model to:', defaultModel);
-                }
-            }
-        }
-    }, 1000); // Wait for models to load
-    
-    // Load saved global system prompt
-    const savedPrompt = localStorage.getItem('globalSystemPrompt');
-    if (savedPrompt) {
-        document.getElementById('globalSystemMessage').value = savedPrompt;
-        updateGlobalSystemPrompt();
-    }
-    
-    // Initialize scroll indicators
-    initScrollIndicators();
-    
-    // Add keyboard navigation for accordion sections
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey && e.key >= '1' && e.key <= '9') {
-            e.preventDefault();
-            const sections = document.querySelectorAll('.accordion-section');
-            const index = parseInt(e.key) - 1;
-            if (sections[index]) {
-                const header = sections[index].querySelector('.accordion-header');
-                header.click();
-                header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }
-    });
-});
 
 // Generic draggable utility function
 function makeElementDraggable(element, dragHandle, storageKey) {
@@ -5087,23 +4939,6 @@ function makeElementDraggable(element, dragHandle, storageKey) {
 }
 
 // Initialize draggable elements when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(() => {
-    const twitchChatOverlay = document.getElementById('twitchChatOverlay');
-    makeElementDraggable(
-        twitchChatOverlay,
-        twitchChatOverlay?.querySelector('.chat-drag-header'),
-        'twitchChatPosition'
-    );
-
-    const speechBubbleOverlay = document.getElementById('speechBubbleOverlay');
-    makeElementDraggable(
-        speechBubbleOverlay,
-        speechBubbleOverlay?.querySelector('.chat-drag-header'),
-        'speechBubblePosition'
-    );
-  }, 1000);
-});
 
 
 
