@@ -155,6 +155,8 @@ camera.add(lookAtTarget);
 
 // gltf and vrm
 let currentVrm = undefined;
+let currentVisemeQueue = [];
+let visemeTimeoutId = null;
 const loader = new THREE.GLTFLoader();
 
 function load( url ) {
@@ -1855,6 +1857,102 @@ async function decodeAndResample(arrayBuffer) {
   return decodedAudioData.getChannelData(0);
 }
 
+// Azure Visemes Integration for VRM Lip-Sync
+function scheduleVisemes(visemes) {
+  if (!currentVrm || !visemes || visemes.length === 0) return;
+  
+  // Clear any existing viseme queue
+  currentVisemeQueue = [];
+  if (visemeTimeoutId) {
+    clearTimeout(visemeTimeoutId);
+    visemeTimeoutId = null;
+  }
+  
+  // Schedule each viseme with precise timing
+  const startTime = Date.now();
+  visemes.forEach(viseme => {
+    const delay = Math.round(viseme.AudioOffset / 10000); // Convert from 100-nanosecond units to milliseconds
+    
+    setTimeout(() => {
+      applyVisemeToVRM(currentVrm, viseme.VisemeId, 1.0);
+    }, delay);
+  });
+  
+  console.log(`Scheduled ${visemes.length} visemes for precise lip-sync`);
+}
+
+function applyVisemeToVRM(vrm, visemeId, intensity = 1.0) {
+  if (!vrm || !vrm.blendShapeProxy) return;
+  
+  const blendShapeProxy = vrm.blendShapeProxy;
+  
+  // Reset all mouth shapes first
+  blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.A, 0);
+  blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.I, 0);
+  blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.U, 0);
+  blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.E, 0);
+  blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.O, 0);
+  
+  // Azure viseme ID to VRM blend shape mapping
+  switch (visemeId) {
+    case 0: // silence
+      break;
+    case 1: // AE, AX, AH (aa)
+    case 15: // AA
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.A, intensity);
+      break;
+    case 2: // EY (E)
+    case 16: // EH
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.E, intensity);
+      break;
+    case 3: // IY (I) 
+    case 17: // IH
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.I, intensity);
+      break;
+    case 4: // OW (O)
+    case 18: // AO
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.O, intensity);
+      break;
+    case 5: // UW (U)
+    case 19: // UH
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.U, intensity);
+      break;
+    case 6: // B, P, M (PP)
+    case 20: // PP
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.U, intensity * 0.7);
+      break;
+    case 7: // F, V (FF)
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.E, intensity * 0.5);
+      break;
+    case 8: // TH
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.I, intensity * 0.6);
+      break;
+    case 9: // T, D (DD)
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.A, intensity * 0.4);
+      break;
+    case 10: // K, G (kk)
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.O, intensity * 0.5);
+      break;
+    case 11: // CH, JH, SH (CH)
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.I, intensity * 0.8);
+      break;
+    case 12: // S, Z (SS)
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.I, intensity * 0.4);
+      break;
+    case 13: // N, NG (nn)
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.A, intensity * 0.3);
+      break;
+    case 14: // R (RR)
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.O, intensity * 0.7);
+      break;
+    case 21: // silence
+      break;
+    default:
+      // Unknown viseme, slight mouth opening
+      blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.A, intensity * 0.2);
+  }
+}
+
 function addMessage(message, role, username) {
   const chatContent = document.getElementById('twitchChatContent');
   const chatOverlay = document.getElementById('twitchChatOverlay');
@@ -2295,7 +2393,13 @@ async function speakWithAzure(text) {
     azureConfig.rate,
     azureConfig.volume
   );
-  const audioBlob = await synthesizeWithAzure(ssml);
+  const ttsResult = await synthesizeWithAzure(ssml);
+  
+  // Apply visemes if available
+  if (ttsResult.visemes && ttsResult.visemes.length > 0) {
+    console.log(`Azure TTS: Received ${ttsResult.visemes.length} visemes for lip-sync`);
+    scheduleVisemes(ttsResult.visemes);
+  }
   
   // Stop any currently playing TTS
   if (currentTTSAudio) {
@@ -2306,7 +2410,7 @@ async function speakWithAzure(text) {
   }
   
   // Create audio element and play
-  const audioUrl = URL.createObjectURL(audioBlob);
+  const audioUrl = URL.createObjectURL(ttsResult.audioBlob);
   currentTTSAudio = new Audio(audioUrl);
   
   // Store the text for speech bubble display
@@ -2424,7 +2528,8 @@ async function synthesizeWithAzure(ssml) {
     headers: {
       'Ocp-Apim-Subscription-Key': azureConfig.key,
       'Content-Type': 'application/ssml+xml',
-      'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3'
+      'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3',
+      'X-Microsoft-OutputFormat-Detailed': 'true' // Enables viseme data
     },
     body: ssml,
     signal
@@ -2437,7 +2542,24 @@ async function synthesizeWithAzure(ssml) {
     throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`);
   }
 
-  return await response.blob();
+  // Check if response includes viseme data
+  const contentType = response.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    // Response contains both audio and viseme data
+    const data = await response.json();
+    return {
+      audioBlob: new Blob([new Uint8Array(data.audio)], { type: 'audio/mpeg' }),
+      visemes: data.visemes || [],
+      duration: data.duration || 0
+    };
+  } else {
+    // Standard audio-only response
+    return {
+      audioBlob: await response.blob(),
+      visemes: [],
+      duration: 0
+    };
+  }
 }
 
 // Browser voice selection functions
