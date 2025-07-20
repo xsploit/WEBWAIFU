@@ -23,6 +23,21 @@ var isTTSPlaying = false;
 var isProcessingTTS = false;
 var isBrowserTTSActive = false;
 
+// Smart AI Request Queue (prevent API overwhelm but don't block user)
+var aiRequestQueue = [];
+var isProcessingAIRequest = false;
+
+// Reusable timeout controller helper
+function createAPITimeoutController(timeoutMs = 30000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  
+  return {
+    signal: controller.signal,
+    cleanup: () => clearTimeout(timeoutId)
+  };
+}
+
 
 // TTS Audio Processing Function
 function setupTTSAudioProcessing(audioElement) {
@@ -71,7 +86,6 @@ function setupTTSAudioProcessing(audioElement) {
     showSpeechBubble(currentText);
     
     
-    console.log('TTS audio started playing');
   };
   
   audioElement.onended = function() {
@@ -83,14 +97,12 @@ function setupTTSAudioProcessing(audioElement) {
     // Hide speech bubble when TTS ends
     hideSpeechBubble();
     
-    console.log('TTS audio ended');
   };
   
   audioElement.onpause = function() {
     isTTSPlaying = false;
     ttsInputVolume = 0;
     updateButtonStates();
-    console.log('TTS audio paused');
   };
 }
 
@@ -423,7 +435,6 @@ function initializeMicrophone() {
       var inputvolume = average;
       
       // audio in spectrum expressed as array
-      // console.log(array.toString());
       // useful for mouth shape variance
       
       // move the interface slider
@@ -1807,8 +1818,8 @@ async function processAudio() {
     // Transcribe using Whisper
     console.log('🤖 Transcribing with Whisper model...');
     const output = await transcriber(audioData, {
-      chunk_length_s: 30, // Process in 30-second chunks
-      stride_length_s: 5  // Overlap chunks by 5 seconds
+      chunk_length_s: 10, // Process in 10-second chunks (faster)
+      stride_length_s: 2  // Overlap chunks by 2 seconds (reduced)
     });
 
     const transcript = output.text ? output.text.trim() : '';
@@ -1879,15 +1890,62 @@ function addMessage(message, role, username) {
   }
 }
 
-// AI Chat Functions
-async function sendMessageToAI(message) {
-  // Block ALL requests until completely finished (AI response + TTS)
-  if (isProcessingTTS) {
-    console.log('AI is busy - blocking request to prevent spam');
-    updateStatus('🚫', 'AI is busy, please wait...');
+// Smart AI Request Queue Functions
+function addToAIRequestQueue(message) {
+  aiRequestQueue.push({
+    message: message,
+    timestamp: Date.now()
+  });
+  
+  // Limit queue size to prevent memory issues
+  if (aiRequestQueue.length > 5) {
+    aiRequestQueue.shift(); // Remove oldest request
+    console.log('AI request queue full - removed oldest request');
+  }
+  
+  console.log(`Added to AI queue. Queue length: ${aiRequestQueue.length}`);
+  updateStatus('⏳', `Queued (${aiRequestQueue.length} waiting)`);
+  
+  // Process queue if not already processing
+  if (!isProcessingAIRequest) {
+    processAIRequestQueue();
+  }
+}
+
+async function processAIRequestQueue() {
+  if (aiRequestQueue.length === 0 || isProcessingAIRequest) {
     return;
   }
   
+  isProcessingAIRequest = true;
+  
+  while (aiRequestQueue.length > 0) {
+    const request = aiRequestQueue.shift();
+    console.log(`Processing AI request: ${request.message.substring(0, 50)}...`);
+    
+    try {
+      await sendMessageToAIInternal(request.message);
+    } catch (error) {
+      console.error('Error processing AI request:', error);
+      updateStatus('❌', error.message || 'AI request failed');
+    }
+    
+    // Brief pause between requests to prevent API overwhelming
+    if (aiRequestQueue.length > 0) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+  }
+  
+  isProcessingAIRequest = false;
+}
+
+// AI Chat Functions
+async function sendMessageToAI(message) {
+  // Instead of blocking, add to smart queue
+  addToAIRequestQueue(message);
+}
+
+async function sendMessageToAIInternal(message) {
   try {
     isProcessingTTS = true;
     updateButtonStates(); // Disable all inputs immediately
@@ -1967,6 +2025,9 @@ async function getOllamaResponse(message) {
     options.frequency_penalty = ollamaConfig.frequency_penalty;
   }
 
+  // Add timeout for Ollama API call
+  const { signal, cleanup } = createAPITimeoutController();
+  
   const response = await fetch(`${ollamaConfig.url}/api/chat`, {
     method: 'POST',
     headers: {
@@ -1977,8 +2038,11 @@ async function getOllamaResponse(message) {
       messages: messages,
       options: options,
       stream: false
-    })
+    }),
+    signal
   });
+  
+  cleanup();
 
   if (!response.ok) {
     throw new Error(`Ollama API error: ${response.status}`);
@@ -2015,6 +2079,9 @@ async function getOpenAIResponse(message) {
     { role: 'user', content: message }
   ];
 
+  // Add timeout for OpenAI API call
+  const { signal, cleanup } = createAPITimeoutController();
+  
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -2029,8 +2096,11 @@ async function getOpenAIResponse(message) {
       top_p: openaiConfig.top_p,
       frequency_penalty: openaiConfig.frequency_penalty,
       presence_penalty: openaiConfig.presence_penalty
-    })
+    }),
+    signal
   });
+  
+  cleanup();
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -2102,14 +2172,20 @@ async function getGeminiResponse(message) {
     }
   };
 
+  // Add timeout for Gemini API call
+  const { signal, cleanup } = createAPITimeoutController();
+  
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${geminiConfig.model}:generateContent`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-goog-api-key': geminiConfig.key
     },
-    body: JSON.stringify(requestBody)
+    body: JSON.stringify(requestBody),
+    signal
   });
+  
+  cleanup();
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -2340,6 +2416,9 @@ function createSSML(text, voice, style, pitch, rate, volume) {
 }
 
 async function synthesizeWithAzure(ssml) {
+  // Add timeout for Azure TTS API call
+  const { signal, cleanup } = createAPITimeoutController();
+  
   const response = await fetch(`https://${azureConfig.region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
     method: 'POST',
     headers: {
@@ -2347,8 +2426,11 @@ async function synthesizeWithAzure(ssml) {
       'Content-Type': 'application/ssml+xml',
       'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3'
     },
-    body: ssml
+    body: ssml,
+    signal
   });
+  
+  cleanup();
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -3168,12 +3250,13 @@ function handleChatKeyPress(event) {
 function toggleVoiceInput() {
   const btn = document.getElementById('voiceBtn');
 
-  // Block if AI is busy or TTS is playing
-  if (isTTSPlaying || isProcessingTTS) {
-    const message = isTTSPlaying ? 'Please wait for AI to finish speaking' : 'AI is processing your request';
-    updateStatus('🚫', message);
+  // Only block if TTS is playing (can't record while AI is speaking)
+  if (isTTSPlaying) {
+    updateStatus('🚫', 'Please wait for AI to finish speaking');
     return;
   }
+  
+  // If AI is processing, voice input will be queued (no blocking needed)
 
   if (isListening) {
     // If we are already listening, stop it
