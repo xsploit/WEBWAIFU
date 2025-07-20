@@ -44,8 +44,15 @@ function setupTTSAudioProcessing(audioElement) {
   ttsAnalyser.smoothingTimeConstant = 0.5;
   ttsAnalyser.fftSize = 1024;
   
+  // Create audio destination for capturing TTS stream
+  const ttsStreamDestination = ttsAudioContext.createMediaStreamDestination();
+  
   ttsAudioSource.connect(ttsAnalyser);
-  ttsAudioSource.connect(ttsAudioContext.destination);
+  ttsAudioSource.connect(ttsAudioContext.destination); // For speakers
+  ttsAudioSource.connect(ttsStreamDestination); // For stream capture
+  
+  // Store the TTS audio stream for recognition
+  ttsAudioStream = ttsStreamDestination.stream;
   
   // Process TTS audio for mouth movement
   function processTTSAudio() {
@@ -775,108 +782,89 @@ function hideinfo() {
   load( url );
   }
 
-// TTS Speech Recognition Setup
-function setupTTSSpeechRecognition() {
-  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    console.warn('Speech Recognition not supported for TTS subtitles');
+// TTS Stream Recognition Setup
+function setupTTSStreamRecognition() {
+  if (!ttsAudioStream) {
+    console.warn('No TTS audio stream available for recognition');
     return;
   }
   
   try {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    ttsRecognition = new SpeechRecognition();
+    // Use MediaRecorder to capture TTS audio in chunks
+    ttsMediaRecorder = new MediaRecorder(ttsAudioStream, {
+      mimeType: 'audio/webm'
+    });
     
-    ttsRecognition.continuous = true;
-    ttsRecognition.interimResults = true;
-    ttsRecognition.lang = 'en-US';
+    ttsMediaRecorder.ondataavailable = async (event) => {
+      if (event.data.size > 0) {
+        // Process audio chunk for transcription
+        await processTTSAudioChunk(event.data);
+      }
+    };
     
-    ttsRecognition.onstart = () => {
+    ttsMediaRecorder.onstart = () => {
       isLiveTTSRecognizing = true;
-      console.log('TTS Speech Recognition started');
+      console.log('TTS stream capture started');
     };
     
-    ttsRecognition.onresult = (event) => {
-      let interimTranscript = '';
-      let finalTranscript = '';
-      
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += transcript;
-        } else {
-          interimTranscript += transcript;
-        }
-      }
-      
-      const displayText = finalTranscript || interimTranscript;
-      if (displayText.trim()) {
-        updateLiveSubtitle(displayText);
-      }
-    };
-    
-    ttsRecognition.onerror = (event) => {
-      console.log('TTS Speech Recognition error:', event.error);
-      if (event.error !== 'no-speech' && event.error !== 'audio-capture') {
-        stopTTSSpeechRecognition();
-      }
-    };
-    
-    ttsRecognition.onend = () => {
+    ttsMediaRecorder.onstop = () => {
       isLiveTTSRecognizing = false;
-      console.log('TTS Speech Recognition ended');
-      
-      // Restart if TTS is still playing and subtitles enabled
-      if (isTTSPlaying && document.getElementById('showSubtitles').checked) {
-        setTimeout(startTTSSpeechRecognition, 100);
-      }
+      console.log('TTS stream capture stopped');
     };
     
-    console.log('TTS Speech Recognition setup complete');
+    // Start recording in small chunks for real-time processing
+    ttsMediaRecorder.start(500); // 500ms chunks
+    
   } catch (error) {
-    console.error('Error setting up TTS Speech Recognition:', error);
+    console.error('Error setting up TTS stream recognition:', error);
   }
 }
 
-function startTTSSpeechRecognition() {
-  if (!ttsRecognition) {
-    setupTTSSpeechRecognition();
+async function processTTSAudioChunk(audioBlob) {
+  try {
+    // Convert blob to ArrayBuffer for processing
+    const arrayBuffer = await audioBlob.arrayBuffer();
+    
+    // Use Whisper to transcribe the TTS audio chunk
+    if (transcriber) {
+      const output = await transcriber(arrayBuffer);
+      const transcript = output.text ? output.text.trim() : '';
+      
+      if (transcript) {
+        console.log('TTS chunk transcribed:', transcript);
+        updateLiveSubtitle(transcript);
+      }
+    }
+  } catch (error) {
+    console.error('Error processing TTS audio chunk:', error);
   }
-  
-  if (ttsRecognition && !isLiveTTSRecognizing) {
+}
+
+function stopTTSStreamRecognition() {
+  if (ttsMediaRecorder && ttsMediaRecorder.state === 'recording') {
     try {
-      ttsRecognition.start();
-      console.log('Started TTS Speech Recognition');
+      ttsMediaRecorder.stop();
+      console.log('Stopped TTS stream recognition');
     } catch (error) {
-      console.error('Error starting TTS Speech Recognition:', error);
+      console.error('Error stopping TTS stream recognition:', error);
     }
   }
 }
 
-function stopTTSSpeechRecognition() {
-  if (ttsRecognition && isLiveTTSRecognizing) {
-    try {
-      ttsRecognition.stop();
-      console.log('Stopped TTS Speech Recognition');
-    } catch (error) {
-      console.error('Error stopping TTS Speech Recognition:', error);
-    }
-  }
-}
-
-// Live TTS Speech Recognition Functions
-function startLiveTTSRecognition() {
+// TTS Audio Stream Capture for Subtitles
+function startTTSAudioStreamCapture() {
   // Only start if subtitles are enabled
   if (!document.getElementById('showSubtitles').checked) {
-    console.log('Subtitles disabled - not starting TTS speech recognition');
+    console.log('Subtitles disabled - not starting TTS audio stream capture');
     return;
   }
   
-  // Start Web Speech Recognition to listen to TTS audio
-  startTTSSpeechRecognition();
+  // Set up audio stream capture from TTS
+  setupTTSStreamRecognition();
 }
 
-function stopLiveTTSRecognition() {
-  stopTTSSpeechRecognition();
+function stopTTSAudioStreamCapture() {
+  stopTTSStreamRecognition();
   
   if (recognitionTimeout) {
     clearTimeout(recognitionTimeout);
@@ -3378,47 +3366,10 @@ function updateStatus(icon, text) {
   }
 }
 
-// Subtitle System - Shows static text from TTS
+// Subtitle System - Uses TTS audio stream recognition
 function showSubtitle(text, duration = null) {
-  // Check if subtitles are enabled
-  if (!document.getElementById('showSubtitles').checked) {
-    return;
-  }
-  
-  const subtitleContainer = document.getElementById('subtitleContainer');
-  const subtitleText = document.getElementById('subtitleText');
-  const subtitleProgress = document.getElementById('subtitleProgress');
-  
-  if (!subtitleContainer || !subtitleText || !subtitleProgress) {
-    return;
-  }
-  
-  // Show the TTS text directly (no speech recognition needed)
-  subtitleText.textContent = text;
-  subtitleContainer.classList.add('show');
-  
-  // Calculate duration based on text length and settings
-  let displayDuration;
-  if (duration === null) {
-    const baseDurationPerSecond = parseFloat(document.getElementById('subtitleDuration').value) || 5;
-    const characterCount = text.length;
-    const readingTimeSeconds = Math.max(2, characterCount / 15);
-    const sliderMultiplier = baseDurationPerSecond / 5;
-    displayDuration = Math.max(2000, readingTimeSeconds * 1000 * sliderMultiplier);
-  } else {
-    displayDuration = duration;
-  }
-  
-  // Start progress animation
-  subtitleProgress.style.transitionDuration = displayDuration + 'ms';
-  subtitleProgress.classList.add('animate');
-  
-  // Hide after duration only if TTS is not playing
-  if (!isTTSPlaying) {
-    setTimeout(() => {
-      hideSubtitles();
-    }, displayDuration);
-  }
+  // Start TTS audio stream capture for live subtitles
+  startTTSAudioStreamCapture();
 }
 
 function hideSubtitles() {
