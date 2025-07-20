@@ -22,6 +22,8 @@ var currentTTSAudio = null;
 var isTTSPlaying = false;
 var isProcessingTTS = false;
 var isBrowserTTSActive = false;
+let isUsingVisemes = false; // Flag to disable audio-reactive movement when using precise visemes
+
 
 // Smart AI Request Queue (prevent API overwhelm but don't block user)
 var aiRequestQueue = [];
@@ -365,8 +367,10 @@ if (currentVrm) {
   // Update eye tracking
   updateEyeTracking();
   
-  // ✅ ADD THIS LINE to run the mouth animation on every frame
-  updateMouthMovement();
+  // Only use audio-reactive mouth movement if not using precise visemes
+  if (!isUsingVisemes) {
+    updateMouthMovement();
+  }
 
   // update vrm
   currentVrm.update(deltaTime);
@@ -1857,28 +1861,264 @@ async function decodeAndResample(arrayBuffer) {
   return decodedAudioData.getChannelData(0);
 }
 
-// Azure Visemes Integration for VRM Lip-Sync
-function scheduleVisemes(visemes) {
-  if (!currentVrm || !visemes || visemes.length === 0) return;
+// Azure Speech SDK Integration
+let speechSynthesizer = null;
+let isUsingSDK = false;
+
+// Live Subtitle System with Azure TTS Word Boundaries
+let currentSubtitleTimeout = null;
+let subtitleElement = null;
+let allSubtitleWords = [];
+let currentWordIndex = 0;
+
+function createSubtitleElement() {
+  if (!subtitleElement) {
+    subtitleElement = document.createElement('div');
+    subtitleElement.id = 'liveSubtitles';
+    subtitleElement.style.cssText = `
+      position: fixed;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 15px;
+      font-size: 20px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 500;
+      z-index: 1000;
+      max-width: 85%;
+      text-align: center;
+      display: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    `;
+    document.body.appendChild(subtitleElement);
+  }
+  return subtitleElement;
+}
+
+function scheduleLiveSubtitles(wordBoundaries, fullText) {
+  if (!wordBoundaries || wordBoundaries.length === 0) return;
   
-  // Clear any existing viseme queue
-  currentVisemeQueue = [];
-  if (visemeTimeoutId) {
-    clearTimeout(visemeTimeoutId);
-    visemeTimeoutId = null;
+  const subtitle = createSubtitleElement();
+  
+  // Clear any existing subtitle timeouts
+  if (currentSubtitleTimeout) {
+    clearTimeout(currentSubtitleTimeout);
   }
   
-  // Schedule each viseme with precise timing
-  const startTime = Date.now();
-  visemes.forEach(viseme => {
-    const delay = Math.round(viseme.AudioOffset / 10000); // Convert from 100-nanosecond units to milliseconds
+  // Show subtitle container
+  subtitle.style.display = 'block';
+  subtitle.textContent = '';
+  
+  // Schedule each word to appear
+  wordBoundaries.forEach((wordBoundary, index) => {
+    const delay = Math.round(wordBoundary.audioOffset / 10000); // Convert to milliseconds
     
     setTimeout(() => {
-      applyVisemeToVRM(currentVrm, viseme.VisemeId, 1.0);
+      // Build subtitle text up to current word
+      const wordsUpToCurrent = wordBoundaries
+        .slice(0, index + 1)
+        .map(wb => wb.text)
+        .join(' ');
+      
+      const previousWords = wordsUpToCurrent.slice(0, -wordBoundary.text.length).trim();
+      
+      subtitle.innerHTML = `
+        <span style="opacity: 0.7; color: #ccc">${previousWords}</span>
+        ${previousWords ? ' ' : ''}
+        <span style="color: #00ffff; font-weight: bold; text-shadow: 0 0 10px #00ffff">${wordBoundary.text}</span>
+      `;
+      
+      // Hide subtitle after last word + some buffer time
+      if (index === wordBoundaries.length - 1) {
+        const hideDelay = Math.round(wordBoundary.duration / 10000) + 2000;
+        currentSubtitleTimeout = setTimeout(() => {
+          if (subtitle) {
+            subtitle.style.display = 'none';
+          }
+        }, hideDelay);
+      }
     }, delay);
   });
   
-  console.log(`Scheduled ${visemes.length} visemes for precise lip-sync`);
+  console.log(`Scheduled ${wordBoundaries.length} words for live subtitles`);
+}
+
+function scheduleFallbackSubtitles(text, speechRate = 1.0) {
+  if (!text || text.trim().length === 0) return;
+  
+  const subtitle = createSubtitleElement();
+  
+  // Clear any existing subtitle timeouts
+  if (currentSubtitleTimeout) {
+    clearTimeout(currentSubtitleTimeout);
+  }
+  
+  // Show subtitle container
+  subtitle.style.display = 'block';
+  
+  // Split text into words
+  const words = text.trim().split(/\s+/);
+  const avgWordsPerMinute = 150; // Average speaking speed
+  const adjustedWPM = avgWordsPerMinute * speechRate; // Adjust for speech rate
+  const msPerWord = (60 * 1000) / adjustedWPM; // Milliseconds per word
+  
+  console.log(`Fallback subtitles: ${words.length} words at ${adjustedWPM} WPM (${msPerWord.toFixed(0)}ms per word)`);
+  
+  // Schedule each word
+  words.forEach((word, index) => {
+    const delay = index * msPerWord + 500; // Small delay to sync with audio start
+    
+    setTimeout(() => {
+      const wordsUpToCurrent = words.slice(0, index + 1).join(' ');
+      const previousWords = words.slice(0, index).join(' ');
+      
+      subtitle.innerHTML = `
+        <span style="opacity: 0.7; color: #ccc">${previousWords}</span>
+        ${previousWords ? ' ' : ''}
+        <span style="color: #00ffff; font-weight: bold; text-shadow: 0 0 10px #00ffff">${word}</span>
+      `;
+      
+      // Hide subtitle after last word
+      if (index === words.length - 1) {
+        currentSubtitleTimeout = setTimeout(() => {
+          if (subtitle) {
+            subtitle.style.display = 'none';
+          }
+        }, msPerWord + 2000);
+      }
+    }, delay);
+  });
+}
+
+// Azure Speech SDK Functions
+function createSpeechSynthesizer() {
+  if (!azureConfig.key || !azureConfig.region) {
+    console.log('Speech SDK: No Azure credentials, falling back to REST API');
+    isUsingSDK = false;
+    return null;
+  }
+  
+  try {
+    const speechConfig = SpeechSDK.SpeechConfig.fromSubscription(azureConfig.key, azureConfig.region);
+    speechConfig.speechSynthesisVoiceName = azureConfig.voice;
+    
+    const audioConfig = SpeechSDK.Audio.AudioConfig.fromDefaultSpeakerOutput();
+    
+    const synthesizer = new SpeechSDK.SpeechSynthesizer(speechConfig, audioConfig);
+    console.log('Speech SDK: Synthesizer created successfully');
+    isUsingSDK = true;
+    return synthesizer;
+  } catch (error) {
+    console.error('Speech SDK: Error creating synthesizer:', error);
+    updateStatus('❌', 'Azure SDK failed to initialize');
+    isUsingSDK = false;
+    return null;
+  }
+}
+
+async function speakTextWithSDK(text) {
+  if (!speechSynthesizer) {
+    speechSynthesizer = createSpeechSynthesizer();
+    if (!speechSynthesizer) {
+      // Fallback to REST if SDK initialization failed
+      return speakTextWithRest(text);
+    }
+  }
+  
+  // Clear previous viseme queue
+  currentVisemeQueue = [];
+  if (visemeTimeoutId) {
+    clearTimeout(visemeTimeoutId);
+  }
+  
+  // Use SSML to get visemes and word boundaries
+  const ssml = `
+    <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-US">
+      <voice name="${azureConfig.voice}">
+        <mstts:viseme type="redlips_front"/>
+        <prosody rate="${azureConfig.rate}" pitch="${azureConfig.pitch}" volume="${azureConfig.volume}">
+          ${text}
+        </prosody>
+      </voice>
+    </speak>`;
+
+  isTTSPlaying = true;
+  isProcessingTTS = true;
+  isUsingVisemes = true; // Enable viseme-based animation
+  updateButtonStates();
+  showSpeechBubble(text);
+
+  // Handle viseme events
+  speechSynthesizer.visemeReceived = function (s, e) {
+    currentVisemeQueue.push(e);
+  };
+  
+  // Handle word boundary events for subtitles
+  let wordBoundaries = [];
+  speechSynthesizer.wordBoundary = function (s, e) {
+    wordBoundaries.push(e);
+  };
+
+  speechSynthesizer.speakSsmlAsync(
+    ssml,
+    result => {
+      if (result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
+        console.log('Speech SDK: Synthesis finished.');
+        processVisemeQueue(); // Start processing the collected visemes
+        if (document.getElementById('enableSubtitles').checked) { scheduleLiveSubtitles(wordBoundaries, text); }
+      } else {
+        console.error('Speech SDK: Error synthesizing speech:', result.errorDetails);
+        updateStatus('❌', 'Azure speech synthesis failed');
+        // Fallback to REST API on error
+        speakTextWithRest(text);
+      }
+      isTTSPlaying = false;
+      isProcessingTTS = false;
+      isUsingVisemes = false; // Disable viseme animation when done
+      updateButtonStates();
+      hideSpeechBubble();
+    },
+    error => {
+      console.error('Speech SDK: SpeakSsmlAsync error:', error);
+      isTTSPlaying = false;
+      isProcessingTTS = false;
+      isUsingVisemes = false;
+      updateButtonStates();
+      hideSpeechBubble();
+      // Fallback to REST API on error
+      speakTextWithRest(text);
+    }
+  );
+}
+
+// Process the queue of visemes with precise timing
+function processVisemeQueue() {
+  if (currentVisemeQueue.length === 0) return;
+
+  const viseme = currentVisemeQueue.shift();
+  const audioOffsetMs = Math.round(viseme.audioOffset / 10000);
+
+  // Apply the viseme to the VRM model
+  applyVisemeToVRM(currentVrm, viseme.visemeId);
+
+  // Schedule the next viseme
+  if (currentVisemeQueue.length > 0) {
+    const nextViseme = currentVisemeQueue[0];
+    const nextAudioOffsetMs = Math.round(nextViseme.audioOffset / 10000);
+    const delay = nextAudioOffsetMs - audioOffsetMs;
+    
+    visemeTimeoutId = setTimeout(processVisemeQueue, delay);
+  } else {
+    // Last viseme, schedule mouth to close
+    visemeTimeoutId = setTimeout(() => {
+      applyVisemeToVRM(currentVrm, 0); // Viseme ID 0 is silence
+    }, 200);
+  }
 }
 
 function applyVisemeToVRM(vrm, visemeId, intensity = 1.0) {
@@ -2673,6 +2913,7 @@ async function loadOllamaModels() {
     const url = `${ollamaConfig.url}/api/tags`;
     console.log('Fetching Ollama models from:', url);
     
+    console.log('Attempting to fetch Ollama models from:', url);
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -3173,28 +3414,7 @@ function saveUISettings() {
   localStorage.setItem('vu-vrm-ai-settings', JSON.stringify(settings));
 }
 
-function loadUISettings() {
-  const saved = localStorage.getItem('vu-vrm-ai-settings');
-  if (saved) {
-    const settings = JSON.parse(saved);
-    
-    // Update configs
-    if (settings.azureConfig) {
-      Object.assign(azureConfig, settings.azureConfig);
-    }
-    if (settings.ollamaConfig) {
-      Object.assign(ollamaConfig, settings.ollamaConfig);
-    }
-    // aiPersonality removed - using global system prompt instead
-    
-    // Update UI elements
-    if (document.getElementById('azureKey')) document.getElementById('azureKey').value = azureConfig.key || '';
-    if (document.getElementById('azureRegion')) document.getElementById('azureRegion').value = azureConfig.region || 'eastus';
-    if (document.getElementById('voiceSelect')) document.getElementById('voiceSelect').value = azureConfig.voice || 'en-US-JennyNeural';
-    if (document.getElementById('ollamaUrl')) document.getElementById('ollamaUrl').value = ollamaConfig.url || 'http://localhost:11434';
-    if (document.getElementById('ollamaModel')) document.getElementById('ollamaModel').value = ollamaConfig.model || '';
-  }
-}
+
 
 // Update button states based on listening status
 function updateButtonStates() {
@@ -3276,36 +3496,7 @@ function togglePasswordVisibility(inputId, buttonElement) {
 }
 
 // AI Provider Config Switching
-function updateAIProvider() {
-  const provider = document.getElementById('aiProvider').value;
-  const ollamaConfig = document.getElementById('ollamaConfig');
-  const openaiConfig = document.getElementById('openaiConfig');
-  const geminiConfig = document.getElementById('geminiConfig');
-  
-  // Hide all provider configs
-  ollamaConfig.style.display = 'none';
-  openaiConfig.style.display = 'none';
-  geminiConfig.style.display = 'none';
-  
-  // Show selected provider config
-  switch(provider) {
-    case 'ollama':
-      ollamaConfig.style.display = 'block';
-      break;
-    case 'openai':
-      openaiConfig.style.display = 'block';
-      break;
-    case 'gemini':
-      geminiConfig.style.display = 'block';
-      break;
-  }
-  
-  // Update current provider
-  currentProvider = provider;
-  saveUISettings();
-  
-  console.log('AI Provider switched to:', provider);
-}
+
 
 // Speech Hotkey Update
 function updateSpeechHotkey() {
@@ -3315,50 +3506,10 @@ function updateSpeechHotkey() {
 }
 
 // Accordion Toggle Function
-function toggleAccordion(sectionId) {
-  const content = document.getElementById(sectionId);
-  const header = content.previousElementSibling;
-  
-  if (!content || !header) return;
-  
-  // Close all other accordion sections first
-  const allContents = document.querySelectorAll('.accordion-content');
-  const allHeaders = document.querySelectorAll('.accordion-header');
-  
-  allContents.forEach((item, index) => {
-    if (item.id !== sectionId) {
-      item.classList.remove('expanded');
-      allHeaders[index].classList.remove('active');
-    }
-  });
-  
-  // Toggle the clicked section
-  const isExpanded = content.classList.contains('expanded');
-  
-  if (isExpanded) {
-    content.classList.remove('expanded');
-    header.classList.remove('active');
-  } else {
-    content.classList.add('expanded');
-    header.classList.add('active');
-  }
-  
-  console.log('Toggled accordion:', sectionId, isExpanded ? 'closed' : 'opened');
-}
+
 
 // Initialize Accordion (expand first section by default)
-function initializeAccordion() {
-  // Expand the VRM Controls section by default
-  const defaultSection = 'vrmControls';
-  const content = document.getElementById(defaultSection);
-  const header = content?.previousElementSibling;
-  
-  if (content && header) {
-    content.classList.add('expanded');
-    header.classList.add('active');
-    console.log('Initialized accordion with default section:', defaultSection);
-  }
-}
+
 
 // Chat Input Handler
 function handleChatKeyPress(event) {
@@ -3439,6 +3590,18 @@ function toggleChatBubble() {
   }
   
   updateStatus('💬', enabled ? 'Chat bubble enabled' : 'Chat bubble disabled');
+  saveUISettings();
+}
+
+function toggleSubtitles() {
+  const enabled = document.getElementById('enableSubtitles').checked;
+  const subtitleElement = document.getElementById('liveSubtitles');
+  
+  if (subtitleElement) {
+    subtitleElement.style.display = enabled ? 'block' : 'none';
+  }
+  
+  updateStatus('📝', enabled ? 'Live subtitles enabled' : 'Live subtitles disabled');
   saveUISettings();
 }
 
@@ -3599,7 +3762,7 @@ function initializeUI() {
 }
 
 // Enhanced settings save/load
-const originalSaveUISettings = saveUISettings;
+
 function saveUISettings() {
   const settings = {
     azureConfig: azureConfig,
@@ -3755,7 +3918,26 @@ document.addEventListener('DOMContentLoaded', () => {
   loadVRMConfig(); // Load VRM position settings
   loadArmConfig(); // Load arm position settings
   loadTwitchSettings(); // Load Twitch stream settings
-  initializeAccordion(); // Initialize accordion sections
+  // Initialize accordion sections
+  // Close all accordion tabs by default
+  document.querySelectorAll('.accordion-content').forEach(content => {
+      content.style.display = 'none';
+      const header = content.previousElementSibling;
+      const icon = header.querySelector('.accordion-icon');
+      if (icon) icon.textContent = '▼';
+  });
+  // Expand the VRM Controls section by default
+  const defaultSection = 'vrmControls';
+  const content = document.getElementById(defaultSection);
+  const header = content?.previousElementSibling;
+  if (content && header) {
+      content.classList.add('expanded');
+      header.classList.add('active');
+      content.style.display = 'block'; // Ensure it's visible
+      const icon = header.querySelector('.accordion-icon');
+      if (icon) icon.textContent = '▲';
+      console.log('Initialized accordion with default section:', defaultSection);
+  }
   setupGlobalHotkeyListeners(); // Setup always-active speech hotkeys
   updateChatToggleButtonState(); // Set initial chat toggle button state
   
@@ -3782,14 +3964,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 200);
   
   // Only load Ollama models if Ollama is the current provider
-  setTimeout(() => {
-    if (currentProvider === 'ollama') {
-      console.log('Loading Ollama models - provider is Ollama');
-      refreshOllamaModels();
-    } else {
-      console.log('Skipping Ollama model load - current provider is:', currentProvider);
-    }
-  }, 500);
+  if (currentProvider === 'ollama') {
+    console.log('Loading Ollama models - provider is Ollama');
+    refreshOllamaModels();
+  } else {
+    console.log('Skipping Ollama model load - current provider is:', currentProvider);
+  }
 });
 
 // ====================================
@@ -4579,6 +4759,282 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('Enhanced Queue System loaded successfully!');
+
+// Generic draggable utility function
+
+// Enhanced JavaScript functions for consolidated AI configuration
+
+function updateAIProviderFromHTML() {
+    const provider = document.getElementById('aiProvider').value;
+    
+    // Hide all provider configs
+    document.getElementById('ollamaConfig').style.display = 'none';
+    document.getElementById('openaiConfig').style.display = 'none';
+    document.getElementById('geminiConfig').style.display = 'none';
+    
+    // Show selected provider config
+    document.getElementById(provider + 'Config').style.display = 'block';
+    
+    // Update current provider in script.js
+    if (typeof currentProvider !== 'undefined') {
+        currentProvider = provider;
+    }
+    
+    // Save selection
+    localStorage.setItem('selectedAIProvider', provider);
+    
+    // Trigger save of full settings if available
+    if (typeof saveUISettings === 'function') {
+        saveUISettings();
+    }
+    
+    // Load models for Ollama if selected
+    if (provider === 'ollama' && typeof refreshOllamaModels === 'function') {
+        setTimeout(() => {
+            refreshOllamaModels(true);
+        }, 100);
+    }
+}
+
+function updateGlobalSystemPrompt() {
+    const globalPrompt = document.getElementById('globalSystemMessage').value;
+    
+    // Update all provider-specific system prompts (these elements don't exist, so this will do nothing)
+    // The actual system_message/system_instruction is updated in the respective updateConfig functions
+    // const ollamaSystem = document.getElementById('ollamaSystemMessage');
+    // const openaiSystem = document.getElementById('openaiSystemMessage');
+    // const geminiSystem = document.getElementById('geminiSystemMessage');
+    
+    // if (ollamaSystem) ollamaSystem.value = globalPrompt;
+    // if (openaiSystem) openaiSystem.value = globalPrompt;
+    // if (geminiSystem) geminiSystem.value = globalPrompt;
+    
+    // Save to localStorage
+    localStorage.setItem('globalSystemPrompt', globalPrompt);
+    
+    // Trigger individual provider updates
+    updateOllamaConfig();
+    updateOpenAIConfig();
+    updateGeminiConfig();
+}
+
+function setOllamaPreset(preset) {
+    const presets = {
+        creative: {
+            temperature: 1.2,
+            topP: 0.95,
+            topK: 60,
+            repeatPenalty: 1.1
+        },
+        balanced: {
+            temperature: 0.7,
+            topP: 0.9,
+            topK: 40,
+            repeatPenalty: 1.1
+        },
+        precise: {
+            temperature: 0.3,
+            topP: 0.8,
+            topK: 20,
+            repeatPenalty: 1.2
+        },
+        fast: {
+            temperature: 0.5,
+            topP: 0.85,
+            topK: 30,
+            repeatPenalty: 1.15,
+            maxTokens: 256
+        }
+    };
+    
+    const config = presets[preset];
+    if (config) {
+        document.getElementById('ollamaTemperature').value = config.temperature;
+        document.getElementById('ollamaTemperatureValue').textContent = config.temperature;
+        document.getElementById('ollamaTopP').value = config.topP;
+        document.getElementById('ollamaTopPValue').textContent = config.topP;
+        document.getElementById('ollamaTopK').value = config.topK;
+        document.getElementById('ollamaTopKValue').textContent = config.topK;
+        document.getElementById('ollamaRepeatPenalty').value = config.repeatPenalty;
+        document.getElementById('ollamaRepeatPenaltyValue').textContent = config.repeatPenalty;
+        
+        if (config.maxTokens) {
+            document.getElementById('ollamaMaxTokens').value = config.maxTokens;
+            document.getElementById('ollamaMaxTokensValue').textContent = config.maxTokens;
+        }
+        
+        updateOllamaConfig();
+    }
+}
+
+function togglePasswordVisibility(inputId, button) {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        button.textContent = '🙈';
+    } else {
+        input.type = 'password';
+        button.textContent = '👁️';
+    }
+}
+
+function saveOllamaModelSelection() {
+    const modelSelect = document.getElementById('ollamaModel');
+    const selectedModel = modelSelect.value;
+    
+    // Save to localStorage for immediate persistence
+    localStorage.setItem('ollamaSelectedModel', selectedModel);
+    
+    // Update the ollamaConfig if it exists
+    if (typeof ollamaConfig !== 'undefined') {
+        ollamaConfig.model = selectedModel;
+    }
+    
+    console.log('Ollama model saved:', selectedModel);
+}
+
+function forceRefreshOllamaModelsFromHTML() {
+    // Refresh button animation
+    const btn = event.target;
+    btn.style.transform = 'rotate(360deg)';
+    setTimeout(() => {
+        btn.style.transform = 'rotate(0deg)';
+    }, 300);
+    
+    // Call existing refresh function if it exists
+    if (typeof refreshOllamaModels === 'function') {
+        refreshOllamaModels();
+    }
+}
+
+// Scroll indicator functionality
+function initScrollIndicators() {
+    const accordionContents = document.querySelectorAll('.accordion-content');
+    
+    accordionContents.forEach(content => {
+        content.addEventListener('scroll', function() {
+            if (this.scrollTop > 10) {
+                this.classList.add('scrolled');
+            } else {
+                this.classList.remove('scrolled');
+            }
+        });
+    });
+}
+
+// Enhanced accordion toggle with scroll reset
+function toggleAccordionFromHTML(sectionId) {
+    const content = document.getElementById(sectionId);
+    const header = content.previousElementSibling;
+    const icon = header.querySelector('.accordion-icon');
+    
+    if (content.style.display === 'block') {
+        content.style.display = 'none';
+        icon.textContent = '▼';
+        content.classList.remove('scrolled');
+    } else {
+        // Close other accordions first (optional)
+        document.querySelectorAll('.accordion-content').forEach(other => {
+            if (other !== content && other.style.display === 'block') {
+                other.style.display = 'none';
+                const otherIcon = other.previousElementSibling.querySelector('.accordion-icon');
+                if (otherIcon) otherIcon.textContent = '▼';
+                other.classList.remove('scrolled');
+            }
+        });
+        
+        content.style.display = 'block';
+        icon.textContent = '▲';
+        
+        // Reset scroll position when opening
+        setTimeout(() => {
+            content.scrollTop = 0;
+        }, 10);
+    }
+}
+
+// Smooth scroll to top of accordion when opening
+function scrollToAccordion(sectionId) {
+    const section = document.getElementById(sectionId);
+    const header = section.previousElementSibling;
+    
+    header.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+    });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Close all accordion tabs by default
+    document.querySelectorAll('.accordion-content').forEach(content => {
+        content.style.display = 'none';
+        const header = content.previousElementSibling;
+        const icon = header.querySelector('.accordion-icon');
+        if (icon) icon.textContent = '▼';
+    });
+    
+    // Load saved AI provider (default to Gemini for reliability)
+    const savedProvider = localStorage.getItem('selectedAIProvider') || 'gemini';
+  const aiProviderSelect = document.getElementById('aiProvider');
+  if (aiProviderSelect) {
+      aiProviderSelect.value = savedProvider;
+      updateAIProviderFromHTML(); // Call the new function
+  }
+
+   // Call the new function
+    
+    // Load saved Ollama model selection with fallback to llama3.1:8b
+    const savedModel = localStorage.getItem('ollamaSelectedModel');
+    setTimeout(() => {
+        const modelSelect = document.getElementById('ollamaModel');
+        if (modelSelect) {
+            if (savedModel) {
+                modelSelect.value = savedModel;
+                // Update the config
+                if (typeof ollamaConfig !== 'undefined') {
+                    ollamaConfig.model = savedModel;
+                }
+            } else {
+                // Try to set default model to llama3.1:8b if available
+                const defaultModel = 'llama3.1:8b';
+                const defaultOption = Array.from(modelSelect.options).find(opt => opt.value === defaultModel);
+                if (defaultOption) {
+                    modelSelect.value = defaultModel;
+                    if (typeof ollamaConfig !== 'undefined') {
+                        ollamaConfig.model = defaultModel;
+                    }
+                    localStorage.setItem('ollamaSelectedModel', defaultModel);
+                    console.log('Set default Ollama model to:', defaultModel);
+                }
+            }
+        }
+    }, 1000); // Wait for models to load
+    
+    // Load saved global system prompt
+    const savedPrompt = localStorage.getItem('globalSystemPrompt');
+    if (savedPrompt) {
+        document.getElementById('globalSystemMessage').value = savedPrompt;
+        updateGlobalSystemPrompt();
+    }
+    
+    // Initialize scroll indicators
+    initScrollIndicators();
+    
+    // Add keyboard navigation for accordion sections
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key >= '1' && e.key <= '9') {
+            e.preventDefault();
+            const sections = document.querySelectorAll('.accordion-section');
+            const index = parseInt(e.key) - 1;
+            if (sections[index]) {
+                const header = sections[index].querySelector('.accordion-header');
+                header.click();
+                header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+    });
+});
 
 // Generic draggable utility function
 function makeElementDraggable(element, dragHandle, storageKey) {

@@ -45,7 +45,7 @@ An interactive AI VTuber experience with VRM avatar support, real-time speech re
 - A modern web browser (Chrome/Edge recommended for full feature support).
 - **For AI features**: API keys for your chosen provider (Google Gemini or OpenAI).
 - **For premium TTS**: An Azure Cognitive Services key (optional).
-- **For local AI**: A running instance of [Ollama](https://ollama.com/) (optional).
+- **For local AI**: A running instance of [Ollama](https://ollama.com/) (optional). See the [Ollama Setup Guide](OLLAMA_SETUP.md) for detailed instructions.
 
 ### Installation
 1.  **Clone the repository:**
@@ -116,7 +116,7 @@ An interactive AI VTuber experience with VRM avatar support, real-time speech re
 
 ## 🙏 Acknowledgments
 
-Built upon the excellent **VU-VRM** project foundation and powered by these open-source libraries:
+Built upon the excellent **VU-VRM** project foundation ([https://github.com/Automattic/VU-VRM](https://github.com/Automattic/VU-VRM)) by [itsTallulahhh](https://github.com/itsTallulahhh) and powered by these open-source libraries:
 - [Three.js](https://threejs.org/) - 3D graphics engine
 - [three-vrm](https://github.com/pixiv/three-vrm) - VRM avatar support  
 - [Transformers.js](https://github.com/xenova/transformers.js) - Client-side AI models

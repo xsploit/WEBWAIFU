@@ -4,7 +4,7 @@
     <title>Webwaifu - AI VTuber Chat</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<script defer="" data-domain="neurolinkvrm.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script></head>
+</head>
 
 <body>
     <!-- Three.js Libraries -->
@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r110/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r110/examples/js/controls/OrbitControls.js"></script>
     <script src="https://unpkg.com/@pixiv/three-vrm@0.3.0/lib/three-vrm.js"></script>
+    <!-- Azure Speech SDK for real-time TTS -->
+    <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
 
     <!-- 3D Canvas Container -->
     <div id="canvas-container"></div>
@@ -126,7 +128,7 @@
         <div class="settings-content">
             <!-- VRM Controls -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('vrmControls')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('vrmControls')">
                     <span>🎭 VRM Controls</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -166,7 +168,7 @@
 
             <!-- VRM Position Controls -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('vrmPosition')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('vrmPosition')">
                     <span>🎯 VRM Position</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -207,7 +209,7 @@
 
             <!-- VRM Arm Controls -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('armPosition')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('armPosition')">
                     <span>💪 Arm Position</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -253,7 +255,7 @@
 
             <!-- File Upload -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('vrmModel')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('vrmModel')">
                     <span>📁 VRM Model</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -275,7 +277,7 @@
 
             <!-- Background Upload -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('backgroundSettings')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('backgroundSettings')">
                     <span>🖼️ Background</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -356,7 +358,7 @@
 
             <!-- TTS Configuration -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('ttsSettings')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('ttsSettings')">
                     <span>🔊 Text-to-Speech</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -419,7 +421,7 @@
 
             <!-- CONSOLIDATED AI CONFIGURATION -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('aiConfiguration')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('aiConfiguration')">
                     <span>🤖 AI Configuration</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -428,7 +430,7 @@
                     <!-- AI Provider Selection -->
                     <div class="control-group">
                         <label>AI Provider</label>
-                        <select id="aiProvider" onchange="updateAIProvider()">
+                        <select id="aiProvider" onchange="updateAIProviderFromHTML()">
                             <option value="gemini">💎 Google Gemini</option>
                             <option value="openai">🔥 OpenAI</option>
                             <option value="ollama">🧠 Ollama (Local)</option>
@@ -534,7 +536,7 @@ Remember: You're not just an assistant - you're a devoted companion who genuinel
                                 <select id="ollamaModel" onchange="updateOllamaConfig(); saveOllamaModelSelection()">
                                     <option value="">Select model...</option>
                                 </select>
-                                <button class="refresh-btn" onclick="forceRefreshOllamaModels()">🔄</button>
+                                <button class="refresh-btn" onclick="forceRefreshOllamaModelsFromHTML()">🔄</button>
                             </div>
                         </div>
                         
@@ -677,7 +679,7 @@ Remember: You're not just an assistant - you're a devoted companion who genuinel
 
             <!-- Twitch Stream Integration -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('twitchSettings')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('twitchSettings')">
                     <span>📺 Twitch Stream Integration</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -715,7 +717,7 @@ Remember: You're not just an assistant - you're a devoted companion who genuinel
 
             <!-- Display Options -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('displayOptions')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('displayOptions')">
                     <span>📺 Display Options</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -731,12 +733,19 @@ Remember: You're not just an assistant - you're a devoted companion who genuinel
                             Show Chat Bubble
                         </label>
                     </div>
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="enableSubtitles" checked="" onchange="toggleSubtitles()">
+                            Enable Live Subtitles
+                        </label>
+                        <p class="upload-hint">Shows AI response text synced with TTS audio</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Voice Controls -->
             <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion('voiceControls')">
+                <div class="accordion-header" onclick="toggleAccordionFromHTML('voiceControls')">
                     <span>🎙️ Voice Controls</span>
                     <span class="accordion-icon">▼</span>
                 </div>
@@ -1060,274 +1069,4 @@ Remember: You're not just an assistant - you're a devoted companion who genuinel
         }
     </style>
     
-    <script>
-        // Enhanced JavaScript functions for consolidated AI configuration
-        
-        function updateAIProvider() {
-            const provider = document.getElementById('aiProvider').value;
-            
-            // Hide all provider configs
-            document.getElementById('ollamaConfig').style.display = 'none';
-            document.getElementById('openaiConfig').style.display = 'none';
-            document.getElementById('geminiConfig').style.display = 'none';
-            
-            // Show selected provider config
-            document.getElementById(provider + 'Config').style.display = 'block';
-            
-            // Update current provider in script.js
-            if (typeof currentProvider !== 'undefined') {
-                currentProvider = provider;
-            }
-            
-            // Save selection
-            localStorage.setItem('selectedAIProvider', provider);
-            
-            // Trigger save of full settings if available
-            if (typeof saveUISettings === 'function') {
-                saveUISettings();
-            }
-            
-            // Load models for Ollama if selected
-            if (provider === 'ollama' && typeof refreshOllamaModels === 'function') {
-                setTimeout(() => {
-                    refreshOllamaModels(true);
-                }, 100);
-            }
-        }
-        
-        function updateGlobalSystemPrompt() {
-            const globalPrompt = document.getElementById('globalSystemMessage').value;
-            
-            // Update all provider-specific system prompts
-            const ollamaSystem = document.getElementById('ollamaSystemMessage');
-            const openaiSystem = document.getElementById('openaiSystemMessage');
-            const geminiSystem = document.getElementById('geminiSystemMessage');
-            
-            if (ollamaSystem) ollamaSystem.value = globalPrompt;
-            if (openaiSystem) openaiSystem.value = globalPrompt;
-            if (geminiSystem) geminiSystem.value = globalPrompt;
-            
-            // Save to localStorage
-            localStorage.setItem('globalSystemPrompt', globalPrompt);
-            
-            // Trigger individual provider updates
-            updateOllamaConfig();
-            updateOpenAIConfig();
-            updateGeminiConfig();
-        }
-        
-        function setOllamaPreset(preset) {
-            const presets = {
-                creative: {
-                    temperature: 1.2,
-                    topP: 0.95,
-                    topK: 60,
-                    repeatPenalty: 1.1
-                },
-                balanced: {
-                    temperature: 0.7,
-                    topP: 0.9,
-                    topK: 40,
-                    repeatPenalty: 1.1
-                },
-                precise: {
-                    temperature: 0.3,
-                    topP: 0.8,
-                    topK: 20,
-                    repeatPenalty: 1.2
-                },
-                fast: {
-                    temperature: 0.5,
-                    topP: 0.85,
-                    topK: 30,
-                    repeatPenalty: 1.15,
-                    maxTokens: 256
-                }
-            };
-            
-            const config = presets[preset];
-            if (config) {
-                document.getElementById('ollamaTemperature').value = config.temperature;
-                document.getElementById('ollamaTemperatureValue').textContent = config.temperature;
-                document.getElementById('ollamaTopP').value = config.topP;
-                document.getElementById('ollamaTopPValue').textContent = config.topP;
-                document.getElementById('ollamaTopK').value = config.topK;
-                document.getElementById('ollamaTopKValue').textContent = config.topK;
-                document.getElementById('ollamaRepeatPenalty').value = config.repeatPenalty;
-                document.getElementById('ollamaRepeatPenaltyValue').textContent = config.repeatPenalty;
-                
-                if (config.maxTokens) {
-                    document.getElementById('ollamaMaxTokens').value = config.maxTokens;
-                    document.getElementById('ollamaMaxTokensValue').textContent = config.maxTokens;
-                }
-                
-                updateOllamaConfig();
-            }
-        }
-        
-        function togglePasswordVisibility(inputId, button) {
-            const input = document.getElementById(inputId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                button.textContent = '🙈';
-            } else {
-                input.type = 'password';
-                button.textContent = '👁️';
-            }
-        }
-        
-        function saveOllamaModelSelection() {
-            const modelSelect = document.getElementById('ollamaModel');
-            const selectedModel = modelSelect.value;
-            
-            // Save to localStorage for immediate persistence
-            localStorage.setItem('ollamaSelectedModel', selectedModel);
-            
-            // Update the ollamaConfig if it exists
-            if (typeof ollamaConfig !== 'undefined') {
-                ollamaConfig.model = selectedModel;
-            }
-            
-            console.log('Ollama model saved:', selectedModel);
-        }
-        
-        function forceRefreshOllamaModels() {
-            // Refresh button animation
-            const btn = event.target;
-            btn.style.transform = 'rotate(360deg)';
-            setTimeout(() => {
-                btn.style.transform = 'rotate(0deg)';
-            }, 300);
-            
-            // Call existing refresh function if it exists
-            if (typeof refreshOllamaModels === 'function') {
-                refreshOllamaModels();
-            }
-        }
-        
-        // Scroll indicator functionality
-        function initScrollIndicators() {
-            const accordionContents = document.querySelectorAll('.accordion-content');
-            
-            accordionContents.forEach(content => {
-                content.addEventListener('scroll', function() {
-                    if (this.scrollTop > 10) {
-                        this.classList.add('scrolled');
-                    } else {
-                        this.classList.remove('scrolled');
-                    }
-                });
-            });
-        }
-        
-        // Enhanced accordion toggle with scroll reset
-        function toggleAccordion(sectionId) {
-            const content = document.getElementById(sectionId);
-            const header = content.previousElementSibling;
-            const icon = header.querySelector('.accordion-icon');
-            
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-                icon.textContent = '▼';
-                content.classList.remove('scrolled');
-            } else {
-                // Close other accordions first (optional)
-                document.querySelectorAll('.accordion-content').forEach(other => {
-                    if (other !== content && other.style.display === 'block') {
-                        other.style.display = 'none';
-                        const otherIcon = other.previousElementSibling.querySelector('.accordion-icon');
-                        if (otherIcon) otherIcon.textContent = '▼';
-                        other.classList.remove('scrolled');
-                    }
-                });
-                
-                content.style.display = 'block';
-                icon.textContent = '▲';
-                
-                // Reset scroll position when opening
-                setTimeout(() => {
-                    content.scrollTop = 0;
-                }, 10);
-            }
-        }
-        
-        // Smooth scroll to top of accordion when opening
-        function scrollToAccordion(sectionId) {
-            const section = document.getElementById(sectionId);
-            const header = section.previousElementSibling;
-            
-            header.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest'
-            });
-        }
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Close all accordion tabs by default
-            document.querySelectorAll('.accordion-content').forEach(content => {
-                content.style.display = 'none';
-                const header = content.previousElementSibling;
-                const icon = header.querySelector('.accordion-icon');
-                if (icon) icon.textContent = '▼';
-            });
-            
-            // Load saved AI provider (default to Gemini for reliability)
-            const savedProvider = localStorage.getItem('selectedAIProvider') || 'gemini';
-            document.getElementById('aiProvider').value = savedProvider;
-            updateAIProvider();
-            
-            // Load saved Ollama model selection with fallback to llama3.1:8b
-            const savedModel = localStorage.getItem('ollamaSelectedModel');
-            setTimeout(() => {
-                const modelSelect = document.getElementById('ollamaModel');
-                if (modelSelect) {
-                    if (savedModel) {
-                        modelSelect.value = savedModel;
-                        // Update the config
-                        if (typeof ollamaConfig !== 'undefined') {
-                            ollamaConfig.model = savedModel;
-                        }
-                    } else {
-                        // Try to set default model to llama3.1:8b if available
-                        const defaultModel = 'llama3.1:8b';
-                        const defaultOption = Array.from(modelSelect.options).find(opt => opt.value === defaultModel);
-                        if (defaultOption) {
-                            modelSelect.value = defaultModel;
-                            if (typeof ollamaConfig !== 'undefined') {
-                                ollamaConfig.model = defaultModel;
-                            }
-                            localStorage.setItem('ollamaSelectedModel', defaultModel);
-                            console.log('Set default Ollama model to:', defaultModel);
-                        }
-                    }
-                }
-            }, 1000); // Wait for models to load
-            
-            // Load saved global system prompt
-            const savedPrompt = localStorage.getItem('globalSystemPrompt');
-            if (savedPrompt) {
-                document.getElementById('globalSystemMessage').value = savedPrompt;
-                updateGlobalSystemPrompt();
-            }
-            
-            // Initialize scroll indicators
-            initScrollIndicators();
-            
-            // Add keyboard navigation for accordion sections
-            document.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.key >= '1' && e.key <= '9') {
-                    e.preventDefault();
-                    const sections = document.querySelectorAll('.accordion-section');
-                    const index = parseInt(e.key) - 1;
-                    if (sections[index]) {
-                        const header = sections[index].querySelector('.accordion-header');
-                        header.click();
-                        header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }
-                }
-            });
-        });
-    </script>
-
-</body></html>
+    

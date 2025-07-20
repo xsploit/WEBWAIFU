@@ -3,8 +3,8 @@
 ## 🚀 High Priority Features
 
 ### 1. Enhanced VRM Animations for Talking/Speaking
-- [ ] Improve mouth movement synchronization with TTS audio
-- [ ] Add more realistic talking animations (head nods, eye blinks)
+- [x] Improve mouth movement synchronization with TTS audio
+- [x] Add more realistic talking animations (head nods, eye blinks)
 - [ ] Implement different talking styles (excited, calm, questioning)
 - [ ] Add lip-sync accuracy improvements
 - [ ] Create animation blending for natural transitions
