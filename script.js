@@ -4707,7 +4707,7 @@ function addQueueControls() {
   const queueSection = document.createElement('div');
   queueSection.className = 'accordion-section';
   queueSection.innerHTML = `
-    <div class="accordion-header" onclick="toggleAccordion('queueSettings')">
+    <div class="accordion-header" onclick="toggleAccordionFromHTML('queueSettings')">
       <span>⚡ Queue System</span>
       <span class="accordion-icon">▼</span>
     </div>
