@@ -78,10 +78,6 @@ function setupTTSAudioProcessing(audioElement) {
     const currentText = audioElement.getAttribute('data-text') || 'AI is speaking...';
     showSpeechBubble(currentText);
     
-    // Start TTS audio capture for subtitles if enabled
-    if (document.getElementById('showSubtitles').checked) {
-      startLiveTTSRecognition();
-    }
     
     console.log('TTS audio started playing');
   };
@@ -2441,10 +2437,6 @@ async function speakWithBrowserTTS(text) {
       // Show speech bubble when browser TTS starts
       showSpeechBubble(text);
       
-      // Start TTS audio capture for subtitles if enabled
-      if (document.getElementById('showSubtitles').checked) {
-        startLiveTTSRecognition();
-      }
       
       console.log('Browser TTS started');
     };
@@ -3386,10 +3378,47 @@ function updateStatus(icon, text) {
   }
 }
 
-// Subtitle System - Now uses live speech recognition
+// Subtitle System - Shows static text from TTS
 function showSubtitle(text, duration = null) {
-  // Always start live recognition - the recognition function will check if subtitles are enabled
-  startLiveTTSRecognition();
+  // Check if subtitles are enabled
+  if (!document.getElementById('showSubtitles').checked) {
+    return;
+  }
+  
+  const subtitleContainer = document.getElementById('subtitleContainer');
+  const subtitleText = document.getElementById('subtitleText');
+  const subtitleProgress = document.getElementById('subtitleProgress');
+  
+  if (!subtitleContainer || !subtitleText || !subtitleProgress) {
+    return;
+  }
+  
+  // Show the TTS text directly (no speech recognition needed)
+  subtitleText.textContent = text;
+  subtitleContainer.classList.add('show');
+  
+  // Calculate duration based on text length and settings
+  let displayDuration;
+  if (duration === null) {
+    const baseDurationPerSecond = parseFloat(document.getElementById('subtitleDuration').value) || 5;
+    const characterCount = text.length;
+    const readingTimeSeconds = Math.max(2, characterCount / 15);
+    const sliderMultiplier = baseDurationPerSecond / 5;
+    displayDuration = Math.max(2000, readingTimeSeconds * 1000 * sliderMultiplier);
+  } else {
+    displayDuration = duration;
+  }
+  
+  // Start progress animation
+  subtitleProgress.style.transitionDuration = displayDuration + 'ms';
+  subtitleProgress.classList.add('animate');
+  
+  // Hide after duration only if TTS is not playing
+  if (!isTTSPlaying) {
+    setTimeout(() => {
+      hideSubtitles();
+    }, displayDuration);
+  }
 }
 
 function hideSubtitles() {
@@ -3409,14 +3438,8 @@ function toggleSubtitles() {
   const enabled = document.getElementById('showSubtitles').checked;
   
   if (enabled) {
-    // If TTS is currently playing, start audio capture
-    if (isTTSPlaying) {
-      startLiveTTSRecognition();
-    }
     updateStatus('📺', 'Subtitles enabled');
   } else {
-    // Stop audio capture and hide subtitles
-    stopLiveTTSRecognition();
     hideSubtitles();
     updateStatus('📺', 'Subtitles disabled');
   }
