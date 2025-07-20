@@ -4117,7 +4117,7 @@ function addToQueue(message, source, username = null, priority = 'normal') {
 }
 
 function processQueue() {
-  if (messageQueue.length === 0 || isProcessingTTS) {
+  if (messageQueue.length === 0 || isProcessingTTS || isTTSPlaying) {
     return;
   }
   
@@ -4381,10 +4381,10 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Initialize queue processing
   setInterval(() => {
-    if (queueProcessingEnabled && !isProcessingTTS) {
+    if (queueProcessingEnabled && !isProcessingTTS && !isTTSPlaying) {
       processQueue();
     }
-  }, 2000); // Check every 2 seconds
+  }, 1000); // Check every 1 second for faster response
 });
 
 console.log('Enhanced Queue System loaded successfully!');
