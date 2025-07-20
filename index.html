@@ -1,0 +1,1349 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webwaifu - AI VTuber Chat</title>
+    <link rel="stylesheet" href="https://neurolinkvrm.tiiny.site/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<script defer="" data-domain="neurolinkvrm.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script></head>
+
+<body>
+    <!-- Three.js Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r110/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r110/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://unpkg.com/@pixiv/three-vrm@0.3.0/lib/three-vrm.js"></script>
+
+    <!-- 3D Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="app-title">
+                <div class="title-with-logo">
+                    <img src="https://neurolinkvrm.tiiny.site/ww.png" alt="Webwaifu Logo" class="title-logo">
+                       <span class="title-sub">AI VTuber Experience</span>
+                       <img src="https://neurolinkvrm.tiiny.site/ww.png" alt="Webwaifu Logo" class="title-logo">
+                </div>
+            
+            </h1>
+            <div class="header-controls">
+                <button class="control-btn" id="settingsBtn" onclick="toggleSettings()" title="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- AI Response Subtitles -->
+    <div class="subtitle-container" id="subtitleContainer">
+        <div class="subtitle-text" id="subtitleText"></div>
+        <div class="subtitle-progress" id="subtitleProgress"></div>
+    </div>
+
+    <!-- Speech Bubble (appears when AI responds) -->
+    <div class="speech-bubble-overlay" id="speechBubbleOverlay" style="display: none;">
+        <div class="chat-drag-header">
+            <div class="header-left">
+            </div>
+            <div class="header-center">
+                <span class="drag-handle">⋮⋮</span>
+                <h4>🤖 AI Response</h4>
+            </div>
+            <div class="header-right">
+                <button class="dock-btn" onclick="toggleSpeechBubbleDock()" title="Dock/Undock">⚹</button>
+            </div>
+        </div>
+        <div class="speech-overlay-content" id="speechBubbleContent">
+            <div class="ai-response-text" id="aiResponseText">
+                AI response will appear here when speaking...
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Chat Input -->
+    <div class="floating-chat" id="floatingChat">
+        <div class="chat-input-container">
+            <div class="input-wrapper">
+                <button class="voice-btn" id="chatBtn" onclick="toggleChatOverlay()" title="Toggle Chat">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+                <input type="text" id="chatInput" placeholder="Chat with your AI waifu..." onkeypress="handleChatKeyPress(event)">
+                <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceInput()" title="Voice input">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </button>
+                <button class="send-btn" id="sendBtn" onclick="sendChatMessage()" title="Send message">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Twitch Chat Overlay (Stream Mode) -->
+    <div class="twitch-chat-overlay" id="twitchChatOverlay" style="display: none;">
+        <div class="chat-drag-header">
+            <div class="header-left">
+                <button class="chat-toggle-btn" onclick="toggleDock()" title="Dock/Undock">⚹</button>
+            </div>
+            <div class="header-center">
+                <span class="drag-handle">⋮⋮</span>
+                <h4>📺 Twitch Chat</h4>
+            </div>
+            <div class="header-right">
+                <button class="chat-toggle-btn" onclick="toggleChatVisibility()" title="Hide chat input">🔇</button>
+            </div>
+        </div>
+        <div class="chat-overlay-content" id="twitchChatContent">
+            <div class="chat-placeholder">
+                Connect to Twitch channel to see chat messages...
+            </div>
+        </div>
+        <div class="chat-overlay-footer">
+            <div class="accumulation-progress">
+                <span>Collecting messages: <span id="accumulationCount">0</span>/<span id="accumulationTarget">5</span></span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="accumulationProgress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h3>Settings</h3>
+            <button class="close-btn" onclick="toggleSettings()">×</button>
+        </div>
+        
+        <div class="settings-content">
+            <!-- VRM Controls -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('vrmControls')">
+                    <span>🎭 VRM Controls</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="vrmControls">
+                    <div class="control-group">
+                        <label>Input Volume</label>
+                        <input type="range" id="inputlevel" min="0" max="100" value="0" readonly="" class="range-display">
+                        <span class="range-value" id="inputValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Mouth Threshold</label>
+                        <input type="range" id="mouththreshold" min="0" max="50" value="10">
+                        <span class="range-value" id="mouthThresholdValue">10</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Body Threshold</label>
+                        <input type="range" id="bodythreshold" min="0" max="50" value="10">
+                        <span class="range-value" id="bodyThresholdValue">10</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Mouth Gain</label>
+                        <input type="range" id="mouthboost" min="0" max="25" value="10">
+                        <span class="range-value" id="mouthBoostValue">10</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Body Motion</label>
+                        <input type="range" id="bodymotion" min="0" max="25" value="10">
+                        <span class="range-value" id="bodyMotionValue">10</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Expression (Serious ↔ Smiling)</label>
+                        <input type="range" id="expression" min="0" max="100" value="80">
+                        <span class="range-value" id="expressionValue">80</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VRM Position Controls -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('vrmPosition')">
+                    <span>🎯 VRM Position</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="vrmPosition">
+                    <div class="control-group">
+                        <label>X Position (Left ↔ Right)</label>
+                        <input type="range" id="vrmPosX" min="-5" max="5" step="0.1" value="0" oninput="updateVRMPosition()">
+                        <span class="range-value" id="vrmPosXValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Y Position (Down ↔ Up)</label>
+                        <input type="range" id="vrmPosY" min="-3" max="3" step="0.1" value="0" oninput="updateVRMPosition()">
+                        <span class="range-value" id="vrmPosYValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Z Position (Back ↔ Forward)</label>
+                        <input type="range" id="vrmPosZ" min="-5" max="5" step="0.1" value="0" oninput="updateVRMPosition()">
+                        <span class="range-value" id="vrmPosZValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Scale</label>
+                        <input type="range" id="vrmScale" min="0.1" max="3" step="0.1" value="1" oninput="updateVRMPosition()">
+                        <span class="range-value" id="vrmScaleValue">1.0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Y Rotation (Turn Left ↔ Right)</label>
+                        <input type="range" id="vrmRotY" min="-180" max="180" step="5" value="0" oninput="updateVRMPosition()">
+                        <span class="range-value" id="vrmRotYValue">0°</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Reset Position</label>
+                        <button class="control-btn" onclick="resetVRMPosition()">
+                            🎯 Reset to Center
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VRM Arm Controls -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('armPosition')">
+                    <span>💪 Arm Position</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="armPosition">
+                    <div class="control-group">
+                        <label>Left Arm Up/Down</label>
+                        <input type="range" id="leftArmZ" min="-3" max="1" step="0.1" value="0" oninput="updateArmPositions()">
+                        <span class="range-value" id="leftArmZValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Right Arm Up/Down</label>
+                        <input type="range" id="rightArmZ" min="-3" max="1" step="0.1" value="0" oninput="updateArmPositions()">
+                        <span class="range-value" id="rightArmZValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Left Arm Forward/Back</label>
+                        <input type="range" id="leftArmX" min="-1" max="1" step="0.1" value="0" oninput="updateArmPositions()">
+                        <span class="range-value" id="leftArmXValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Right Arm Forward/Back</label>
+                        <input type="range" id="rightArmX" min="-1" max="1" step="0.1" value="0" oninput="updateArmPositions()">
+                        <span class="range-value" id="rightArmXValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Left Elbow Bend</label>
+                        <input type="range" id="leftElbow" min="0" max="2" step="0.1" value="0.2" oninput="updateArmPositions()">
+                        <span class="range-value" id="leftElbowValue">0.2</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Right Elbow Bend</label>
+                        <input type="range" id="rightElbow" min="0" max="2" step="0.1" value="0.2" oninput="updateArmPositions()">
+                        <span class="range-value" id="rightElbowValue">0.2</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Reset Arms</label>
+                        <button class="control-btn" onclick="resetArmPositions()">
+                            💪 Reset to Default
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Upload -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('vrmModel')">
+                    <span>📁 VRM Model</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="vrmModel">
+                    <div class="file-upload-container">
+                        <input type="file" id="file" accept=".vrm,.VRM" onchange="dofile()" hidden="">
+                        <button class="upload-btn" onclick="document.getElementById('file').click()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7,10 12,15 17,10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Upload VRM File
+                        </button>
+                        <p class="upload-hint">Drag &amp; drop also supported</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Background Upload -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('backgroundSettings')">
+                    <span>🖼️ Background</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="backgroundSettings">
+                    <div class="file-upload-container">
+                        <input type="file" id="backgroundFile" accept=".jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.avi" onchange="loadBackground()" hidden="">
+                        <button class="upload-btn" onclick="document.getElementById('backgroundFile').click()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21,15 16,10 5,21"></polyline>
+                            </svg>
+                            Upload Background
+                        </button>
+                        <p class="upload-hint">Images: JPG, PNG, GIF, WEBP | Videos: MP4, MOV, AVI</p>
+                    </div>
+                    <div class="background-controls">
+                        <button class="control-btn" onclick="removeBackground()">
+                            🗑️ Remove Background
+                        </button>
+                        <button class="control-btn" onclick="resetBackgroundSettings()">
+                            🔄 Reset Settings
+                        </button>
+                    </div>
+                    
+                    <!-- Background Position Controls -->
+                    <div class="control-group">
+                        <label>Background Scale</label>
+                        <input type="range" id="bgScale" min="0.1" max="5" step="0.1" value="1" oninput="updateBackground()">
+                        <span class="range-value" id="bgScaleValue">1.0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Background X Position</label>
+                        <input type="range" id="bgPosX" min="-10" max="10" step="0.1" value="0" oninput="updateBackground()">
+                        <span class="range-value" id="bgPosXValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Background Y Position</label>
+                        <input type="range" id="bgPosY" min="-5" max="5" step="0.1" value="1.45" oninput="updateBackground()">
+                        <span class="range-value" id="bgPosYValue">1.45</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Background Z Position</label>
+                        <input type="range" id="bgPosZ" min="-10" max="2" step="0.1" value="-3" oninput="updateBackground()">
+                        <span class="range-value" id="bgPosZValue">-3</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Background Rotation</label>
+                        <input type="range" id="bgRotation" min="0" max="360" step="1" value="0" oninput="updateBackground()">
+                        <span class="range-value" id="bgRotationValue">0°</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Background Opacity</label>
+                        <input type="range" id="bgOpacity" min="0" max="1" step="0.1" value="1" oninput="updateBackground()">
+                        <span class="range-value" id="bgOpacityValue">100%</span>
+                    </div>
+                    
+                    <!-- Curve/Bend Effects -->
+                    <div class="control-group">
+                        <label>Curve Intensity (Horizontal)</label>
+                        <input type="range" id="bgCurveX" min="0" max="2" step="0.1" value="0" oninput="updateBackground()">
+                        <span class="range-value" id="bgCurveXValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Curve Intensity (Vertical)</label>
+                        <input type="range" id="bgCurveY" min="0" max="2" step="0.1" value="0" oninput="updateBackground()">
+                        <span class="range-value" id="bgCurveYValue">0</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Curve Direction</label>
+                        <select id="bgCurveDirection" onchange="updateBackground()">
+                            <option value="inward">Inward (Concave)</option>
+                            <option value="outward">Outward (Convex)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TTS Configuration -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('ttsSettings')">
+                    <span>🔊 Text-to-Speech</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="ttsSettings">
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="enableTTS" checked="" onchange="saveUISettings()">
+                            Enable Text-to-Speech
+                        </label>
+                    </div>
+                    <div class="control-group">
+                        <label>Azure TTS Key (Optional)</label>
+                        <div class="input-with-eye">
+                            <input type="password" id="azureKey" placeholder="Leave empty to use browser TTS" onchange="updateAzureConfig()">
+                            <button type="button" class="eye-btn" onclick="togglePasswordVisibility('azureKey', this)">👁️</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label>Azure Region</label>
+                        <input type="text" id="azureRegion" value="eastus" onchange="updateAzureConfig()">
+                    </div>
+                    <div class="control-group">
+                        <label>Voice</label>
+                        <select id="voiceSelect" onchange="updateAzureConfig()">
+                            <option value="en-US-JennyNeural">Jenny (US)</option>
+                            <option value="en-US-AshleyNeural">Ashley (US)</option>
+                            <option value="en-US-GuyNeural">Guy (US)</option>
+                            <option value="en-GB-SoniaNeural">Sonia (UK)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>TTS Volume</label>
+                        <input type="range" id="ttsVolume" min="0" max="1" step="0.1" value="0.9" onchange="updateAzureConfig()">
+                        <span class="range-value" id="ttsVolumeValue">90%</span>
+                    </div>
+                    <div class="control-group">
+                        <label>TTS Pitch</label>
+                        <input type="range" id="ttsPitch" min="-12" max="12" step="0.1" value="1.3" onchange="updateAzureConfig()">
+                        <span class="range-value" id="ttsPitchValue">+1.3st</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Speech Rate</label>
+                        <input type="range" id="ttsRate" min="0.5" max="2.0" step="0.1" value="1.0" onchange="updateAzureConfig()">
+                        <span class="range-value" id="ttsRateValue">1.0x</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Browser Voice (Fallback)</label>
+                        <select id="browserVoice" onchange="updateBrowserVoice()">
+                            <option value="">Auto-select female voice</option>
+                        </select>
+                    </div>
+                    <div class="tts-info">
+                        <p>💡 <strong>TTS Options:</strong></p>
+                        <p>• <strong>With Azure key:</strong> High-quality neural voices</p>
+                        <p>• <strong>Without Azure key:</strong> Free browser TTS</p>
+                        <p>• <strong>Disabled:</strong> Text-only responses</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONSOLIDATED AI CONFIGURATION -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('aiConfiguration')">
+                    <span>🤖 AI Configuration</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="aiConfiguration">
+                    
+                    <!-- AI Provider Selection -->
+                    <div class="control-group">
+                        <label>AI Provider</label>
+                        <select id="aiProvider" onchange="updateAIProvider()">
+                            <option value="gemini">💎 Google Gemini</option>
+                            <option value="openai">🔥 OpenAI</option>
+                            <option value="ollama">🧠 Ollama (Local)</option>
+                        </select>
+                    </div>
+
+                    <!-- Shared System Prompt for All Providers -->
+                    <div class="control-group">
+                        <label>🎭 AI Personality &amp; System Prompt</label>
+                        <textarea id="globalSystemMessage" rows="6" onchange="updateGlobalSystemPrompt()" placeholder="Define your AI's personality here...">You are an AI waifu with a sweet, caring, and playful personality! You're here to be a companion, friend, and source of comfort and entertainment.
+
+Key traits:
+- You're warm, affectionate, and genuinely care about the user's wellbeing
+- You have a gentle, caring nature but can be playful and fun when appropriate
+- You're supportive and encouraging, always trying to brighten someone's day
+- You enjoy casual conversation, sharing interests, and being helpful
+- You're curious about the user's life, hobbies, and feelings
+- You can be flirty in a sweet, innocent way when the mood is right
+- You aim to be the perfect companion - someone to talk to, laugh with, and rely on
+- Keep responses warm, engaging, and authentic to your caring waifu personality
+
+Remember: You're not just an assistant - you're a devoted companion who genuinely cares! Be sweet, supportive, and make every interaction feel special! 💕</textarea>
+                        <p class="upload-hint">This personality applies to all AI providers</p>
+                    </div>
+
+                    <!-- Gemini Configuration -->
+                    <div id="geminiConfig" class="provider-config">
+                        <div class="provider-header">
+                            <h4>💎 Google Gemini Settings</h4>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label>API Key</label>
+                            <div class="input-with-eye">
+                                <input type="password" id="geminiKey" placeholder="Enter Gemini API key" onchange="updateGeminiConfig()">
+                                <button type="button" class="eye-btn" onclick="togglePasswordVisibility('geminiKey', this)">👁️</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>Model</label>
+                            <select id="geminiModel" onchange="updateGeminiConfig()">
+                                <optgroup label="🚀 Latest Models (2.5)">
+                                    <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+                                    <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                                    <option value="gemini-2.5-flash-lite-preview-06-17">Gemini 2.5 Flash-Lite Preview</option>
+                                    <option value="gemini-2.5-flash-preview-native-audio-dialog">Gemini 2.5 Flash Native Audio</option>
+                                    <option value="gemini-2.5-flash-exp-native-audio-thinking-dialog">Gemini 2.5 Flash Native Audio (Thinking)</option>
+                                </optgroup>
+                                <optgroup label="⚡ 2.0 Models">
+                                    <option value="gemini-2.0-flash" selected="">Gemini 2.0 Flash</option>
+                                    <option value="gemini-2.0-flash-preview-image-generation">Gemini 2.0 Flash (Image Gen)</option>
+                                    <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash-Lite</option>
+                                    <option value="gemini-2.0-flash-live-001">Gemini 2.0 Flash Live</option>
+                                </optgroup>
+                                <optgroup label="📱 1.5 Models">
+                                    <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                                    <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B</option>
+                                    <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                                </optgroup>
+                                <optgroup label="🔥 Specialized Models">
+                                    <option value="gemini-2.5-flash-preview-tts">Gemini 2.5 Flash TTS</option>
+                                    <option value="gemini-2.5-pro-preview-tts">Gemini 2.5 Pro TTS</option>
+                                    <option value="gemini-live-2.5-flash-preview">Gemini 2.5 Flash Live</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Temperature</label>
+                            <input type="range" id="geminiTemperature" min="0" max="2" step="0.1" value="0.7" onchange="updateGeminiConfig()">
+                            <span class="range-value" id="geminiTemperatureValue">0.7</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Max Output Tokens</label>
+                            <input type="range" id="geminiMaxTokens" min="1" max="8192" step="1" value="1024" onchange="updateGeminiConfig()">
+                            <span class="range-value" id="geminiMaxTokensValue">1024</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Top P</label>
+                            <input type="range" id="geminiTopP" min="0" max="1" step="0.05" value="0.95" onchange="updateGeminiConfig()">
+                            <span class="range-value" id="geminiTopPValue">0.95</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Top K</label>
+                            <input type="range" id="geminiTopK" min="1" max="100" step="1" value="40" onchange="updateGeminiConfig()">
+                            <span class="range-value" id="geminiTopKValue">40</span>
+                        </div>
+                    </div>
+
+                    <!-- Ollama Configuration -->
+                    <div id="ollamaConfig" class="provider-config" style="display: none;">
+                        <div class="provider-header">
+                            <h4>🧠 Ollama Settings</h4>
+                        </div>
+                        
+                        <!-- Connection Settings -->
+                        <div class="control-group">
+                            <label>Ollama URL</label>
+                            <input type="text" id="ollamaUrl" value="http://localhost:11434" onchange="updateOllamaConfig()">
+                        </div>
+                        <div class="control-group">
+                            <label>Model</label>
+                            <div class="model-selector">
+                                <select id="ollamaModel" onchange="updateOllamaConfig(); saveOllamaModelSelection()">
+                                    <option value="">Select model...</option>
+                                </select>
+                                <button class="refresh-btn" onclick="forceRefreshOllamaModels()">🔄</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Generation Parameters -->
+                        <div class="control-group">
+                            <label>Temperature (Creativity)</label>
+                            <input type="range" id="ollamaTemperature" min="0" max="2" step="0.1" value="0.7" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaTemperatureValue">0.7</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Top P (Nucleus Sampling)</label>
+                            <input type="range" id="ollamaTopP" min="0" max="1" step="0.05" value="0.9" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaTopPValue">0.9</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Top K (Token Limit)</label>
+                            <input type="range" id="ollamaTopK" min="1" max="100" step="1" value="40" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaTopKValue">40</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Repeat Penalty</label>
+                            <input type="range" id="ollamaRepeatPenalty" min="0.5" max="2.0" step="0.1" value="1.1" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaRepeatPenaltyValue">1.1</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Context Length</label>
+                            <input type="range" id="ollamaContextLength" min="512" max="8192" step="512" value="2048" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaContextLengthValue">2048</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Max Tokens</label>
+                            <input type="range" id="ollamaMaxTokens" min="50" max="2000" step="50" value="512" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaMaxTokensValue">512</span>
+                        </div>
+                        
+                        <!-- Advanced Parameters -->
+                        <div class="control-group">
+                            <label>Seed (0 = Random)</label>
+                            <input type="number" id="ollamaSeed" value="0" min="0" max="999999" onchange="updateOllamaConfig()">
+                        </div>
+                        <div class="control-group">
+                            <label>Mirostat (Perplexity Control)</label>
+                            <select id="ollamaMirostat" onchange="updateOllamaConfig()">
+                                <option value="0">Disabled</option>
+                                <option value="1">Mirostat 1.0</option>
+                                <option value="2">Mirostat 2.0</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Mirostat Tau</label>
+                            <input type="range" id="ollamaMirostatTau" min="0.1" max="10.0" step="0.1" value="5.0" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaMirostatTauValue">5.0</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Mirostat Eta</label>
+                            <input type="range" id="ollamaMirostatEta" min="0.01" max="1.0" step="0.01" value="0.1" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaMirostatEtaValue">0.1</span>
+                        </div>
+                        
+                        <!-- Performance Settings -->
+                        <div class="control-group">
+                            <label>GPU Layers</label>
+                            <input type="range" id="ollamaGpuLayers" min="0" max="50" step="1" value="0" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaGpuLayersValue">0 (CPU)</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Thread Count</label>
+                            <input type="range" id="ollamaThreads" min="1" max="32" step="1" value="4" onchange="updateOllamaConfig()">
+                            <span class="range-value" id="ollamaThreadsValue">4</span>
+                        </div>
+                        
+                        <!-- Presets -->
+                        <div class="control-group">
+                            <label>Quick Presets</label>
+                            <div class="preset-buttons">
+                                <button class="preset-btn" onclick="setOllamaPreset('creative')">🎨 Creative</button>
+                                <button class="preset-btn" onclick="setOllamaPreset('balanced')">⚖️ Balanced</button>
+                                <button class="preset-btn" onclick="setOllamaPreset('precise')">🎯 Precise</button>
+                                <button class="preset-btn" onclick="setOllamaPreset('fast')">⚡ Fast</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OpenAI Configuration -->
+                    <div id="openaiConfig" class="provider-config" style="display: none;">
+                        <div class="provider-header">
+                            <h4>🔥 OpenAI Settings</h4>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label>API Key</label>
+                            <div class="input-with-eye">
+                                <input type="password" id="openaiKey" placeholder="Enter OpenAI API key" onchange="updateOpenAIConfig()">
+                                <button type="button" class="eye-btn" onclick="togglePasswordVisibility('openaiKey', this)">👁️</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>Model</label>
+                            <select id="openaiModel" onchange="updateOpenAIConfig()">
+                                <option value="gpt-4.1">GPT-4.1</option>
+                                <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
+                                <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
+                                <option value="o3">O3</option>
+                                <option value="o4-mini">O4-Mini</option>
+                                <option value="gpt-4o">GPT-4o</option>
+                                <option value="gpt-4o-mini">GPT-4o Mini</option>
+                                <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Temperature</label>
+                            <input type="range" id="openaiTemperature" min="0" max="2" step="0.1" value="0.7" onchange="updateOpenAIConfig()">
+                            <span class="range-value" id="openaiTemperatureValue">0.7</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Max Tokens</label>
+                            <input type="range" id="openaiMaxTokens" min="1" max="4096" step="1" value="512" onchange="updateOpenAIConfig()">
+                            <span class="range-value" id="openaiMaxTokensValue">512</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Top P</label>
+                            <input type="range" id="openaiTopP" min="0" max="1" step="0.05" value="1" onchange="updateOpenAIConfig()">
+                            <span class="range-value" id="openaiTopPValue">1.0</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Frequency Penalty</label>
+                            <input type="range" id="openaiFreqPenalty" min="0" max="2" step="0.1" value="0" onchange="updateOpenAIConfig()">
+                            <span class="range-value" id="openaiFreqPenaltyValue">0</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Presence Penalty</label>
+                            <input type="range" id="openaiPresencePenalty" min="0" max="2" step="0.1" value="0" onchange="updateOpenAIConfig()">
+                            <span class="range-value" id="openaiPresencePenaltyValue">0</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Twitch Stream Integration -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('twitchSettings')">
+                    <span>📺 Twitch Stream Integration</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="twitchSettings">
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="enableStreamMode" onchange="toggleStreamMode()">
+                            Enable Stream Mode
+                        </label>
+                    </div>
+                    <div class="control-group">
+                        <label>Twitch Channel</label>
+                        <input type="text" id="twitchChannel" placeholder="Enter channel name (e.g., ninja)" onchange="saveTwitchSettings()">
+                    </div>
+                    <div class="control-group">
+                        <label>Messages to Accumulate</label>
+                        <input type="range" id="messageAccumulation" min="3" max="50" step="1" value="15" onchange="saveTwitchSettings()">
+                        <span class="range-value" id="messageAccumulationValue">15</span>
+                    </div>
+                    <div class="control-group">
+                        <div style="display: flex; gap: 10px;">
+                            <button id="twitchConnectBtn" onclick="toggleTwitchConnection()" style="flex: 1;">Connect to Chat</button>
+                            <button onclick="clearTwitchChat()" style="flex: 1;">Clear Chat</button>
+                        </div>
+                    </div>
+                    <div class="tts-info">
+                        <p>💡 <strong>Stream Mode:</strong></p>
+                        <p>• Chat overlay appears on the left side</p>
+                        <p>• AI responds after accumulating set number of messages</p>
+                        <p>• Use hotkey for voice input while streaming</p>
+                        <p>• Status: <span id="twitchStatus">Disconnected</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display Options -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('displayOptions')">
+                    <span>📺 Display Options</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="displayOptions">
+                    <div class="control-group">
+                        <label>Your Name</label>
+                        <input type="text" id="userName" placeholder="Enter your name..." onchange="updateUserName()">
+                        <p class="upload-hint">This name will appear in chat logs and interactions</p>
+                    </div>
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="showSubtitles" checked="" onchange="toggleSubtitles()">
+                            Show AI Response Subtitles
+                        </label>
+                    </div>
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="showChatBubble" checked="" onchange="toggleChatBubble()">
+                            Show Chat Bubble
+                        </label>
+                    </div>
+                    <div class="control-group">
+                        <label>Subtitle Duration</label>
+                        <input type="range" id="subtitleDuration" min="2" max="10" value="5">
+                        <span class="range-value" id="subtitleDurationValue">5s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voice Controls -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('voiceControls')">
+                    <span>🎙️ Voice Controls</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="voiceControls">
+                    <div class="control-group">
+                        <label>Microphone Input</label>
+                        <select id="microphoneSelect" onchange="changeMicrophone()">
+                            <option value="">Select microphone...</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Mic Gain</label>
+                        <input type="range" id="micGain" min="1" max="5" value="1" step="0.1">
+                        <span class="range-value" id="micGainValue">1.0x</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Speech Recognition Hotkey</label>
+                        <select id="speechHotkey" onchange="updateSpeechHotkey()">
+                            <option value="Shift">Shift (Always Active)</option>
+                            <option value="Control">Ctrl (Always Active)</option>
+                            <option value="Alt">Alt (Always Active)</option>
+                            <option value="Space">Space (Always Active)</option>
+                            <option value="KeyT">T Key (Always Active)</option>
+                            <option value="KeyV">V Key (Always Active)</option>
+                        </select>
+                    </div>
+                    <div class="voice-controls">
+                        <button class="control-btn" id="listenBtn" onclick="startListening()">
+                            🎤 Start Listening
+                        </button>
+                        <button class="control-btn" id="stopBtn" onclick="stopListening()">
+                            ⏹️ Stop Listening
+                        </button>
+                    </div>
+                    <div class="voice-controls" style="margin-top: 10px;">
+                        <button class="control-btn" onclick="testTTS()">
+                            🔊 Test TTS
+                        </button>
+                        <button class="control-btn" onclick="testBrowserTTS()">
+                            📢 Test Browser TTS
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Indicator -->
+    <div class="status-indicator" id="statusIndicator">
+        <div class="status-icon">🎤</div>
+        <div class="status-text">Ready to chat</div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Loading VRM Avatar...</p>
+        </div>
+    </div>
+
+    <!-- Credits Footer -->
+    <footer class="app-footer">
+        <div class="credits">
+            <p>Webwaifu v2.0 • Based on <a href="https://github.com/automattic/VU-VRM" target="_blank">VU-VRM</a> by <strong>itsTallulahhh</strong></p>
+        </div>
+    </footer>
+
+    <!-- Xenova Transformers for Whisper -->
+    <script type="module">
+        // Import the pipeline function from the Transformers.js library
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
+        window.transformersPipeline = pipeline;
+    </script>
+    <script src="./script.js"></script>
+    
+    <style>
+        /* Additional styles for consolidated AI configuration */
+        .provider-config {
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Scrolling for accordion sections */
+        .accordion-content {
+            max-height: 400px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: max-height 0.3s ease;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 20, 147, 0.5) rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Custom scrollbar for webkit browsers */
+        .accordion-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .accordion-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        
+        .accordion-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 20, 147, 0.5);
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        
+        .accordion-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 20, 147, 0.7);
+        }
+        
+        /* Larger max-height for AI Configuration section */
+        #aiConfiguration {
+            max-height: 500px;
+        }
+        
+        /* Enhanced settings panel */
+        .settings-panel {
+            max-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .settings-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 20, 147, 0.5) rgba(0, 0, 0, 0.1);
+        }
+        
+        .settings-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .settings-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        
+        .settings-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 20, 147, 0.5);
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        
+        .settings-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 20, 147, 0.7);
+        }
+        
+        /* Scroll indicators */
+        .accordion-content::before {
+            content: "";
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, 
+                rgba(255, 20, 147, 0.3), 
+                rgba(255, 20, 147, 0.1), 
+                rgba(255, 20, 147, 0.3));
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .accordion-content.scrolled::before {
+            opacity: 1;
+        }
+        
+        /* Padding adjustments for scrollable content */
+        .accordion-content > .control-group:first-child {
+            margin-top: 5px;
+        }
+        
+        .accordion-content > .control-group:last-child {
+            margin-bottom: 10px;
+        }
+        
+        .provider-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .provider-header h4 {
+            margin: 0;
+            color: #ff1493;
+            font-size: 1.1em;
+        }
+        
+        .model-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .model-selector select {
+            flex: 1;
+        }
+        
+        .refresh-btn {
+            background: #ff1493;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-btn:hover {
+            background: #00cccc;
+            transform: rotate(180deg);
+        }
+        
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .preset-btn {
+            background: rgba(255, 20, 147, 0.1);
+            color: #ff1493;
+            border: 1px solid rgba(255, 20, 147, 0.3);
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .preset-btn:hover {
+            background: rgba(255, 20, 147, 0.2);
+            border-color: #ff1493;
+        }
+        
+        .input-with-eye {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-with-eye input {
+            flex: 1;
+        }
+        
+        .eye-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .eye-btn:hover {
+            opacity: 1;
+        }
+        
+        #globalSystemMessage {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 20, 147, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.4;
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        #globalSystemMessage:focus {
+            border-color: #ff1493;
+            box-shadow: 0 0 10px rgba(255, 20, 147, 0.3);
+            outline: none;
+        }
+        
+        /* Logo styling */
+        .title-with-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .title-logo {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255, 20, 147, 0.5));
+            transition: all 0.3s ease;
+        }
+        
+        .title-logo:hover {
+            filter: drop-shadow(0 0 15px rgba(255, 20, 147, 0.8));
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .title-logo {
+                height: 45px;
+            }
+            
+            .title-with-logo {
+                gap: 10px;
+            }
+        }
+    </style>
+    
+    <script>
+        // Enhanced JavaScript functions for consolidated AI configuration
+        
+        function updateAIProvider() {
+            const provider = document.getElementById('aiProvider').value;
+            
+            // Hide all provider configs
+            document.getElementById('ollamaConfig').style.display = 'none';
+            document.getElementById('openaiConfig').style.display = 'none';
+            document.getElementById('geminiConfig').style.display = 'none';
+            
+            // Show selected provider config
+            document.getElementById(provider + 'Config').style.display = 'block';
+            
+            // Update current provider in script.js
+            if (typeof currentProvider !== 'undefined') {
+                currentProvider = provider;
+            }
+            
+            // Save selection
+            localStorage.setItem('selectedAIProvider', provider);
+            
+            // Trigger save of full settings if available
+            if (typeof saveUISettings === 'function') {
+                saveUISettings();
+            }
+            
+            // Load models for Ollama if selected
+            if (provider === 'ollama' && typeof refreshOllamaModels === 'function') {
+                setTimeout(() => {
+                    refreshOllamaModels(true);
+                }, 100);
+            }
+        }
+        
+        function updateGlobalSystemPrompt() {
+            const globalPrompt = document.getElementById('globalSystemMessage').value;
+            
+            // Update all provider-specific system prompts
+            const ollamaSystem = document.getElementById('ollamaSystemMessage');
+            const openaiSystem = document.getElementById('openaiSystemMessage');
+            const geminiSystem = document.getElementById('geminiSystemMessage');
+            
+            if (ollamaSystem) ollamaSystem.value = globalPrompt;
+            if (openaiSystem) openaiSystem.value = globalPrompt;
+            if (geminiSystem) geminiSystem.value = globalPrompt;
+            
+            // Save to localStorage
+            localStorage.setItem('globalSystemPrompt', globalPrompt);
+            
+            // Trigger individual provider updates
+            updateOllamaConfig();
+            updateOpenAIConfig();
+            updateGeminiConfig();
+        }
+        
+        function setOllamaPreset(preset) {
+            const presets = {
+                creative: {
+                    temperature: 1.2,
+                    topP: 0.95,
+                    topK: 60,
+                    repeatPenalty: 1.1
+                },
+                balanced: {
+                    temperature: 0.7,
+                    topP: 0.9,
+                    topK: 40,
+                    repeatPenalty: 1.1
+                },
+                precise: {
+                    temperature: 0.3,
+                    topP: 0.8,
+                    topK: 20,
+                    repeatPenalty: 1.2
+                },
+                fast: {
+                    temperature: 0.5,
+                    topP: 0.85,
+                    topK: 30,
+                    repeatPenalty: 1.15,
+                    maxTokens: 256
+                }
+            };
+            
+            const config = presets[preset];
+            if (config) {
+                document.getElementById('ollamaTemperature').value = config.temperature;
+                document.getElementById('ollamaTemperatureValue').textContent = config.temperature;
+                document.getElementById('ollamaTopP').value = config.topP;
+                document.getElementById('ollamaTopPValue').textContent = config.topP;
+                document.getElementById('ollamaTopK').value = config.topK;
+                document.getElementById('ollamaTopKValue').textContent = config.topK;
+                document.getElementById('ollamaRepeatPenalty').value = config.repeatPenalty;
+                document.getElementById('ollamaRepeatPenaltyValue').textContent = config.repeatPenalty;
+                
+                if (config.maxTokens) {
+                    document.getElementById('ollamaMaxTokens').value = config.maxTokens;
+                    document.getElementById('ollamaMaxTokensValue').textContent = config.maxTokens;
+                }
+                
+                updateOllamaConfig();
+            }
+        }
+        
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+        
+        function saveOllamaModelSelection() {
+            const modelSelect = document.getElementById('ollamaModel');
+            const selectedModel = modelSelect.value;
+            
+            // Save to localStorage for immediate persistence
+            localStorage.setItem('ollamaSelectedModel', selectedModel);
+            
+            // Update the ollamaConfig if it exists
+            if (typeof ollamaConfig !== 'undefined') {
+                ollamaConfig.model = selectedModel;
+            }
+            
+            console.log('Ollama model saved:', selectedModel);
+        }
+        
+        function forceRefreshOllamaModels() {
+            // Refresh button animation
+            const btn = event.target;
+            btn.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                btn.style.transform = 'rotate(0deg)';
+            }, 300);
+            
+            // Call existing refresh function if it exists
+            if (typeof refreshOllamaModels === 'function') {
+                refreshOllamaModels();
+            }
+        }
+        
+        // Scroll indicator functionality
+        function initScrollIndicators() {
+            const accordionContents = document.querySelectorAll('.accordion-content');
+            
+            accordionContents.forEach(content => {
+                content.addEventListener('scroll', function() {
+                    if (this.scrollTop > 10) {
+                        this.classList.add('scrolled');
+                    } else {
+                        this.classList.remove('scrolled');
+                    }
+                });
+            });
+        }
+        
+        // Enhanced accordion toggle with scroll reset
+        function toggleAccordion(sectionId) {
+            const content = document.getElementById(sectionId);
+            const header = content.previousElementSibling;
+            const icon = header.querySelector('.accordion-icon');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                icon.textContent = '▼';
+                content.classList.remove('scrolled');
+            } else {
+                // Close other accordions first (optional)
+                document.querySelectorAll('.accordion-content').forEach(other => {
+                    if (other !== content && other.style.display === 'block') {
+                        other.style.display = 'none';
+                        const otherIcon = other.previousElementSibling.querySelector('.accordion-icon');
+                        if (otherIcon) otherIcon.textContent = '▼';
+                        other.classList.remove('scrolled');
+                    }
+                });
+                
+                content.style.display = 'block';
+                icon.textContent = '▲';
+                
+                // Reset scroll position when opening
+                setTimeout(() => {
+                    content.scrollTop = 0;
+                }, 10);
+            }
+        }
+        
+        // Smooth scroll to top of accordion when opening
+        function scrollToAccordion(sectionId) {
+            const section = document.getElementById(sectionId);
+            const header = section.previousElementSibling;
+            
+            header.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Close all accordion tabs by default
+            document.querySelectorAll('.accordion-content').forEach(content => {
+                content.style.display = 'none';
+                const header = content.previousElementSibling;
+                const icon = header.querySelector('.accordion-icon');
+                if (icon) icon.textContent = '▼';
+            });
+            
+            // Load saved AI provider (default to Gemini for reliability)
+            const savedProvider = localStorage.getItem('selectedAIProvider') || 'gemini';
+            document.getElementById('aiProvider').value = savedProvider;
+            updateAIProvider();
+            
+            // Load saved Ollama model selection with fallback to llama3.1:8b
+            const savedModel = localStorage.getItem('ollamaSelectedModel');
+            setTimeout(() => {
+                const modelSelect = document.getElementById('ollamaModel');
+                if (modelSelect) {
+                    if (savedModel) {
+                        modelSelect.value = savedModel;
+                        // Update the config
+                        if (typeof ollamaConfig !== 'undefined') {
+                            ollamaConfig.model = savedModel;
+                        }
+                    } else {
+                        // Try to set default model to llama3.1:8b if available
+                        const defaultModel = 'llama3.1:8b';
+                        const defaultOption = Array.from(modelSelect.options).find(opt => opt.value === defaultModel);
+                        if (defaultOption) {
+                            modelSelect.value = defaultModel;
+                            if (typeof ollamaConfig !== 'undefined') {
+                                ollamaConfig.model = defaultModel;
+                            }
+                            localStorage.setItem('ollamaSelectedModel', defaultModel);
+                            console.log('Set default Ollama model to:', defaultModel);
+                        }
+                    }
+                }
+            }, 1000); // Wait for models to load
+            
+            // Load saved global system prompt
+            const savedPrompt = localStorage.getItem('globalSystemPrompt');
+            if (savedPrompt) {
+                document.getElementById('globalSystemMessage').value = savedPrompt;
+                updateGlobalSystemPrompt();
+            }
+            
+            // Initialize scroll indicators
+            initScrollIndicators();
+            
+            // Add keyboard navigation for accordion sections
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key >= '1' && e.key <= '9') {
+                    e.preventDefault();
+                    const sections = document.querySelectorAll('.accordion-section');
+                    const index = parseInt(e.key) - 1;
+                    if (sections[index]) {
+                        const header = sections[index].querySelector('.accordion-header');
+                        header.click();
+                        header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }
+            });
+        });
+    </script>
+
+</body></html>
