@@ -2093,6 +2093,23 @@ async function getGeminiResponse(message) {
   }
 
   const data = await response.json();
+  
+  // Check if response has expected structure
+  if (!data.candidates) {
+    console.error('No candidates in Gemini API response:', data);
+    throw new Error(`Gemini API returned no candidates. Response: ${JSON.stringify(data)}`);
+  }
+  
+  if (!data.candidates[0]) {
+    console.error('No first candidate in Gemini API response:', data);
+    throw new Error('Gemini API returned empty candidates array');
+  }
+  
+  if (!data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0]) {
+    console.error('Invalid content structure in Gemini API response:', data.candidates[0]);
+    throw new Error('Gemini API candidate missing content or parts');
+  }
+  
   const aiResponse = data.candidates[0].content.parts[0].text;
 
   // Add to conversation history
