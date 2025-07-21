@@ -1,33 +1,32 @@
 // setup
 
 // Mobile device detection (needs to be at the top)
-var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 // Mobile-friendly voice input (removed complex hold-to-speak for better compatibility)
 
   //expression setup
-var expressionyay = 0;
-var expressionoof = 0;
-var expressionlimityay = 0.5;
-var expressionlimitoof = 0.5;
-var expressionease = 100;
-var expressionintensity = 0.75;
+let expressionyay = 0;
+let expressionoof = 0;
+let expressionlimityay = 0.5;
+let expressionlimitoof = 0.5;
+const expressionease = 100;
+const expressionintensity = 0.75;
 
 // TTS Audio Context Variables
-var ttsAudioContext = null;
-var ttsAnalyser = null;
-var ttsAudioSource = null;
-var ttsInputVolume = 0;
-var currentTTSAudio = null;
-var isTTSPlaying = false;
-var isProcessingTTS = false;
-var isBrowserTTSActive = false;
+let ttsAudioContext = null;
+let ttsAnalyser = null;
+let ttsAudioSource = null;
+let ttsInputVolume = 0;
+let currentTTSAudio = null;
+let isTTSPlaying = false;
+let isProcessingTTS = false;
+let isBrowserTTSActive = false;
 let isUsingVisemes = false; // Flag to disable audio-reactive movement when using precise visemes
 
 
-// Smart AI Request Queue (prevent API overwhelm but don't block user)
-var aiRequestQueue = [];
-var isProcessingAIRequest = false;
+// AI Request processing flag (queue system handled by stream mode queues)
+let isProcessingAIRequest = false;
 
 // Reusable timeout controller helper
 function createAPITimeoutController(timeoutMs = 30000) {
@@ -281,10 +280,7 @@ const savedModelPath = localStorage.getItem('vrm-model-path') || '17680805378249
 load( savedModelPath );
 
 // grid / axis helpers
-//			const gridHelper = new THREE.GridHelper( 10, 10 );
-//			scene.add( gridHelper );
-//			const axesHelper = new THREE.AxesHelper( 5 );
-//			scene.add( axesHelper );
+// Removed commented THREE.js helper code
 
 // animate
 
@@ -393,8 +389,7 @@ let javascriptNode = null;
 let average = 0;
 
 // Speech recognition variables (global scope)
-let holdToSpeakActive = false;
-let holdToSpeakTimeout = null;
+// Removed unused holdToSpeak variables (functionality was simplified)
 
 // Ollama model loading optimization variables
 let isLoadingOllamaModels = false;
@@ -416,7 +411,7 @@ function initializeMicrophone() {
   function (stream) {
     audioContext = new AudioContext();
     analyser = audioContext.createAnalyser();
-    const gainNode = audioContext.createGain();
+    gainNode = audioContext.createGain();
     microphone = audioContext.createMediaStreamSource(stream);
     javascriptNode = audioContext.createScriptProcessor(256, 1, 1);
 
@@ -649,7 +644,7 @@ function blink() {
 
 // loop blink timing
 (function loop() {
-var rand = Math.round(Math.random() * 10000) + 1000;
+const rand = Math.round(Math.random() * 10000) + 1000;
 setTimeout(function () {
   if (currentVrm) {
     blink();
@@ -703,37 +698,49 @@ function onWindowResize(){
 }
 // interface handling
 
-var talktime = true;
+let talktime = true;
 
-function interface() {
+// VRM Motion Settings - consolidated function
+function updateVRMMotionSettings() {
+    // Initialize values if first time
+    if (initvalues == true && localStorage.localvalues) {
+        initvalues = false;
+        document.getElementById("mouththreshold").value = mouththreshold;
+        document.getElementById("mouthboost").value = mouthboost;
+        document.getElementById("bodythreshold").value = bodythreshold;
+        document.getElementById("bodymotion").value = bodymotion;
+        document.getElementById("expression").value = expression;
+    }
 
-  if (initvalues == true){
-  if (localStorage.localvalues) {
-    initvalues = false;
-    document.getElementById("mouththreshold").value = mouththreshold;
-    document.getElementById("mouthboost").value = mouthboost;
-    document.getElementById("bodythreshold").value = bodythreshold;
-    document.getElementById("bodymotion").value = bodymotion;
-    document.getElementById("expression").value = expression;
-  }}
-
+    // Update variables from DOM elements
     mouththreshold = document.getElementById("mouththreshold").value;
     mouthboost = document.getElementById("mouthboost").value;
     bodythreshold = document.getElementById("bodythreshold").value;
     bodymotion = document.getElementById("bodymotion").value;
-
     expression = document.getElementById("expression").value;
-    expressionlimityay = (expression);
-    expressionlimitoof = (100 - expression); 
-    expressionlimityay = expressionlimityay/100;
-    expressionlimitoof = expressionlimitoof/100;
-    expressionlimityay = expressionlimityay*expressionintensity;
-    expressionlimitoof = expressionlimitoof*expressionintensity;    
-
-    console.log("Expression " + expressionyay + " yay / " + expressionoof + " oof");
-    console.log("Expression mix " + expressionlimityay + " yay / " + expressionlimitoof + " oof");
-
-    // store it too
+    
+    // Update expression limits
+    expressionlimityay = expression / 100;
+    expressionlimitoof = (100 - expression) / 100;
+    
+    // Apply intensity scaling
+    expressionlimityay = expressionlimityay * expressionintensity;
+    expressionlimitoof = expressionlimitoof * expressionintensity;
+    
+    // Update display values
+    const mouthThresholdValue = document.getElementById("mouthThresholdValue");
+    const bodyThresholdValue = document.getElementById("bodyThresholdValue");
+    const mouthBoostValue = document.getElementById("mouthBoostValue");
+    const bodyMotionValue = document.getElementById("bodyMotionValue");
+    const expressionValue = document.getElementById("expressionValue");
+    
+    if (mouthThresholdValue) mouthThresholdValue.textContent = mouththreshold;
+    if (bodyThresholdValue) bodyThresholdValue.textContent = bodythreshold;
+    if (mouthBoostValue) mouthBoostValue.textContent = mouthboost;
+    if (bodyMotionValue) bodyMotionValue.textContent = bodymotion;
+    if (expressionValue) expressionValue.textContent = expression;
+    
+    // Save VRM motion settings to localStorage
     const motionSettings = {
       mouththreshold: mouththreshold,
       mouthboost: mouthboost,
@@ -742,34 +749,50 @@ function interface() {
       expression: expression
     };
     localStorage.setItem('vrm-motion-settings', JSON.stringify(motionSettings));
+}
 
+// Clear conversation history function
+function clearConversationHistory() {
+  // Confirm with user first
+  if (confirm('Are you sure you want to clear the conversation history? This cannot be undone.')) {
+    // Clear the conversation history array
+    conversationHistory = [];
+    
+    // Update localStorage to remove conversation history
+    const settings = JSON.parse(localStorage.getItem('neurolink-vrm-settings') || '{}');
+    settings.conversationHistory = [];
+    localStorage.setItem('neurolink-vrm-settings', JSON.stringify(settings));
+    
+    // Show confirmation
+    const clearBtn = document.getElementById('clearConvoBtn');
+    if (clearBtn) {
+      const originalText = clearBtn.textContent;
+      clearBtn.textContent = '✅ Cleared!';
+      clearBtn.style.backgroundColor = '#44ff44';
+      
+      setTimeout(() => {
+        clearBtn.textContent = originalText;
+        clearBtn.style.backgroundColor = '#ff4444';
+      }, 2000);
+    }
+    
+    console.log('Conversation history cleared');
+  }
 }
 
 // click to dismiss non-vrm divs
   function hideinterface() {
-
-  var a = document.getElementById("backplate");
-  var b = document.getElementById("interface");
-  var x = document.getElementById("infobar");
+  // Only hide elements that actually exist
   var y = document.getElementById("credits");
-  a.style.display = "none";
-  b.style.display = "none";
-  x.style.display = "none";
-  y.style.display = "none";
-
+  if (y) y.style.display = "none";
   }
 
 // click to dismiss non-interface divs
 function hideinfo() {
-
-  var a = document.getElementById("backplate");
-  var x = document.getElementById("infobar");
+  // Only hide elements that actually exist
   var y = document.getElementById("credits");
-  a.style.display = "none";
-  x.style.display = "none";
-  y.style.display = "none";
-
-  }
+  if (y) y.style.display = "none";
+}
 
 // load file from user picker
   function dofile(){
@@ -1417,9 +1440,7 @@ function loadArmConfig() {
 // Cleanup - removed complex animation system, now using simple arm sliders
 // end
 
-// wait to trigger interface and load init values
-
-setTimeout(() => {  interface(); }, 500);
+// VRM motion settings are now initialized in updateVRMMotionSettings() when needed
 
 // Microphone enumeration and selection
 async function enumerateMicrophones() {
@@ -1486,7 +1507,7 @@ function updateMicGain() {
 // TTS and AI Integration Functions
 
 // Default Azure TTS and Ollama settings
-var azureConfig = {
+let azureConfig = {
   key: '',
   region: 'eastus',
   voice: 'en-US-JennyNeural',
@@ -1496,11 +1517,11 @@ var azureConfig = {
   rate: 1.0
 };
 
-var browserTTSConfig = {
+let browserTTSConfig = {
   selectedVoice: '' // Empty means auto-select
 };
 
-var ollamaConfig = {
+let ollamaConfig = {
   url: 'http://localhost:11434',
   model: '',
   temperature: 0.7,
@@ -1522,7 +1543,7 @@ var ollamaConfig = {
   batch_size: 512
 };
 
-var backgroundConfig = {
+let backgroundConfig = {
   scale: 1.2,
   posX: 0,
   posY: 0.8,
@@ -1534,7 +1555,7 @@ var backgroundConfig = {
   curveDirection: 'inward'
 };
 
-var vrmConfig = {
+let vrmConfig = {
   posX: 0,
   posY: 0,
   posZ: 0,
@@ -1542,7 +1563,7 @@ var vrmConfig = {
   rotY: 0
 };
 
-var armConfig = {
+let armConfig = {
   leftArmZ: 0,    // Up/Down
   rightArmZ: 0,   // Up/Down  
   leftArmX: 0,    // Forward/Back
@@ -1551,7 +1572,7 @@ var armConfig = {
   rightElbow: 0.2 // Elbow bend
 };
 
-var openaiConfig = {
+let openaiConfig = {
   key: '',
   model: 'gpt-4.1',
   temperature: 0.7,
@@ -1562,7 +1583,7 @@ var openaiConfig = {
   system_message: ''
 };
 
-var geminiConfig = {
+let geminiConfig = {
   key: '',
   model: 'gemini-2.5-flash',
   temperature: 0.7,
@@ -1572,10 +1593,11 @@ var geminiConfig = {
   system_instruction: ''
 };
 
-var currentProvider = 'gemini'; // 'ollama', 'openai', or 'gemini' - default to Gemini
+let currentProvider = 'gemini'; // 'ollama', 'openai', or 'gemini' - default to Gemini
 
-var userName = localStorage.getItem('user-name') || 'Local User'; // Default user name
-var characterName = localStorage.getItem('character-name') || 'Neuro-sama'; // Default character name
+let userName = localStorage.getItem('user-name') || 'Local User'; // Default user name
+let characterName = localStorage.getItem('character-name') || 'Neuro-sama'; // Default character name
+let characterDescription = localStorage.getItem('character-description') || ''; // Character personality description
 
 function updateUserName() {
   const userNameInput = document.getElementById('userName');
@@ -1599,6 +1621,184 @@ function updateCharacterName() {
   }
 }
 
+function updateCharacterDescription() {
+  const characterDescInput = document.getElementById('characterDescription');
+  if (characterDescInput) {
+    characterDescription = characterDescInput.value || '';
+    localStorage.setItem('character-description', characterDescription);
+    console.log('Character description updated');
+    // Character description is kept separate from system prompt - no auto-mixing
+  }
+}
+
+function applyCharacterToChat() {
+  const personality = document.getElementById('characterDescription').value;
+  const name = document.getElementById('characterName').value || 'AI Assistant';
+  
+  if (!personality || personality.trim() === '') {
+    alert('Please enter a character personality description first.');
+    return;
+  }
+  
+  // Get current system prompt or use default
+  const currentSystemPrompt = document.getElementById('globalSystemMessage').value || 
+                              'You are a helpful AI assistant.';
+  
+  // Combine system prompt with character personality
+  const newSystemPrompt = `${currentSystemPrompt}
+
+Character Name: ${name}
+Character Personality: ${personality}
+
+Important: You must roleplay as this character consistently. Respond in character, matching the personality traits, speaking style, and behavior described above.`;
+
+  // Update the global system message
+  document.getElementById('globalSystemMessage').value = newSystemPrompt;
+  
+  // Update all AI provider configurations
+  updateGlobalSystemPrompt();
+  
+  // Clear conversation history to start fresh with new character
+  conversationHistory = [];
+  
+  // Show success feedback
+  const applyBtn = document.querySelector('button[onclick="applyCharacterToChat()"]');
+  if (applyBtn) {
+    const originalText = applyBtn.textContent;
+    applyBtn.textContent = '✅ Character Applied!';
+    applyBtn.style.backgroundColor = '#45a049';
+    
+    setTimeout(() => {
+      applyBtn.textContent = originalText;
+      applyBtn.style.backgroundColor = '#4CAF50';
+    }, 2000);
+  }
+  
+  console.log('Character applied to chat:', { name, personality });
+}
+
+async function generateCharacter() {
+  const promptInput = document.getElementById('characterPrompt');
+  const characterDescTextarea = document.getElementById('characterDescription');
+  const generateBtn = document.querySelector('button[onclick="generateCharacter()"]');
+  
+  if (!promptInput || !characterDescTextarea) return;
+  
+  const userPrompt = promptInput.value.trim();
+  if (!userPrompt) {
+    alert('Please describe the character you want to generate');
+    return;
+  }
+  
+  // Show generating state
+  const originalBtnText = generateBtn.textContent;
+  generateBtn.textContent = '⏳ Generating...';
+  generateBtn.disabled = true;
+  
+  // Craft the character generation prompt
+  const characterGenPrompt = `Create a detailed character personality description based on this request: "${userPrompt}"
+
+Please write a comprehensive personality description that includes:
+- Core personality traits and characteristics
+- How they speak and communicate (tone, style, mannerisms)
+- Their behavior patterns and reactions
+- Emotional tendencies and social style
+- Any quirks, habits, or unique aspects
+- Background context that shapes their personality
+
+Write this as a personality description that could be used to roleplay as this character. Be specific and detailed, but keep it focused on personality rather than physical appearance or technical instructions.
+
+Output only the personality description, nothing else:`;
+
+  try {
+    // Send to current AI provider
+    const response = await sendCharacterGenerationRequest(characterGenPrompt);
+    
+    if (response && response.trim()) {
+      // Fill the character description textarea
+      characterDescTextarea.value = response.trim();
+      // Update the stored character description
+      updateCharacterDescription();
+      
+      // Clear the prompt input
+      promptInput.value = '';
+      
+      console.log('Character generated successfully');
+    } else {
+      throw new Error('Empty response from AI');
+    }
+    
+  } catch (error) {
+    console.error('Character generation failed:', error);
+    // Show error in character description field instead of alert
+    const personalityField = document.getElementById('characterDescription');
+    if (personalityField) {
+      personalityField.value = `Error: ${error.message}. Please check your AI provider settings and try again.`;
+      personalityField.style.borderColor = '#ff4444';
+      setTimeout(() => {
+        personalityField.style.borderColor = '';
+      }, 3000);
+    } else {
+      console.error('Character generation failed and no UI field found for error display');
+    }
+  } finally {
+    // Restore button state
+    generateBtn.textContent = originalBtnText;
+    generateBtn.disabled = false;
+  }
+}
+
+async function sendCharacterGenerationRequest(prompt) {
+  // Use the comprehensive AI functions for character generation
+  // Temporarily clear conversation history to avoid interference
+  const originalHistory = [...conversationHistory];
+  conversationHistory = [];
+  
+  try {
+    let response;
+    switch (currentProvider) {
+      case 'gemini':
+        response = await getGeminiResponse(prompt);
+        break;
+      case 'openai':
+        response = await getOpenAIResponse(prompt);
+        break;
+      case 'ollama':
+        response = await getOllamaResponse(prompt);
+        break;
+      default:
+        throw new Error('No AI provider selected');
+    }
+    return response;
+  } finally {
+    // Restore original conversation history
+    conversationHistory = originalHistory;
+  }
+}
+
+// REMOVED: Duplicate sendTo* functions - using comprehensive get*Response functions instead
+
+function updateChatDisplayCharacterName() {
+  // Update any existing chat messages or UI elements with the new character name
+  // This function ensures the character name is used consistently throughout the app
+  console.log("Character name updated in chat display to:", characterName);
+  
+  // Update chat bubble title if it exists
+  const chatBubbleTitle = document.querySelector('#speechBubbleOverlay h4');
+  if (chatBubbleTitle) {
+    chatBubbleTitle.textContent = `🤖 ${characterName}`;
+  }
+  
+  // Update chat input placeholder
+  const chatInput = document.getElementById('chatInput');
+  if (chatInput) {
+    chatInput.placeholder = `Chat with ${characterName}...`;
+  }
+  
+  // Update page title
+  document.title = `${characterName} - AI VTuber Chat`;
+}
+
 function updateChatDisplayUserName() {
     // This function is called when the user name is updated.
     // It should find all existing messages from the "Local User" and update the name.
@@ -1607,6 +1807,7 @@ function updateChatDisplayUserName() {
     // New messages will correctly use the new user name.
     console.log("User name updated. New messages will use the name: " + userName);
 }
+
 
 // Chat toggle functions
 function toggleChatVisibility() {
@@ -1700,7 +1901,7 @@ function hideSpeechBubble() {
 // Removed aiPersonality object - personality is now fully customizable via the global system prompt
 
 
-var conversationHistory = [];
+let conversationHistory = [];
 
 // Speech Recognition - Clean Working Implementation
 let mediaRecorder;
@@ -2241,59 +2442,12 @@ function addMessage(message, role, username) {
   }
 }
 
-// Smart AI Request Queue Functions
-function addToAIRequestQueue(message) {
-  aiRequestQueue.push({
-    message: message,
-    timestamp: Date.now()
-  });
-  
-  // Limit queue size to prevent memory issues
-  if (aiRequestQueue.length > 5) {
-    aiRequestQueue.shift(); // Remove oldest request
-    console.log('AI request queue full - removed oldest request');
-  }
-  
-  console.log(`Added to AI queue. Queue length: ${aiRequestQueue.length}`);
-  updateStatus('⏳', `Queued (${aiRequestQueue.length} waiting)`);
-  
-  // Process queue if not already processing
-  if (!isProcessingAIRequest) {
-    processAIRequestQueue();
-  }
-}
-
-async function processAIRequestQueue() {
-  if (aiRequestQueue.length === 0 || isProcessingAIRequest) {
-    return;
-  }
-  
-  isProcessingAIRequest = true;
-  
-  while (aiRequestQueue.length > 0) {
-    const request = aiRequestQueue.shift();
-    console.log(`Processing AI request: ${request.message.substring(0, 50)}...`);
-    
-    try {
-      await sendMessageToAIInternal(request.message);
-    } catch (error) {
-      console.error('Error processing AI request:', error);
-      updateStatus('❌', error.message || 'AI request failed');
-    }
-    
-    // Brief pause between requests to prevent API overwhelming
-    if (aiRequestQueue.length > 0) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
-  }
-  
-  isProcessingAIRequest = false;
-}
+// REMOVED: Duplicate AI request queue functions - using unified stream queue system
 
 // AI Chat Functions
 async function sendMessageToAI(message) {
-  // Instead of blocking, add to smart queue
-  addToAIRequestQueue(message);
+  // Use unified stream queue system instead of separate AI queue
+  addToQueue(message, 'local', userName, 'normal');
 }
 
 async function sendMessageToAIInternal(message) {
@@ -3018,6 +3172,22 @@ function loadUISettings() {
       if (document.getElementById('enableTTS')) document.getElementById('enableTTS').checked = settings.displayOptions.enableTTS !== false;
     }
 
+    // Update character settings
+    if (settings.characterSettings) {
+      if (settings.characterSettings.characterName) {
+        characterName = settings.characterSettings.characterName;
+        if (document.getElementById('characterName')) {
+          document.getElementById('characterName').value = characterName;
+        }
+      }
+      if (settings.characterSettings.characterDescription) {
+        characterDescription = settings.characterSettings.characterDescription;
+        if (document.getElementById('characterDescription')) {
+          document.getElementById('characterDescription').value = characterDescription;
+        }
+      }
+    }
+
     if (settings.micGain) {
       if (document.getElementById('micGain')) document.getElementById('micGain').value = settings.micGain;
       updateMicGain();
@@ -3601,7 +3771,7 @@ async function enhancedSpeakAIResponse(text) {
   showSpeechBubble(text);
 
   // Add AI response to the chat overlay
-  addTwitchChatMessage('Neuro-sama', text);
+  addTwitchChatMessage(characterName, text);
   
   // Update status
   updateStatus('🔊', 'AI is speaking...');
@@ -3737,6 +3907,10 @@ function saveUISettings() {
     displayOptions: {
       showChatBubble: document.getElementById('showChatBubble').checked,
       enableTTS: document.getElementById('enableTTS').checked
+    },
+    characterSettings: {
+      characterName: characterName,
+      characterDescription: characterDescription
     },
     micGain: document.getElementById('micGain').value,
     conversationHistory: conversationHistory
@@ -3887,6 +4061,20 @@ document.addEventListener('DOMContentLoaded', () => {
   if (userNameInput) {
     userNameInput.value = userName;
   }
+  
+  // Load character name and description into input fields
+  const characterNameInput = document.getElementById('characterName');
+  if (characterNameInput) {
+    characterNameInput.value = characterName;
+  }
+  
+  const characterDescInput = document.getElementById('characterDescription');
+  if (characterDescInput) {
+    characterDescInput.value = characterDescription;
+  }
+  
+  // Update UI elements with character name
+  updateChatDisplayCharacterName();
   
   // Ensure stream mode is off by default
   ensureStreamModeOff();
@@ -4551,8 +4739,8 @@ function processQueuedMessage(queueItem) {
     contextualPrompt += queueStatus;
   }
   
-  // Send to AI
-  sendMessageToAI(contextualPrompt);
+  // Send to AI directly to avoid infinite loop
+  sendMessageToAIInternal(contextualPrompt);
 }
 
 function updateQueueDisplay() {

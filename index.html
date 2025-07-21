@@ -70,7 +70,7 @@
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </button>
-                <input type="text" id="chatInput" placeholder="Chat with your AI waifu..." onkeypress="handleChatKeyPress(event)">
+                <input type="text" id="chatInput" placeholder="Chat with your AI character..." onkeypress="handleChatKeyPress(event)">
                 <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceInput()" title="Voice input">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
@@ -140,27 +140,27 @@
                     </div>
                     <div class="control-group">
                         <label>Mouth Threshold</label>
-                        <input type="range" id="mouththreshold" min="0" max="50" value="10">
+                        <input type="range" id="mouththreshold" min="0" max="50" value="10" oninput="updateVRMMotionSettings()">
                         <span class="range-value" id="mouthThresholdValue">10</span>
                     </div>
                     <div class="control-group">
                         <label>Body Threshold</label>
-                        <input type="range" id="bodythreshold" min="0" max="50" value="10">
+                        <input type="range" id="bodythreshold" min="0" max="50" value="10" oninput="updateVRMMotionSettings()">
                         <span class="range-value" id="bodyThresholdValue">10</span>
                     </div>
                     <div class="control-group">
                         <label>Mouth Gain</label>
-                        <input type="range" id="mouthboost" min="0" max="25" value="10">
+                        <input type="range" id="mouthboost" min="0" max="25" value="10" oninput="updateVRMMotionSettings()">
                         <span class="range-value" id="mouthBoostValue">10</span>
                     </div>
                     <div class="control-group">
                         <label>Body Motion</label>
-                        <input type="range" id="bodymotion" min="0" max="25" value="10">
+                        <input type="range" id="bodymotion" min="0" max="25" value="10" oninput="updateVRMMotionSettings()">
                         <span class="range-value" id="bodyMotionValue">10</span>
                     </div>
                     <div class="control-group">
                         <label>Expression (Serious ↔ Smiling)</label>
-                        <input type="range" id="expression" min="0" max="100" value="80">
+                        <input type="range" id="expression" min="0" max="100" value="80" oninput="updateVRMMotionSettings()">
                         <span class="range-value" id="expressionValue">80</span>
                     </div>
                 </div>
@@ -728,6 +728,28 @@ Remember: You're not just an assistant - you're a devoted companion who genuinel
                         <p class="upload-hint">This name will appear in chat logs and interactions</p>
                     </div>
                     <div class="control-group">
+                        <label>Character Name</label>
+                        <input type="text" id="characterName" placeholder="Enter character name..." onchange="updateCharacterName()">
+                        <p class="upload-hint">This name will appear as the AI character in chats</p>
+                    </div>
+                    <div class="control-group">
+                        <label>Quick Character Generator</label>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <input type="text" id="characterPrompt" placeholder="Describe character (e.g. 'tsundere anime girl', 'wise wizard', 'cheerful assistant')" style="flex: 1;">
+                            <button class="control-btn" onclick="generateCharacter()" style="white-space: nowrap;">🎲 Generate</button>
+                        </div>
+                        <p class="upload-hint">AI will generate a personality description based on your prompt</p>
+                    </div>
+                    <div class="control-group">
+                        <label>Character Personality</label>
+                        <textarea id="characterDescription" rows="4" onchange="updateCharacterDescription()" 
+                                  placeholder="Describe your character's personality, traits, and behavior..."></textarea>
+                        <button class="control-btn" onclick="applyCharacterToChat()" style="background-color: #4CAF50; margin-top: 5px;">
+                            ✅ Apply Character to Chat
+                        </button>
+                        <p class="upload-hint">Pure personality description - separate from technical system prompt</p>
+                    </div>
+                    <div class="control-group">
                         <label>
                             <input type="checkbox" id="showChatBubble" checked="" onchange="toggleChatBubble()">
                             Show Chat Bubble
@@ -778,6 +800,9 @@ Remember: You're not just an assistant - you're a devoted companion who genuinel
                         </button>
                         <button class="control-btn" id="stopBtn" onclick="stopListening()">
                             ⏹️ Stop Listening
+                        </button>
+                        <button class="control-btn" id="clearConvoBtn" onclick="clearConversationHistory()" style="background-color: #ff4444; margin-top: 10px;">
+                            🗑️ Clear Conversation History
                         </button>
                     </div>
                     <div class="voice-controls" style="margin-top: 10px;">
