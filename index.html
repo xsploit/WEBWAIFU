@@ -382,12 +382,17 @@
                     </div>
                     <div class="control-group">
                         <label>Voice</label>
-                        <select id="voiceSelect" onchange="updateAzureConfig()">
-                            <option value="en-US-JennyNeural">Jenny (US)</option>
-                            <option value="en-US-AshleyNeural">Ashley (US)</option>
-                            <option value="en-US-GuyNeural">Guy (US)</option>
-                            <option value="en-GB-SoniaNeural">Sonia (UK)</option>
-                        </select>
+                        <div style="display: flex; gap: 5px; align-items: center;">
+                            <select id="voiceSelect" onchange="updateAzureConfig()" style="flex: 1;">
+                                <option value="en-US-JennyNeural">Jenny (US)</option>
+                                <option value="en-US-AshleyNeural">Ashley (US)</option>
+                                <option value="en-US-GuyNeural">Guy (US)</option>
+                                <option value="en-GB-SoniaNeural">Sonia (UK)</option>
+                            </select>
+                            <button class="control-btn" onclick="refreshAzureVoices()" title="Refresh Azure voice list" style="padding: 5px 10px; font-size: 12px;">
+                                🔄
+                            </button>
+                        </div>
                     </div>
                     <div class="control-group">
                         <label>TTS Volume</label>

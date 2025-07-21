@@ -144,6 +144,170 @@ controls.screenSpacePanning = true;
 controls.target.set(0.0, 1.45, 0.0);
 controls.update();
 
+// Track camera changes for springbone physics
+let lastCameraPosition = camera.position.clone();
+let lastCameraRotation = camera.rotation.clone();
+let cameraMovement = { intensity: 0, deltaX: 0, deltaY: 0, deltaZ: 0 };
+
+// Add change event listener to OrbitControls
+controls.addEventListener('change', () => {
+  // Calculate camera movement
+  const deltaPos = camera.position.clone().sub(lastCameraPosition);
+  const deltaRot = new THREE.Vector3(
+    camera.rotation.x - lastCameraRotation.x,
+    camera.rotation.y - lastCameraRotation.y,
+    camera.rotation.z - lastCameraRotation.z
+  );
+  
+  // Calculate movement intensity from camera changes
+  const positionChange = deltaPos.length();
+  const rotationChange = deltaRot.length();
+  const totalChange = positionChange + rotationChange * 2; // Weight rotation more
+  
+  if (totalChange > 0.001) {
+    cameraMovement.intensity = Math.min(totalChange * 50, 1.0);
+    cameraMovement.deltaX = deltaPos.x;
+    cameraMovement.deltaY = deltaPos.y; 
+    cameraMovement.deltaZ = deltaPos.z;
+    cameraMovement.rotationIntensity = rotationChange;
+  }
+  
+  // Update last positions
+  lastCameraPosition.copy(camera.position);
+  lastCameraRotation.copy(camera.rotation);
+});
+
+// Mouse movement tracking for springbone physics
+let mouseMovement = { x: 0, y: 0, intensity: 0 };
+let lastMousePosition = { x: 0, y: 0 };
+let lastMouseTime = Date.now();
+
+// Track mouse button states
+let isLeftMouseDown = false;
+let isRightMouseDown = false;
+
+// Raycaster for VRM click detection
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+// Track mouse button states and VRM clicks
+renderer.domElement.addEventListener('mousedown', (event) => {
+  if (event.button === 0) isLeftMouseDown = true;  // Left click
+  if (event.button === 2) isRightMouseDown = true; // Right click
+  
+  // Check if clicking on VRM
+  checkVRMClick(event);
+});
+
+renderer.domElement.addEventListener('mouseup', (event) => {
+  if (event.button === 0) isLeftMouseDown = false;  // Left click
+  if (event.button === 2) isRightMouseDown = false; // Right click
+});
+
+// Function to check if click hits VRM and trigger springbone reaction
+function checkVRMClick(event) {
+  if (!currentVrm || !currentVrm.scene) return;
+  
+  // Convert mouse position to normalized device coordinates
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  
+  // Set up raycaster
+  raycaster.setFromCamera(mouse, camera);
+  
+  // Check for intersections with VRM
+  const intersects = raycaster.intersectObject(currentVrm.scene, true);
+  
+  if (intersects.length > 0) {
+    const intersection = intersects[0];
+    console.log('👆 VRM clicked at:', intersection.point);
+    
+    // Trigger springbone reaction like a "poke"
+    triggerVRMPoke(intersection.point, event.button);
+  }
+}
+
+// Trigger springbone reaction when VRM is "poked"
+function triggerVRMPoke(hitPoint, button) {
+  // Calculate poke direction from hit point
+  const vrmCenter = currentVrm.scene.position;
+  const pokeDirection = hitPoint.clone().sub(vrmCenter).normalize();
+  
+  // Different intensity for left vs right click
+  const intensity = button === 0 ? 0.15 : 0.08; // Left click stronger
+  
+  // Move VRM slightly in poke direction (like being pushed)
+  const originalPos = currentVrm.scene.position.clone();
+  currentVrm.scene.position.add(pokeDirection.multiplyScalar(intensity));
+  
+  console.log(`✨ VRM poked with ${button === 0 ? 'left' : 'right'} click!`);
+  
+  // Return to original position after springbone reaction
+  setTimeout(() => {
+    currentVrm.scene.position.copy(originalPos);
+  }, 200);
+}
+
+// Track mouse movement for springbone reactivity
+renderer.domElement.addEventListener('mousemove', (event) => {
+  const currentTime = Date.now();
+  const deltaTime = currentTime - lastMouseTime;
+  
+  if (deltaTime > 0) {
+    const deltaX = event.clientX - lastMousePosition.x;
+    const deltaY = event.clientY - lastMousePosition.y;
+    
+    // Calculate movement intensity
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const speed = distance / deltaTime;
+    
+    // Only apply springbone physics when actively dragging
+    if (isLeftMouseDown || isRightMouseDown) {
+      mouseMovement.x = deltaX;
+      mouseMovement.y = deltaY;
+      mouseMovement.intensity = Math.min(speed * 10, 1.0); // Normalize to 0-1
+      
+      // Increase intensity for different mouse button actions
+      if (isLeftMouseDown) {
+        mouseMovement.intensity *= 1.5; // More intense for rotation (touching VRM to spin)
+      }
+      if (isRightMouseDown) {
+        mouseMovement.intensity *= 1.2; // Moderate for panning (touching VRM to move)
+      }
+      
+      // Add extra jiggle when interacting directly with VRM area
+      const canvas = renderer.domElement;
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = (event.clientX - rect.left) / rect.width * 2 - 1;
+      const mouseY = -(event.clientY - rect.top) / rect.height * 2 + 1;
+      
+      // If mouse is in center area where VRM likely is, increase intensity
+      if (Math.abs(mouseX) < 0.6 && Math.abs(mouseY) < 0.8) {
+        mouseMovement.intensity *= 1.3; // Extra jiggle when touching VRM area
+      }
+    }
+    
+    lastMousePosition.x = event.clientX;
+    lastMousePosition.y = event.clientY;
+    lastMouseTime = currentTime;
+  }
+});
+
+// Decay mouse and camera movement over time
+setInterval(() => {
+  mouseMovement.intensity *= 0.95;
+  mouseMovement.x *= 0.9;
+  mouseMovement.y *= 0.9;
+  
+  // Decay camera movement
+  cameraMovement.intensity *= 0.9;
+  cameraMovement.deltaX *= 0.85;
+  cameraMovement.deltaY *= 0.85;
+  cameraMovement.deltaZ *= 0.85;
+  cameraMovement.rotationIntensity *= 0.9;
+}, 16); // 60fps decay
+
 // scene
 const scene = new THREE.Scene();
 
@@ -338,24 +502,76 @@ function updateMouthMovement() {
 function animate() {
 requestAnimationFrame(animate);
 
-const deltaTime = clock.getDelta();
+const deltaTime = Math.min(clock.getDelta(), 0.1); // Cap deltaTime to prevent tab-switch chaos
 
-if (currentVrm) {
-  // Enhanced spring bone physics
-  if (currentVrm.springBoneManager && currentVrm.springBoneManager.springs) {
-    // Add subtle environmental force for more natural movement
+if (currentVrm && currentVrm.scene) {
+  // Enhanced spring bone physics with audio reactivity
+  if (currentVrm.springBoneManager && currentVrm.springBoneManager.springBoneGroupList && currentVrm.springBoneManager.springBoneGroupList.length > 0) {
+    // Very subtle environmental force (reduced from constant movement)
     const environmentalForce = new THREE.Vector3(
-      Math.sin(Date.now() * 0.001) * 0.02,
-      Math.cos(Date.now() * 0.0015) * 0.01,
-      Math.sin(Date.now() * 0.0008) * 0.015
+      Math.sin(Date.now() * 0.001) * 0.005,  // Reduced from 0.02
+      Math.cos(Date.now() * 0.0015) * 0.003, // Reduced from 0.01
+      Math.sin(Date.now() * 0.0008) * 0.004  // Reduced from 0.015
     );
     
-    // Apply slight gravity effect to spring bones (with safety check)
+    // Audio-reactive force for talking animation (main springbone trigger)
+    let audioForce = new THREE.Vector3(0, 0, 0);
+    if (window.inputvolume && window.inputvolume > 15) { // Higher threshold
+      const audioIntensity = Math.min(window.inputvolume / 100, 1.0);
+      audioForce = new THREE.Vector3(
+        (Math.random() - 0.5) * audioIntensity * 0.02,  // Reduced from 0.05
+        Math.abs(Math.sin(Date.now() * 0.01)) * audioIntensity * 0.015, // Reduced from 0.03
+        (Math.random() - 0.5) * audioIntensity * 0.018  // Reduced from 0.04
+      );
+    }
+    
+    // Mouse movement reactive force (very subtle)
+    let mouseForce = new THREE.Vector3(0, 0, 0);
+    if (mouseMovement.intensity > 0.3) { // Higher threshold
+      const mouseIntensity = mouseMovement.intensity;
+      mouseForce = new THREE.Vector3(
+        (mouseMovement.x / 1000) * mouseIntensity * 0.02,  // Reduced from 0.08
+        -(mouseMovement.y / 1000) * mouseIntensity * 0.015, // Reduced from 0.06
+        (Math.random() - 0.5) * mouseIntensity * 0.012     // Reduced from 0.05
+      );
+    }
+    
+    // Camera movement reactive force (disabled - too much with 200+ springbones)
+    let cameraForce = new THREE.Vector3(0, 0, 0);
+    // Commented out - camera movement springbones disabled for subtlety
+    /*
+    if (cameraMovement.intensity > 0.1) {
+      const camIntensity = cameraMovement.intensity;
+      cameraForce = new THREE.Vector3(
+        (cameraMovement.deltaX) * camIntensity * 0.005,
+        (cameraMovement.deltaY) * camIntensity * 0.003,
+        (cameraMovement.deltaZ) * camIntensity * 0.004
+      );
+    }
+    */
+    
+    // Combine environmental, audio, mouse, and camera forces
+    const totalForce = environmentalForce.add(audioForce).add(mouseForce).add(cameraForce);
+    
+    // Apply forces to spring bones with hair-specific adjustments
     try {
-      currentVrm.springBoneManager.springs.forEach(spring => {
-        if (spring && spring.bone && spring.bone.position) {
-          spring.bone.position.add(environmentalForce.clone().multiplyScalar(deltaTime));
-        }
+      currentVrm.springBoneManager.springBoneGroupList.forEach((springBoneGroup, groupIndex) => {
+        springBoneGroup.forEach(spring => {
+          if (spring && spring.bone && spring.bone.position) {
+            let adjustedForce = totalForce.clone();
+            
+            // Reduce force for hair groups (groups 4-36 are hair)
+            if (groupIndex >= 4 && groupIndex <= 36) {
+              adjustedForce.multiplyScalar(0.3); // Much less hair movement
+            }
+            // Normal force for bust and clothing (groups 0-3)
+            else {
+              adjustedForce.multiplyScalar(1.0);
+            }
+            
+            spring.bone.position.add(adjustedForce.multiplyScalar(deltaTime));
+          }
+        });
       });
     } catch (error) {
       console.warn('Spring bone enhancement error:', error);
@@ -436,6 +652,7 @@ function initializeMicrophone() {
       // audio in expressed as one number
       var average = values / length;
       var inputvolume = average;
+      window.inputvolume = inputvolume; // Make available globally for springbone physics
       
       // audio in spectrum expressed as array
       // useful for mouth shape variance
@@ -740,15 +957,7 @@ function updateVRMMotionSettings() {
     if (bodyMotionValue) bodyMotionValue.textContent = bodymotion;
     if (expressionValue) expressionValue.textContent = expression;
     
-    // Save VRM motion settings to localStorage
-    const motionSettings = {
-      mouththreshold: mouththreshold,
-      mouthboost: mouthboost,
-      bodythreshold: bodythreshold,
-      bodymotion: bodymotion,
-      expression: expression
-    };
-    localStorage.setItem('vrm-motion-settings', JSON.stringify(motionSettings));
+    saveUISettings();
 }
 
 // Clear conversation history function
@@ -1903,24 +2112,107 @@ function hideSpeechBubble() {
 
 let conversationHistory = [];
 
-// Speech Recognition - Clean Working Implementation
+// Speech Recognition - Web Worker Implementation (Performance Optimized)
 let mediaRecorder;
 let audioChunks = [];
-let transcriber = null;
 let isListening = false;
-let isInitializingTranscriber = false;
 const MODEL_NAME = 'Xenova/whisper-tiny.en';
+
+// Web Worker for Whisper AI (prevents UI freezing)
+let whisperWorker = null;
+let pendingTranscriptions = new Map();
+let transcriptionIdCounter = 0;
+let modelLoaded = false;
+let isInitializingModel = false;
+
+// Initialize Whisper Worker
+function initializeWhisperWorker() {
+  if (whisperWorker) return;
+  
+  try {
+    whisperWorker = new Worker('whisper-worker.js');
+    
+    // Handle worker messages
+    whisperWorker.onmessage = (event) => {
+      const { type, id, result, error, status } = event.data;
+      
+      switch (type) {
+        case 'model-ready':
+          modelLoaded = true;
+          isInitializingModel = false;
+          console.log('✅ Whisper model loaded in worker');
+          updateStatus('✅', 'Model loaded. Ready to record.');
+          break;
+          
+        case 'model-error':
+          isInitializingModel = false;
+          console.error('❌ Whisper model failed to load:', error);
+          updateStatus('❌', `Error loading model: ${error}`);
+          break;
+          
+        case 'transcribe-result':
+          if (pendingTranscriptions.has(id)) {
+            const resolve = pendingTranscriptions.get(id);
+            pendingTranscriptions.delete(id);
+            resolve(result);
+          }
+          break;
+          
+        case 'transcribe-error':
+          if (pendingTranscriptions.has(id)) {
+            const resolve = pendingTranscriptions.get(id);
+            pendingTranscriptions.delete(id);
+            resolve({ success: false, error });
+          }
+          break;
+          
+        case 'status-response':
+          // Handle status responses if needed
+          break;
+      }
+    };
+    
+    // Handle worker errors
+    whisperWorker.onerror = (error) => {
+      console.error('❌ Whisper worker error:', error);
+      updateStatus('❌', 'Worker error occurred');
+    };
+    
+    // Initialize the model in worker
+    isInitializingModel = true;
+    whisperWorker.postMessage({ type: 'init-model' });
+    
+  } catch (error) {
+    console.error('❌ Failed to create Whisper worker:', error);
+    updateStatus('❌', 'Failed to initialize speech recognition');
+  }
+}
+
+// Transcribe audio using worker
+function transcribeAudioWithWorker(audioData, options = {}) {
+  return new Promise((resolve) => {
+    const id = transcriptionIdCounter++;
+    pendingTranscriptions.set(id, resolve);
+    
+    whisperWorker.postMessage({
+      type: 'transcribe',
+      id: id,
+      data: {
+        audioData: audioData,
+        options: options
+      }
+    });
+  });
+}
 
 // Check Whisper model status
 function getWhisperStatus() {
-  if (isInitializingTranscriber) {
+  if (isInitializingModel) {
     return { loaded: false, status: 'Initializing...', model: MODEL_NAME };
-  } else if (transcriber === null) {
+  } else if (!modelLoaded) {
     return { loaded: false, status: 'Not initialized' };
-  } else if (transcriber) {
-    return { loaded: true, status: 'Ready', model: MODEL_NAME };
   } else {
-    return { loaded: false, status: 'Loading failed' };
+    return { loaded: true, status: 'Ready', model: MODEL_NAME };
   }
 }
 
@@ -1931,32 +2223,20 @@ window.checkWhisperStatus = function() {
   console.log('📊 Loaded:', status.loaded);
   console.log('📊 Status:', status.status);
   if (status.model) console.log('📊 Model:', status.model);
-  console.log('📊 Transcriber object:', transcriber);
-  console.log('📊 Is Initializing:', isInitializingTranscriber);
+  console.log('📊 Worker:', whisperWorker);
+  console.log('📊 Is Initializing:', isInitializingModel);
   return status;
 };
 
 // Alternative ways to check status
 window.whisperStatus = function() { return window.checkWhisperStatus(); };
-window.transcriber = null; // Will be updated when model loads
 
 // Make status check available immediately
 console.log('🔧 Debug functions available: checkWhisperStatus() or whisperStatus()');
 
-// Initialize the transcriber using the working implementation
+// Initialize the transcriber using worker implementation
 async function initializeTranscriber() {
-    try {
-        // Use the pipeline function for an easy interface
-        transcriber = await window.transformersPipeline('automatic-speech-recognition', MODEL_NAME, {
-            // Caching the model is important for performance
-            cache: 'force-cache' 
-        });
-        updateStatus('✅', 'Model loaded. Ready to record.');
-        console.log('Model loaded successfully');
-    } catch (error) {
-        updateStatus('❌', `Error loading model: ${error.message}`);
-        console.error('Model loading error:', error);
-    }
+    initializeWhisperWorker();
 }
 
 // Start Recording
@@ -1973,7 +2253,7 @@ async function startListening() {
     return;
   }
   
-  if (!transcriber) {
+  if (!modelLoaded) {
     console.log('❌ Cannot start listening - Whisper not loaded');
     console.log('📊 Current Whisper Status:', getWhisperStatus());
     updateStatus('❌', 'Whisper not loaded yet');
@@ -2035,14 +2315,18 @@ async function processAudio() {
     const audioData = await decodeAndResample(audioBuffer);
     console.log(`📊 Resampled audio length: ${audioData.length} samples`);
     
-    // Transcribe using Whisper
-    console.log('🤖 Transcribing with Whisper model...');
-    const output = await transcriber(audioData, {
+    // Transcribe using Whisper Worker
+    console.log('🤖 Transcribing with Whisper model via worker...');
+    const result = await transcribeAudioWithWorker(audioData, {
       chunk_length_s: 10, // Process in 10-second chunks (faster)
       stride_length_s: 2  // Overlap chunks by 2 seconds (reduced)
     });
 
-    const transcript = output.text ? output.text.trim() : '';
+    if (!result.success) {
+      throw new Error(result.error || 'Transcription failed');
+    }
+
+    const transcript = result.transcript || '';
     console.log('📝 Whisper transcription result:', transcript || 'No text detected');
     
     if (transcript) {
@@ -3010,6 +3294,102 @@ function getAutoSelectedFemaleVoice() {
   return femaleVoice;
 }
 
+// Azure Voice Management Functions
+async function fetchAzureVoices() {
+  const azureKey = document.getElementById('azureKey').value;
+  const azureRegion = document.getElementById('azureRegion').value;
+  
+  if (!azureKey || !azureRegion) {
+    console.log('❌ Azure key and region required for voice list');
+    return [];
+  }
+  
+  try {
+    updateStatus('🔄', 'Fetching Azure voices...');
+    
+    const response = await fetch(`https://${azureRegion}.tts.speech.microsoft.com/cognitiveservices/voices/list`, {
+      method: 'GET',
+      headers: {
+        'Ocp-Apim-Subscription-Key': azureKey
+      }
+    });
+    
+    if (!response.ok) {
+      console.error('❌ Failed to fetch voices:', response.status);
+      updateStatus('❌', `Failed to fetch voices: ${response.status}`);
+      return [];
+    }
+    
+    const voices = await response.json();
+    console.log(`✅ Found ${voices.length} Azure voices`);
+    
+    // Filter for neural voices and sort by locale
+    const neuralVoices = voices
+      .filter(voice => voice.VoiceType === 'Neural')
+      .sort((a, b) => a.Locale.localeCompare(b.Locale) || a.DisplayName.localeCompare(b.DisplayName));
+    
+    console.log(`🎯 ${neuralVoices.length} neural voices available`);
+    updateStatus('✅', `Found ${neuralVoices.length} Azure neural voices`);
+    return neuralVoices;
+    
+  } catch (error) {
+    console.error('❌ Error fetching voices:', error);
+    updateStatus('❌', 'Error fetching Azure voices');
+    return [];
+  }
+}
+
+async function refreshAzureVoices() {
+  const voices = await fetchAzureVoices();
+  const voiceSelect = document.getElementById('voiceSelect');
+  
+  if (voices.length === 0) {
+    console.log('Using default voice list');
+    return;
+  }
+  
+  // Store current selection
+  const currentVoice = voiceSelect.value;
+  
+  // Clear existing options
+  voiceSelect.innerHTML = '';
+  
+  // Group by language/region
+  const grouped = {};
+  voices.forEach(voice => {
+    const region = voice.Locale;
+    const lang = region.split('-')[0].toUpperCase();
+    const country = region.split('-')[1];
+    const groupKey = `${lang} (${country})`;
+    
+    if (!grouped[groupKey]) grouped[groupKey] = [];
+    grouped[groupKey].push(voice);
+  });
+  
+  // Add grouped options
+  Object.keys(grouped).sort().forEach(groupKey => {
+    const optgroup = document.createElement('optgroup');
+    optgroup.label = `${groupKey} Voices`;
+    
+    grouped[groupKey].forEach(voice => {
+      const option = document.createElement('option');
+      option.value = voice.ShortName;
+      option.textContent = `${voice.DisplayName} (${voice.Gender})`;
+      optgroup.appendChild(option);
+    });
+    
+    voiceSelect.appendChild(optgroup);
+  });
+  
+  // Restore selection if it still exists
+  if (currentVoice && [...voiceSelect.options].find(opt => opt.value === currentVoice)) {
+    voiceSelect.value = currentVoice;
+  }
+  
+  console.log('✅ Voice dropdown updated with Azure voices');
+  updateStatus('🎤', 'Azure voices refreshed');
+}
+
 function populateBrowserVoices() {
   const browserVoiceSelect = document.getElementById('browserVoice');
   if (!browserVoiceSelect) return;
@@ -3913,7 +4293,16 @@ function saveUISettings() {
       characterDescription: characterDescription
     },
     micGain: document.getElementById('micGain').value,
-    conversationHistory: conversationHistory
+    conversationHistory: conversationHistory,
+    vrmMotionSettings: {
+      mouththreshold: document.getElementById("mouththreshold")?.value || 10,
+      mouthboost: document.getElementById("mouthboost")?.value || 10,
+      bodythreshold: document.getElementById("bodythreshold")?.value || 10,
+      bodymotion: document.getElementById("bodymotion")?.value || 10,
+      expression: document.getElementById("expression")?.value || 80
+    },
+    vrmConfig: vrmConfig,
+    armConfig: armConfig
   };
   localStorage.setItem('neurolink-vrm-settings', JSON.stringify(settings));
 }
@@ -4288,14 +4677,14 @@ function handleGlobalHotkeyUp(event) {
 }
 
 function startVoiceInput() {
-  if (transcriber && !isListening) {
+  if (modelLoaded && !isListening) {
     console.log('Starting voice input with hotkey:', speechHotkey);
     startListening();
   }
 }
 
 function stopVoiceInput() {
-  if (transcriber && isListening) {
+  if (modelLoaded && isListening) {
     console.log('Stopping voice input');
     stopListening();
   }
@@ -4311,14 +4700,14 @@ function removeHotkeyListeners() {
 }
 
 function startStreamVoiceInput() {
-  if (transcriber && !isListening) {
+  if (modelLoaded && !isListening) {
     console.log('Starting stream voice input with hotkey:', speechHotkey);
     startListening();
   }
 }
 
 function stopStreamVoiceInput() {
-  if (transcriber && isListening) {
+  if (modelLoaded && isListening) {
     console.log('Stopping stream voice input');
     stopListening();
   }
