@@ -1,6 +1,4 @@
-// setup
 
-// Mobile device detection (needs to be at the top)
 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 // Mobile-friendly voice input (removed complex hold-to-speak for better compatibility)
