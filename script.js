@@ -2141,13 +2141,13 @@ function initializeWhisperWorker() {
           console.log('✅ Whisper model loaded in worker');
           updateStatus('✅', 'Model loaded. Ready to record.');
           break;
-          
+
         case 'model-error':
           isInitializingModel = false;
           console.error('❌ Whisper model failed to load:', error);
           updateStatus('❌', `Error loading model: ${error}`);
           break;
-          
+
         case 'transcribe-result':
           if (pendingTranscriptions.has(id)) {
             const resolve = pendingTranscriptions.get(id);
@@ -2155,7 +2155,7 @@ function initializeWhisperWorker() {
             resolve(result);
           }
           break;
-          
+
         case 'transcribe-error':
           if (pendingTranscriptions.has(id)) {
             const resolve = pendingTranscriptions.get(id);
@@ -2163,7 +2163,7 @@ function initializeWhisperWorker() {
             resolve({ success: false, error });
           }
           break;
-          
+
         case 'status-response':
           // Handle status responses if needed
           break;
@@ -2203,6 +2203,7 @@ function transcribeAudioWithWorker(audioData, options = {}) {
   });
 }
 
+
 // Check Whisper model status
 function getWhisperStatus() {
   if (isInitializingModel) {
@@ -2234,7 +2235,7 @@ console.log('🔧 Debug functions available: checkWhisperStatus() or whisperStat
 
 // Initialize the transcriber using worker implementation
 async function initializeTranscriber() {
-    initializeWhisperWorker();
+  initializeWhisperWorker();
 }
 
 // Start Recording
