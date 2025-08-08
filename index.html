@@ -302,7 +302,15 @@
                             🔄 Reset Settings
                         </button>
                     </div>
-                    
+
+                    <div class="file-upload-container" style="margin-top:10px;">
+                        <input type="file" id="roomFile" accept=".glb,.gltf" onchange="loadRoomFromInput(event)" hidden>
+                        <button class="upload-btn" onclick="document.getElementById('roomFile').click()">Upload 3D Room</button>
+                        <button class="control-btn" onclick="loadDemoRoom()">Load Demo Room</button>
+                        <button class="control-btn" onclick="clearRoom()">Clear Room</button>
+                        <p class="upload-hint">Rooms: GLB, GLTF</p>
+                    </div>
+
                     <!-- Background Position Controls -->
                     <div class="control-group">
                         <label>Background Scale</label>
