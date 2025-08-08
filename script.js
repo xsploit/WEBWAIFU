@@ -308,6 +308,7 @@ setInterval(() => {
 
 // scene
 const scene = new THREE.Scene();
+let room = null;
 
 // light
 const light = new THREE.DirectionalLight(0xffffff);
@@ -1343,8 +1344,7 @@ function removeBackground() {
     
     scene.remove(existingBg);
     
-    // Remove both old and new storage formats
-    localStorage.removeItem('background-media');
+    // Remove stored background reference
     localStorage.removeItem('background-media');
     
     updateStatus('🗑️', 'Background removed');
@@ -1378,6 +1378,60 @@ function resetBackgroundSettings() {
   updateBackground();
   
   updateStatus('🔄', 'Background settings reset to defaults');
+}
+
+function clearRoom() {
+  if (room) {
+    scene.remove(room);
+    room = null;
+    updateStatus('🗑️', 'Room cleared');
+  }
+}
+
+function loadRoomFromInput(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const loader = new THREE.GLTFLoader();
+  loader.load(url, gltf => {
+    if (room) scene.remove(room);
+    room = gltf.scene;
+    room.traverse(child => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+    scene.add(room);
+    updateStatus('🏠', 'Room loaded');
+    URL.revokeObjectURL(url);
+  }, undefined, error => {
+    console.error('Room loading error:', error);
+    updateStatus('❌', 'Room loading failed');
+    URL.revokeObjectURL(url);
+  });
+}
+
+function loadDemoRoom() {
+  clearRoom();
+  room = new THREE.Group();
+
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(10, 10),
+    new THREE.MeshLambertMaterial({ color: 0x808080 })
+  );
+  floor.rotation.x = -Math.PI / 2;
+  floor.receiveShadow = true;
+  room.add(floor);
+
+  const wallMaterial = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+  const backWall = new THREE.Mesh(new THREE.PlaneGeometry(10, 5), wallMaterial);
+  backWall.position.set(0, 2.5, -5);
+  backWall.receiveShadow = true;
+  room.add(backWall);
+
+  scene.add(room);
+  updateStatus('🏠', 'Demo room loaded');
 }
 
 // Load saved background on startup
