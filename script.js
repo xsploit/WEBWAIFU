@@ -1,4 +1,3 @@
-
 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 // Mobile-friendly voice input (removed complex hold-to-speak for better compatibility)
@@ -21,6 +20,9 @@ let isTTSPlaying = false;
 let isProcessingTTS = false;
 let isBrowserTTSActive = false;
 let isUsingVisemes = false; // Flag to disable audio-reactive movement when using precise visemes
+
+// Disable mic-driven motion by default (user request)
+const MIC_FEATURES_ENABLED = false;
 
 
 // AI Request processing flag (queue system handled by stream mode queues)
@@ -83,6 +85,8 @@ function setupTTSAudioProcessing(audioElement) {
     // Show speech bubble when TTS starts
     const currentText = audioElement.getAttribute('data-text') || 'AI is speaking...';
     showSpeechBubble(currentText);
+    // Trigger talking animation
+    startTalkingAnimation();
     
     
   };
@@ -95,6 +99,8 @@ function setupTTSAudioProcessing(audioElement) {
     
     // Hide speech bubble when TTS ends
     hideSpeechBubble();
+    // Return to idle animation
+    stopTalkingAnimation();
     
   };
   
@@ -102,6 +108,7 @@ function setupTTSAudioProcessing(audioElement) {
     isTTSPlaying = false;
     ttsInputVolume = 0;
     updateButtonStates();
+    stopTalkingAnimation();
   };
 }
 
@@ -115,12 +122,14 @@ if (savedValues) {
   var bodythreshold = Number(motionSettings.bodythreshold) || 10;
   var bodymotion = Number(motionSettings.bodymotion) || 10;
   var expression = Number(motionSettings.expression) || 80;
+  var bustStiffness = Number(motionSettings.bustStiffness) || 0.5;
 } else {
   var mouththreshold = 10;
   var mouthboost = 10;
   var bodythreshold = 10;
   var bodymotion = 10;
   var expression = 80;
+  var bustStiffness = 0.5;
 }
 
 // setup three-vrm
@@ -324,6 +333,127 @@ let currentVisemeQueue = [];
 let visemeTimeoutId = null;
 const loader = new THREE.GLTFLoader();
 
+// Simple idle/talking animation system (mixer + programmatic clips)
+let animationMixer = null;
+let idleAction = null;
+let talkingAction = null;
+let idleClip = null;
+let talkingClip = null;
+
+function createHeadBobClip(node, durationSec = 2.5, amplitudeRad = 0.06) {
+  if (!node) return null;
+  const times = new Float32Array([0, durationSec * 0.5, durationSec]);
+  const q0 = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0));
+  const q1 = new THREE.Quaternion().setFromEuler(new THREE.Euler(amplitudeRad, 0, 0));
+  const q2 = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0));
+  const values = new Float32Array([
+    q0.x, q0.y, q0.z, q0.w,
+    q1.x, q1.y, q1.z, q1.w,
+    q2.x, q2.y, q2.z, q2.w
+  ]);
+  const track = new THREE.QuaternionKeyframeTrack(`${node.name}.quaternion`, times, values);
+  return new THREE.AnimationClip('idle_head_bob', durationSec, [track]);
+}
+
+function createTalkingClip(headNode, chestNode, durationSec = 1.2) {
+  if (!headNode) return null;
+  const times = new Float32Array([0, durationSec * 0.33, durationSec * 0.66, durationSec]);
+  // Head subtle yaw + nod pattern
+  const h0 = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.03, 0.04, 0));
+  const h1 = new THREE.Quaternion().setFromEuler(new THREE.Euler(-0.02, -0.03, 0));
+  const h2 = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.02, 0.03, 0));
+  const h3 = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.03, -0.02, 0));
+  const hValues = new Float32Array([
+    h0.x, h0.y, h0.z, h0.w,
+    h1.x, h1.y, h1.z, h1.w,
+    h2.x, h2.y, h2.z, h2.w,
+    h3.x, h3.y, h3.z, h3.w
+  ]);
+  const headTrack = new THREE.QuaternionKeyframeTrack(`${headNode.name}.quaternion`, times, hValues);
+
+  const tracks = [headTrack];
+  // Optional slight chest sway for liveliness
+  if (chestNode) {
+    const c0 = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.01, 0.01, 0));
+    const c1 = new THREE.Quaternion().setFromEuler(new THREE.Euler(-0.01, -0.01, 0));
+    const c2 = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.008, 0.008, 0));
+    const c3 = new THREE.Quaternion().setFromEuler(new THREE.Euler(-0.008, -0.008, 0));
+    const cValues = new Float32Array([
+      c0.x, c0.y, c0.z, c0.w,
+      c1.x, c1.y, c1.z, c1.w,
+      c2.x, c2.y, c2.z, c2.w,
+      c3.x, c3.y, c3.z, c3.w
+    ]);
+    const chestTrack = new THREE.QuaternionKeyframeTrack(`${chestNode.name}.quaternion`, times, cValues);
+    tracks.push(chestTrack);
+  }
+  return new THREE.AnimationClip('talking_loop', durationSec, tracks);
+}
+
+function setupIdleTalkingAnimations() {
+  if (!currentVrm) return;
+  const head = currentVrm.humanoid?.getBoneNode(THREE.VRMSchema.HumanoidBoneName.Head);
+  const chest = currentVrm.humanoid?.getBoneNode(THREE.VRMSchema.HumanoidBoneName.UpperChest) ||
+                currentVrm.humanoid?.getBoneNode(THREE.VRMSchema.HumanoidBoneName.Chest);
+
+  animationMixer = new THREE.AnimationMixer(currentVrm.scene);
+  idleClip = createHeadBobClip(head, 2.8, 0.05);
+  talkingClip = createTalkingClip(head, chest, 1.0);
+  idleAction = idleClip ? animationMixer.clipAction(idleClip) : null;
+  talkingAction = talkingClip ? animationMixer.clipAction(talkingClip) : null;
+
+  if (idleAction) {
+    idleAction.setLoop(THREE.LoopRepeat);
+    idleAction.play();
+  }
+}
+
+function startTalkingAnimation() {
+  if (!animationMixer || !talkingAction) return;
+  if (idleAction) idleAction.stop();
+  talkingAction.reset();
+  talkingAction.setLoop(THREE.LoopRepeat);
+  talkingAction.play();
+}
+
+function stopTalkingAnimation() {
+  if (!animationMixer) return;
+  if (talkingAction) talkingAction.stop();
+  if (idleAction) {
+    idleAction.reset();
+    idleAction.play();
+  }
+}
+
+// Attempt to auto-load default animations from assets/animations
+async function autoLoadDefaultAnimations(){
+  try{
+    // Happy Idle
+    const respIdle = await fetch('./assets/animations/Happy Idle.fbx');
+    if (respIdle.ok){
+      const buf = await respIdle.arrayBuffer();
+      await loadFBXMixamoRetarget(new File([buf], 'Happy Idle.fbx'));
+      idleAnimation = animationClip;
+    }
+    // Talking
+    const respTalk = await fetch('./assets/animations/Talking.fbx');
+    if (respTalk.ok){
+      const buf2 = await respTalk.arrayBuffer();
+      await loadFBXMixamoRetarget(new File([buf2], 'Talking.fbx'));
+      talkingAnimation = animationClip;
+    }
+    // Start idle if available
+    if (idleAnimation) {
+      if (currentAnimationAction) currentAnimationAction.stop();
+      if (!currentMixer) currentMixer = new THREE.AnimationMixer(currentVrm.scene);
+      currentAnimationAction = currentMixer.clipAction(idleAnimation);
+      currentAnimationAction.setLoop(THREE.LoopRepeat);
+      currentAnimationAction.reset();
+      currentAnimationAction.play();
+    }
+  }catch(e){ console.warn('autoLoadDefaultAnimations error', e); }
+}
+
 function load( url ) {
 
 loader.crossOrigin = 'anonymous';
@@ -351,10 +481,13 @@ scene.add( vrm.scene );
 // Apply saved VRM position
 applyVRMPosition();
 
-// Apply saved arm positions  
-setTimeout(() => {
-  applyArmPositions();
-}, 100);
+// Remove per-arm UI adjustments in favor of animations
+
+// Initialize simple idle/talking animations
+try { setupIdleTalkingAnimations(); } catch (e) { console.warn('Animation setup failed:', e); }
+
+ // Auto-load default animations (if present) and start idle
+ try { autoLoadDefaultAnimations(); } catch (e) { console.warn('Auto animation load failed:', e); }
 
 vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;
 vrm.springBoneManager.reset();
@@ -503,8 +636,12 @@ requestAnimationFrame(animate);
 const deltaTime = Math.min(clock.getDelta(), 0.1); // Cap deltaTime to prevent tab-switch chaos
 
 if (currentVrm && currentVrm.scene) {
-  // Enhanced spring bone physics with audio reactivity
-  if (currentVrm.springBoneManager && currentVrm.springBoneManager.springBoneGroupList && currentVrm.springBoneManager.springBoneGroupList.length > 0) {
+  // Update our animation mixer (idle/talking)
+  if (animationMixer) {
+    try { animationMixer.update(deltaTime); } catch(_) {}
+  }
+  // Enhanced spring bone physics with audio reactivity (mic features gated)
+  if (MIC_FEATURES_ENABLED && currentVrm.springBoneManager && currentVrm.springBoneManager.springBoneGroupList && currentVrm.springBoneManager.springBoneGroupList.length > 0) {
     // Very subtle environmental force (reduced from constant movement)
     const environmentalForce = new THREE.Vector3(
       Math.sin(Date.now() * 0.001) * 0.005,  // Reduced from 0.02
@@ -564,7 +701,7 @@ if (currentVrm && currentVrm.scene) {
             }
             // Normal force for bust and clothing (groups 0-3)
             else {
-              adjustedForce.multiplyScalar(1.0);
+              adjustedForce.multiplyScalar(1.0 - bustStiffness);
             }
             
             spring.bone.position.add(adjustedForce.multiplyScalar(deltaTime));
@@ -579,9 +716,11 @@ if (currentVrm && currentVrm.scene) {
   // Update eye tracking
   updateEyeTracking();
   
-  // Only use audio-reactive mouth movement if not using precise visemes
+  // Mouth movement: use visemes when available; otherwise use audio thresholds from TTS or mic
   if (!isUsingVisemes) {
-    updateMouthMovement();
+    if (isTTSPlaying || MIC_FEATURES_ENABLED) {
+      updateMouthMovement();
+    }
   }
 
   // update vrm
@@ -592,6 +731,363 @@ renderer.render(scene, camera);
 }
 
 animate();
+
+// ----------------------
+// Room / Environment API
+// ----------------------
+let room = null;
+let customFloorTexture = null;
+let isDemoRoomLoaded = false;
+
+function createFloorTexture() {
+  if (customFloorTexture) return customFloorTexture;
+  const canvas = document.createElement('canvas');
+  canvas.width = 256; canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#8B4513'; ctx.fillRect(0,0,256,256);
+  ctx.strokeStyle = '#654321'; ctx.lineWidth = 2;
+  for (let i=0;i<256;i+=32){ ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,256); ctx.stroke(); }
+  ctx.strokeStyle = '#A0522D'; ctx.lineWidth = 1;
+  for (let i=0;i<256;i+=64){ ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(256,i); ctx.stroke(); }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping; texture.wrapT = THREE.RepeatWrapping; texture.repeat.set(4,4);
+  return texture;
+}
+
+function loadDemoRoom() {
+  if (room) scene.remove(room);
+  room = new THREE.Group();
+  isDemoRoomLoaded = true;
+  const floorTexture = createFloorTexture();
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(10,10), new THREE.MeshLambertMaterial({ map: floorTexture, color: 0xFFFFFF }));
+  floor.rotation.x = -Math.PI/2; floor.receiveShadow = true; room.add(floor);
+  const wallMat = new THREE.MeshLambertMaterial({ color: 0xF5F5DC });
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(10,5), wallMat); back.position.set(0,2.5,-5); back.receiveShadow=true; room.add(back);
+  const left = new THREE.Mesh(new THREE.PlaneGeometry(10,5), wallMat); left.position.set(-5,2.5,0); left.rotation.y=Math.PI/2; left.receiveShadow=true; room.add(left);
+  const right = new THREE.Mesh(new THREE.PlaneGeometry(10,5), wallMat); right.position.set(5,2.5,0); right.rotation.y=-Math.PI/2; right.receiveShadow=true; room.add(right);
+  scene.add(room);
+}
+
+function loadFloorTexture(e){
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const loader = new THREE.TextureLoader();
+    customFloorTexture = loader.load(ev.target.result);
+    customFloorTexture.wrapS = THREE.RepeatWrapping;
+    customFloorTexture.wrapT = THREE.RepeatWrapping;
+    customFloorTexture.repeat.set(4,4);
+    if (room && isDemoRoomLoaded) loadDemoRoom();
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearFloorTexture(){
+  customFloorTexture = null;
+  const el = document.getElementById('floorTextureFile');
+  if (el) el.value = '';
+  if (room && isDemoRoomLoaded) loadDemoRoom();
+}
+
+function loadRoom(evt){
+  const file = evt.target.files && evt.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const gltfLoader = new THREE.GLTFLoader();
+  gltfLoader.load(url, (gltf)=>{
+    if (room) scene.remove(room);
+    room = gltf.scene; isDemoRoomLoaded = false; scene.add(room);
+    room.traverse((child)=>{ if (child.isMesh){ child.receiveShadow = true; if (child.material) child.material.side = THREE.DoubleSide; } });
+    URL.revokeObjectURL(url);
+  }, undefined, (err)=>{ console.error('Room load error:', err); URL.revokeObjectURL(url); });
+}
+
+function resetCamera(){
+  camera.position.set(0, 1.5, 3);
+  controls.target.set(0, 1, 0);
+  controls.update();
+}
+
+// Attach environment UI after DOM is ready
+window.addEventListener('DOMContentLoaded', function(){
+  const roomFile = document.getElementById('roomFile'); if (roomFile) roomFile.addEventListener('change', loadRoom);
+  const demoBtn = document.getElementById('loadDemoRoom'); if (demoBtn) demoBtn.addEventListener('click', loadDemoRoom);
+  const floorTex = document.getElementById('floorTextureFile'); if (floorTex) floorTex.addEventListener('change', loadFloorTexture);
+  const clearBtn = document.getElementById('clearFloorTexture'); if (clearBtn) clearBtn.addEventListener('click', clearFloorTexture);
+  const resetBtn = document.getElementById('resetCamera'); if (resetBtn) resetBtn.addEventListener('click', resetCamera);
+  // mirror bindings for Environment panel tab
+  const roomFile2 = document.getElementById('roomFile2'); if (roomFile2) roomFile2.addEventListener('change', loadRoom);
+  const demoBtn2 = document.getElementById('loadDemoRoom2'); if (demoBtn2) demoBtn2.addEventListener('click', loadDemoRoom);
+  const floorTex2 = document.getElementById('floorTextureFile2'); if (floorTex2) floorTex2.addEventListener('change', loadFloorTexture);
+  const clearBtn2 = document.getElementById('clearFloorTexture2'); if (clearBtn2) clearBtn2.addEventListener('click', clearFloorTexture);
+  const resetBtn2 = document.getElementById('resetCamera2'); if (resetBtn2) resetBtn2.addEventListener('click', resetCamera);
+  // TTS WebSocket controls
+  const wsToggle = document.getElementById('enableTTSWebSocket');
+  const wsReconnect = document.getElementById('reconnectTTSBtn');
+  const wsTest = document.getElementById('testTalkingBtn');
+  if (wsToggle) {
+    wsToggle.addEventListener('change', (e)=>{
+      if (e.target.checked) {
+        connectTTSWebSocket();
+      } else {
+        disconnectTTSWebSocket();
+      }
+    });
+  }
+  if (wsReconnect) wsReconnect.addEventListener('click', ()=>{ const t=document.getElementById('enableTTSWebSocket'); if (t) t.checked=true; connectTTSWebSocket(true); });
+  if (wsTest) wsTest.addEventListener('click', ()=>{ startTalkingAnimation(); setTimeout(stopTalkingAnimation, 2000); });
+});
+
+// Environment tab toggle
+function toggleEnvironmentPanel(){
+  const panel = document.getElementById('environmentPanel');
+  if (!panel) return;
+  panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
+}
+
+// Transparent background toggle
+function toggleTransparentBackground(enabled){
+  if (!renderer) return;
+  if (enabled){
+    renderer.setClearColor(0x000000, 0);
+    const cc = document.getElementById('canvas-container');
+    if (cc) cc.style.background = 'transparent';
+    document.body.style.background = 'transparent';
+  } else {
+    renderer.setClearColor(0x00ff00, 1); // restore greenscreen default
+    const cc = document.getElementById('canvas-container');
+    if (cc) cc.style.background = '';
+    document.body.style.background = '';
+  }
+}
+
+// Animation UI handlers
+function handleAnimationFile(){
+  const inp = document.getElementById('animationFile');
+  const file = inp && inp.files && inp.files[0];
+  if (!file) return;
+  const name = file.name.toLowerCase();
+  if (name.endsWith('.vrma')) {
+    // Placeholder: VRMA under legacy stack is limited. Inform user.
+    updateStatus('ℹ️', 'VRMA requires the modern module viewer. Use FBX for now.');
+  } else if (name.endsWith('.fbx')) {
+    loadFBXMixamoRetarget(file);
+  } else {
+    updateStatus('ℹ️', 'Unsupported animation format');
+  }
+}
+
+let currentAnimationAction = null;
+let currentMixer = null;
+let animationClip = null;
+let idleAnimation = null;
+let talkingAnimation = null;
+let isTalking = false;
+
+// Mixamo to VRM bone mapping (legacy VRM 0.3)
+const mixamoVRMRigMap = {
+  mixamorigHips: 'Hips',
+  mixamorigSpine: 'Spine',
+  mixamorigSpine1: 'Chest',
+  mixamorigSpine2: 'UpperChest',
+  mixamorigNeck: 'Neck',
+  mixamorigHead: 'Head',
+  mixamorigLeftShoulder: 'LeftShoulder',
+  mixamorigLeftArm: 'LeftUpperArm',
+  mixamorigLeftForeArm: 'LeftLowerArm',
+  mixamorigLeftHand: 'LeftHand',
+  mixamorigRightShoulder: 'RightShoulder',
+  mixamorigRightArm: 'RightUpperArm',
+  mixamorigRightForeArm: 'RightLowerArm',
+  mixamorigRightHand: 'RightHand',
+  mixamorigLeftUpLeg: 'LeftUpperLeg',
+  mixamorigLeftLeg: 'LeftLowerLeg',
+  mixamorigLeftFoot: 'LeftFoot',
+  mixamorigLeftToeBase: 'LeftToes',
+  mixamorigRightUpLeg: 'RightUpperLeg',
+  mixamorigRightLeg: 'RightLowerLeg',
+  mixamorigRightFoot: 'RightFoot',
+  mixamorigRightToeBase: 'RightToes',
+  // Fingers
+  mixamorigLeftHandIndex1: 'LeftIndexProximal',
+  mixamorigLeftHandIndex2: 'LeftIndexIntermediate',
+  mixamorigLeftHandIndex3: 'LeftIndexDistal',
+  mixamorigLeftHandMiddle1: 'LeftMiddleProximal',
+  mixamorigLeftHandMiddle2: 'LeftMiddleIntermediate',
+  mixamorigLeftHandMiddle3: 'LeftMiddleDistal',
+  mixamorigLeftHandRing1: 'LeftRingProximal',
+  mixamorigLeftHandRing2: 'LeftRingIntermediate',
+  mixamorigLeftHandRing3: 'LeftRingDistal',
+  mixamorigLeftHandPinky1: 'LeftLittleProximal',
+  mixamorigLeftHandPinky2: 'LeftLittleIntermediate',
+  mixamorigLeftHandPinky3: 'LeftLittleDistal',
+  mixamorigLeftHandThumb1: 'LeftThumbMetacarpal',
+  mixamorigLeftHandThumb2: 'LeftThumbProximal',
+  mixamorigLeftHandThumb3: 'LeftThumbDistal',
+  mixamorigRightHandIndex1: 'RightIndexProximal',
+  mixamorigRightHandIndex2: 'RightIndexIntermediate',
+  mixamorigRightHandIndex3: 'RightIndexDistal',
+  mixamorigRightHandMiddle1: 'RightMiddleProximal',
+  mixamorigRightHandMiddle2: 'RightMiddleIntermediate',
+  mixamorigRightHandMiddle3: 'RightMiddleDistal',
+  mixamorigRightHandRing1: 'RightRingProximal',
+  mixamorigRightHandRing2: 'RightRingIntermediate',
+  mixamorigRightHandRing3: 'RightRingDistal',
+  mixamorigRightHandPinky1: 'RightLittleProximal',
+  mixamorigRightHandPinky2: 'RightLittleIntermediate',
+  mixamorigRightHandPinky3: 'RightLittleDistal',
+  mixamorigRightHandThumb1: 'RightThumbMetacarpal',
+  mixamorigRightHandThumb2: 'RightThumbProximal',
+  mixamorigRightHandThumb3: 'RightThumbDistal'
+};
+
+function convertMixamoClipLegacy(clip, asset, vrm) {
+  const tracks = [];
+  const restRotationInverse = new THREE.Quaternion();
+  const parentRestWorldRotation = new THREE.Quaternion();
+  const _quat = new THREE.Quaternion();
+  const _vec3 = new THREE.Vector3();
+
+  const hipsNode = asset.getObjectByName('mixamorigHips');
+  const motionHipsHeight = hipsNode ? hipsNode.position.y : 1.0;
+  const vrmHips = vrm.humanoid.getBoneNode(THREE.VRMSchema.HumanoidBoneName.Hips);
+  const vrmRoot = vrm.scene;
+  const vrmHipsHeight = vrmHips && vrmRoot ? Math.abs(vrmHips.getWorldPosition(_vec3).y - vrmRoot.getWorldPosition(_vec3).y) : 1.0;
+  const hipsPositionScale = motionHipsHeight !== 0 ? (vrmHipsHeight / motionHipsHeight) : 1.0;
+
+  clip.tracks.forEach((track)=>{
+    const parts = track.name.split('.');
+    const mixamoRigName = parts[0];
+    const property = parts[1];
+    const vrmBoneKey = mixamoVRMRigMap[mixamoRigName];
+    const vrmSchemaName = THREE.VRMSchema.HumanoidBoneName[vrmBoneKey];
+    const vrmNode = vrmSchemaName ? vrm.humanoid.getBoneNode(vrmSchemaName) : null;
+    const mixamoNode = asset.getObjectByName(mixamoRigName);
+    if (!vrmNode || !mixamoNode) return;
+
+    mixamoNode.getWorldQuaternion(restRotationInverse).invert();
+    mixamoNode.parent && mixamoNode.parent.getWorldQuaternion(parentRestWorldRotation);
+
+    if (track instanceof THREE.QuaternionKeyframeTrack) {
+      const qValues = track.values.slice();
+      for (let i=0;i<qValues.length;i+=4){
+        _quat.set(qValues[i], qValues[i+1], qValues[i+2], qValues[i+3]);
+        _quat.premultiply(parentRestWorldRotation).multiply(restRotationInverse);
+        qValues[i] = _quat.x; qValues[i+1] = _quat.y; qValues[i+2] = _quat.z; qValues[i+3] = _quat.w;
+      }
+      tracks.push(new THREE.QuaternionKeyframeTrack(`${vrmNode.name}.quaternion`, track.times, qValues));
+    } else if (track instanceof THREE.VectorKeyframeTrack && property === 'position') {
+      const vValues = track.values.slice();
+      for (let i=0;i<vValues.length;i+=3){
+        vValues[i] *= hipsPositionScale; vValues[i+1] *= hipsPositionScale; vValues[i+2] *= hipsPositionScale;
+      }
+      tracks.push(new THREE.VectorKeyframeTrack(`${vrmNode.name}.position`, track.times, vValues));
+    }
+  });
+
+  return new THREE.AnimationClip(clip.name || 'mixamoRetarget', clip.duration, tracks);
+}
+
+function loadFBXMixamoRetarget(file){
+  if (!currentVrm) { updateStatus('ℹ️', 'Load VRM first'); return; }
+  const url = URL.createObjectURL(file);
+  const loader = new THREE.FBXLoader();
+  loader.load(url, (asset)=>{
+    URL.revokeObjectURL(url);
+    let clip = THREE.AnimationClip.findByName(asset.animations, 'mixamo.com');
+    if (!clip) clip = asset.animations && asset.animations[0];
+    if (!clip){ updateStatus('ℹ️', 'No animations found in FBX'); return; }
+    const retargeted = convertMixamoClipLegacy(clip, asset, currentVrm);
+    if (currentMixer) currentMixer.stopAllAction();
+    currentMixer = new THREE.AnimationMixer(currentVrm.scene);
+    animationClip = retargeted;
+    currentAnimationAction = currentMixer.clipAction(animationClip);
+    currentAnimationAction.setLoop(THREE.LoopRepeat);
+    updateStatus('✅', 'FBX retargeted to VRM');
+  }, undefined, (err)=>{ URL.revokeObjectURL(url); console.error(err); updateStatus('❌','FBX load failed'); });
+}
+
+async function loadFBXLegacy(file){
+  try{
+    if (!currentVrm) { updateStatus('ℹ️', 'Load VRM first'); return; }
+    const url = URL.createObjectURL(file);
+    const loader = new THREE.FBXLoader();
+    loader.load(url, (asset)=>{
+      URL.revokeObjectURL(url);
+      if (!asset.animations || asset.animations.length === 0){ updateStatus('ℹ️', 'No animations in FBX'); return; }
+      if (currentMixer) currentMixer.stopAllAction();
+      currentMixer = new THREE.AnimationMixer(currentVrm.scene);
+      animationClip = asset.animations[0];
+      currentAnimationAction = currentMixer.clipAction(animationClip);
+      currentAnimationAction.setLoop(THREE.LoopRepeat);
+      updateStatus('✅', 'FBX animation loaded');
+    }, undefined, (err)=>{ URL.revokeObjectURL(url); console.error(err); updateStatus('❌', 'Failed to load FBX'); });
+  }catch(e){ console.error(e); updateStatus('❌', 'FBX load error'); }
+}
+
+function playAnimation(){
+  if (!currentAnimationAction) { updateStatus('ℹ️', 'No animation loaded'); return; }
+  currentAnimationAction.reset();
+  currentAnimationAction.play();
+  updateStatus('▶', 'Animation playing');
+}
+function stopAnimation(){
+  if (!currentAnimationAction) { updateStatus('ℹ️', 'No animation loaded'); return; }
+  currentAnimationAction.stop();
+  updateStatus('⏹', 'Animation stopped');
+}
+function resetAnimation(){
+  if (!currentAnimationAction) { updateStatus('ℹ️', 'No animation loaded'); return; }
+  currentAnimationAction.reset();
+  updateStatus('⏮', 'Animation reset');
+}
+function clearAnimation(){
+  if (currentAnimationAction) currentAnimationAction.stop();
+  currentAnimationAction = null; animationClip = null;
+  updateStatus('🧹', 'Animation cleared');
+}
+function assignCurrentAsIdle(){ if (!animationClip){ updateStatus('ℹ️','Load an animation first'); return; } idleAnimation = animationClip; updateStatus('✅','Assigned as idle'); }
+function assignCurrentAsTalking(){ if (!animationClip){ updateStatus('ℹ️','Load an animation first'); return; } talkingAnimation = animationClip; updateStatus('✅','Assigned as talking'); }
+
+
+// ----------------------
+// TTS WebSocket (room.html-style)
+// ----------------------
+let ttsWebSocket = null;
+let ttsReconnectTimer = null;
+
+function updateWebSocketStatus(status, color) {
+  const statusEl = document.getElementById('websocketStatus');
+  if (statusEl) { statusEl.textContent = status; statusEl.style.color = color || '#fff'; }
+}
+
+function connectTTSWebSocket(force){
+  try{
+    if (ttsWebSocket && !force) return;
+    if (ttsWebSocket) { try{ ttsWebSocket.close(); }catch(_){} ttsWebSocket=null; }
+    ttsWebSocket = new WebSocket('ws://localhost:8765');
+    ttsWebSocket.onopen = function(){ updateWebSocketStatus('Connected', '#4ecdc4'); if (ttsReconnectTimer){ clearInterval(ttsReconnectTimer); ttsReconnectTimer=null; } };
+    ttsWebSocket.onmessage = function(event){
+      try{
+        const data = JSON.parse(event.data);
+        if (data.type === 'tts_start') {
+          startTalkingAnimation();
+        } else if (data.type === 'tts_end') {
+          stopTalkingAnimation();
+        }
+      }catch(e){ console.error('WS parse error:', e); }
+    };
+    ttsWebSocket.onclose = function(){ updateWebSocketStatus('Disconnected', '#ff6b6b'); ttsWebSocket=null; if (!ttsReconnectTimer){ ttsReconnectTimer = setInterval(()=>connectTTSWebSocket(true), 5000); } };
+    ttsWebSocket.onerror = function(err){ console.error('TTS WS error:', err); };
+  }catch(e){ console.error('TTS WS connect failed:', e); updateWebSocketStatus('Error', '#ff6b6b'); if (!ttsReconnectTimer){ ttsReconnectTimer=setInterval(()=>connectTTSWebSocket(true), 5000);} }
+}
+
+function disconnectTTSWebSocket(){
+  if (ttsReconnectTimer) { clearInterval(ttsReconnectTimer); ttsReconnectTimer=null; }
+  if (ttsWebSocket) { try{ ttsWebSocket.close(); }catch(_){} ttsWebSocket=null; }
+  updateWebSocketStatus('Disconnected', '#ff6b6b');
+}
 
 // Microphone and audio variables
 let selectedMicrophoneId = null;
@@ -819,8 +1315,10 @@ currentVrm.blendShapeProxy.setValue(THREE.VRMSchema.BlendShapePresetName.Angry, 
 );
 }
 
-// Initialize microphone on page load
-initializeMicrophone();
+// Initialize microphone on page load (disabled by default)
+if (MIC_FEATURES_ENABLED) {
+  initializeMicrophone();
+}
 
 
 // blink
@@ -925,6 +1423,7 @@ function updateVRMMotionSettings() {
         document.getElementById("bodythreshold").value = bodythreshold;
         document.getElementById("bodymotion").value = bodymotion;
         document.getElementById("expression").value = expression;
+        document.getElementById("bustStiffness").value = bustStiffness;
     }
 
     // Update variables from DOM elements
@@ -933,6 +1432,7 @@ function updateVRMMotionSettings() {
     bodythreshold = document.getElementById("bodythreshold").value;
     bodymotion = document.getElementById("bodymotion").value;
     expression = document.getElementById("expression").value;
+    bustStiffness = document.getElementById("bustStiffness").value;
     
     // Update expression limits
     expressionlimityay = expression / 100;
@@ -948,12 +1448,14 @@ function updateVRMMotionSettings() {
     const mouthBoostValue = document.getElementById("mouthBoostValue");
     const bodyMotionValue = document.getElementById("bodyMotionValue");
     const expressionValue = document.getElementById("expressionValue");
+    const bustStiffnessValue = document.getElementById("bustStiffnessValue");
     
     if (mouthThresholdValue) mouthThresholdValue.textContent = mouththreshold;
     if (bodyThresholdValue) bodyThresholdValue.textContent = bodythreshold;
     if (mouthBoostValue) mouthBoostValue.textContent = mouthboost;
     if (bodyMotionValue) bodyMotionValue.textContent = bodymotion;
     if (expressionValue) expressionValue.textContent = expression;
+    if (bustStiffnessValue) bustStiffnessValue.textContent = bustStiffness;
     
     saveUISettings();
 }
@@ -962,8 +1464,9 @@ function updateVRMMotionSettings() {
 function clearConversationHistory() {
   // Confirm with user first
   if (confirm('Are you sure you want to clear the conversation history? This cannot be undone.')) {
-    // Clear the conversation history array
+    // Clear the conversation history array for the current session
     conversationHistory = [];
+    console.log('Current session conversation cleared.');
     
     // Update localStorage to remove conversation history
     const settings = JSON.parse(localStorage.getItem('neurolink-vrm-settings') || '{}');
@@ -983,7 +1486,7 @@ function clearConversationHistory() {
       }, 2000);
     }
     
-    console.log('Conversation history cleared');
+    console.log('Local storage conversation history cleared');
   }
 }
 
@@ -2549,6 +3052,8 @@ async function speakTextWithSDK(text) {
   isUsingVisemes = true; // Enable viseme-based animation
   updateButtonStates();
   showSpeechBubble(text);
+  // Kick talking animation when synthesis starts
+  try { startTalkingAnimation(); } catch(_) {}
 
   // Handle viseme events
   speechSynthesizer.visemeReceived = function (s, e) {
@@ -2574,6 +3079,7 @@ async function speakTextWithSDK(text) {
         // Fallback to REST API on error
         speakTextWithRest(text);
       }
+      stopTalkingAnimation();
       isTTSPlaying = false;
       isProcessingTTS = false;
       isUsingVisemes = false; // Disable viseme animation when done
@@ -2582,6 +3088,7 @@ async function speakTextWithSDK(text) {
     },
     error => {
       console.error('Speech SDK: SpeakSsmlAsync error:', error);
+      stopTalkingAnimation();
       isTTSPlaying = false;
       isProcessingTTS = false;
       isUsingVisemes = false;
@@ -3155,6 +3662,8 @@ async function speakWithBrowserTTS(text) {
       
       // Show speech bubble when browser TTS starts
       showSpeechBubble(text);
+      // Trigger talking animation
+      startTalkingAnimation();
       
       
       console.log('Browser TTS started');
@@ -3169,6 +3678,8 @@ async function speakWithBrowserTTS(text) {
       
       // Hide speech bubble when browser TTS ends
       hideSpeechBubble();
+      // Return to idle animation
+      stopTalkingAnimation();
       
       console.log('Browser TTS ended');
       resolve();
@@ -3582,6 +4093,17 @@ function loadUISettings() {
       Object.assign(backgroundConfig, settings.backgroundConfig);
     }
     
+    // Restore VRM motion settings
+    if (settings.vrmMotionSettings) {
+      if (document.getElementById("mouththreshold")) document.getElementById("mouththreshold").value = settings.vrmMotionSettings.mouththreshold;
+      if (document.getElementById("mouthboost")) document.getElementById("mouthboost").value = settings.vrmMotionSettings.mouthboost;
+      if (document.getElementById("bodythreshold")) document.getElementById("bodythreshold").value = settings.vrmMotionSettings.bodythreshold;
+      if (document.getElementById("bodymotion")) document.getElementById("bodymotion").value = settings.vrmMotionSettings.bodymotion;
+      if (document.getElementById("expression")) document.getElementById("expression").value = settings.vrmMotionSettings.expression;
+      if (document.getElementById("bustStiffness")) document.getElementById("bustStiffness").value = settings.vrmMotionSettings.bustStiffness;
+      updateVRMMotionSettings();
+    }
+    
     // Update UI elements
     if (document.getElementById('azureKey')) document.getElementById('azureKey').value = azureConfig.key || '';
     if (document.getElementById('azureRegion')) document.getElementById('azureRegion').value = azureConfig.region || 'eastus';
@@ -3651,7 +4173,7 @@ function loadUISettings() {
     if (document.getElementById('bgCurveDirection')) document.getElementById('bgCurveDirection').value = backgroundConfig.curveDirection || 'inward';
     
     // Update TTS range displays
-    updateTTSRangeValues();
+
     
     // Update Ollama range displays
     updateOllamaRangeValues();
@@ -4007,274 +4529,113 @@ function togglePasswordVisibility(inputId, buttonElement) {
   }
 }
 
-// AI Provider Config Switching
-
-
-// Speech Hotkey Update
-function updateSpeechHotkey() {
-  speechHotkey = document.getElementById('speechHotkey').value;
-  saveTwitchSettings();
-  console.log('Speech hotkey updated to:', speechHotkey);
-}
-
-// Accordion Toggle Function
-
-
-// Initialize Accordion (expand first section by default)
-
-
-// Chat Input Handler
-function handleChatKeyPress(event) {
-  if (event.key === 'Enter') {
-    sendChatMessage();
-  }
-}
-
-
-// Voice Input Toggle - Unified function for both mobile and desktop
-function toggleVoiceInput() {
-  const btn = document.getElementById('voiceBtn');
-
-  // Only block if TTS is playing (can't record while AI is speaking)
-  if (isTTSPlaying) {
-    updateStatus('🚫', 'Please wait for AI to finish speaking');
-    return;
-  }
+// Accordion Controls
+function toggleAccordionFromHTML(sectionId) {
+  const content = document.getElementById(sectionId);
+  const header = content.previousElementSibling;
+  const icon = header.querySelector('.accordion-icon');
   
-  // If AI is processing, voice input will be queued (no blocking needed)
-
-  if (isListening) {
-    // If we are already listening, stop it
-    stopListening();
-    if (btn) {
-      btn.classList.remove('recording');
-      // Reset any visual effects
-      btn.style.transform = '';
-      btn.style.boxShadow = '';
-    }
-    updateStatus('🎤', 'Voice input stopped');
+  if (content.style.display === 'block') {
+    content.style.display = 'none';
+    icon.textContent = '▼';
+    header.classList.remove('active');
   } else {
-    // If not listening, start it (triggered directly by user tap/click)
-    try {
-      startListening();
-      if (btn) {
-        btn.classList.add('recording');
-      }
-      const actionText = isMobileDevice ? 'Listening... (tap to stop)' : 'Listening... (click to stop)';
-      updateStatus('🎤', actionText);
-    } catch (error) {
-      console.error('Could not start speech recognition:', error);
-      updateStatus('❌', 'Voice input failed to start');
-    }
+    content.style.display = 'block';
+    icon.textContent = '▲';
+    header.classList.add('active');
   }
 }
 
-// Update Status Indicator
-function updateStatus(icon, text) {
+// Status Indicator
+function updateStatus(icon, text, duration = 4000) {
   const statusIndicator = document.getElementById('statusIndicator');
-  const statusIcon = document.getElementById('statusIndicator').querySelector('.status-icon');
-  const statusText = document.getElementById('statusIndicator').querySelector('.status-text');
+  const statusIcon = statusIndicator.querySelector('.status-icon');
+  const statusText = statusIndicator.querySelector('.status-text');
   
   statusIcon.textContent = icon;
   statusText.textContent = text;
   
-  // Show status indicator
   statusIndicator.classList.add('show');
   
-  // Auto-hide after 3 seconds for non-permanent messages
-  if (text !== 'Ready to chat' && text !== 'Listening...') {
-    setTimeout(() => {
-      statusIndicator.classList.remove('show');
-    }, 3000);
-  }
+  // Hide after duration
+  setTimeout(() => {
+    statusIndicator.classList.remove('show');
+  }, duration);
 }
 
-// Chat Bubble System
-
-// Display Options Toggles
-
-function toggleChatBubble() {
-  const enabled = document.getElementById('showChatBubble').checked;
-  const speechBubbleOverlay = document.getElementById('speechBubbleOverlay');
+// Loading Screen
+function showLoadingScreen(text = 'Loading...') {
+  const loadingScreen = document.getElementById('loadingScreen');
+  const loadingText = loadingScreen.querySelector('p');
   
-  if (speechBubbleOverlay) {
-    speechBubbleOverlay.style.display = enabled ? 'block' : 'none';
-  }
-  
-  updateStatus('💬', enabled ? 'Chat bubble enabled' : 'Chat bubble disabled');
+  loadingText.textContent = text;
+  loadingScreen.classList.add('show');
+}
+
+function hideLoadingScreen() {
+  document.getElementById('loadingScreen').classList.remove('show');
+}
+
+// Speech Hotkey
+function updateSpeechHotkey() {
+  const hotkey = document.getElementById('speechHotkey').value;
   saveUISettings();
+  console.log('Speech hotkey set to:', hotkey);
 }
 
-function toggleSubtitles() {
-  const enabled = document.getElementById('enableSubtitles').checked;
-  const subtitleElement = document.getElementById('liveSubtitles');
-  
-  if (subtitleElement) {
-    subtitleElement.style.display = enabled ? 'block' : 'none';
-  }
-  
-  updateStatus('📝', enabled ? 'Live subtitles enabled' : 'Live subtitles disabled');
-  saveUISettings();
+// Test TTS
+function testTTS() {
+  const text = "Hello, this is a test of the text-to-speech system.";
+  enhancedSpeakAIResponse(text);
 }
 
-// Test TTS Function
-async function testTTS() {
-  const testText = "Hey there! This is a test of my voice settings. How do I sound? Pretty cool, right?";
-  updateStatus('🔊', 'Testing TTS...');
-  
-  try {
-    await enhancedSpeakAIResponse(testText);
-  } catch (error) {
-    console.error('TTS test failed:', error);
-    updateStatus('❌', 'TTS test failed');
-  }
+function testBrowserTTS() {
+  const text = "This is a test of the browser's built-in text-to-speech.";
+  speakWithBrowserTTS(text);
 }
 
-// Test Browser TTS Function
-async function testBrowserTTS() {
-  const testText = "This is a test of the browser's built-in text-to-speech. No Azure key required!";
-  updateStatus('📢', 'Testing browser TTS...');
-  
-  try {
-    await speakWithBrowserTTS(testText);
-    updateStatus('✅', 'Browser TTS test completed');
-  } catch (error) {
-    console.error('Browser TTS test failed:', error);
-    updateStatus('❌', 'Browser TTS test failed');
-  }
-}
-
-// Enhanced AI Response Handler
+// Enhanced TTS function that handles subtitles and visemes
 async function enhancedSpeakAIResponse(text) {
-  // Show speech bubble with AI response
-  showSpeechBubble(text);
+  // Check if TTS is enabled
+  if (!document.getElementById('enableTTS').checked) {
+    console.log('TTS disabled, skipping speech');
+    isProcessingTTS = false;
+    updateButtonStates();
+    return;
+  }
 
-  // Add AI response to the chat overlay
-  addTwitchChatMessage(characterName, text);
-  
-  // Update status
-  updateStatus('🔊', 'AI is speaking...');
-  
-  // Call original TTS function
-  await speakAIResponse(text);
-  
-  // Update status when done
-  setTimeout(() => {
-    updateStatus('🎤', 'Ready to chat');
-  }, 1000);
-}
+  isProcessingTTS = true;
+  updateButtonStates();
 
-// Update Range Value Displays
-function updateRangeValues() {
-  const ranges = [
-    { id: 'mouththreshold', valueId: 'mouthThresholdValue' },
-    { id: 'bodythreshold', valueId: 'bodyThresholdValue' },
-    { id: 'mouthboost', valueId: 'mouthBoostValue' },
-    { id: 'bodymotion', valueId: 'bodyMotionValue' },
-    { id: 'expression', valueId: 'expressionValue' }
-  ];
-  
-  ranges.forEach(range => {
-    const element = document.getElementById(range.id);
-    const valueElement = document.getElementById(range.valueId);
-    
-    if (element && valueElement) {
-      element.addEventListener('input', () => {
-        valueElement.textContent = element.value + (range.suffix || '');
-      });
+  // Use Azure SDK if available and configured
+  if (azureConfig.key && azureConfig.region && isUsingSDK) {
+    try {
+      await speakTextWithSDK(text);
+    } catch (error) {
+      console.warn('Azure SDK failed, falling back to REST/Browser TTS:', error);
+      await speakWithRestOrBrowser(text);
     }
-  });
-  
-  // Add TTS-specific range updates
-  setupTTSRangeUpdates();
-}
-
-// Setup TTS Range Updates
-function setupTTSRangeUpdates() {
-  const ttsVolumeSlider = document.getElementById('ttsVolume');
-  const ttsPitchSlider = document.getElementById('ttsPitch');
-  
-  if (ttsVolumeSlider) {
-    ttsVolumeSlider.addEventListener('input', updateTTSRangeValues);
-  }
-  
-  if (ttsPitchSlider) {
-    ttsPitchSlider.addEventListener('input', updateTTSRangeValues);
+  } else {
+    await speakWithRestOrBrowser(text);
   }
 }
 
-// Update TTS Range Values
-function updateTTSRangeValues() {
-  const ttsVolumeValue = document.getElementById('ttsVolumeValue');
-  const ttsPitchValue = document.getElementById('ttsPitchValue');
-  const ttsRateValue = document.getElementById('ttsRateValue');
-  
-  if (ttsVolumeValue) {
-    const volume = document.getElementById('ttsVolume').value;
-    ttsVolumeValue.textContent = Math.round(volume * 100) + '%';
-  }
-  
-  if (ttsPitchValue) {
-    const pitch = document.getElementById('ttsPitch').value;
-    ttsPitchValue.textContent = (pitch >= 0 ? '+' : '') + pitch + 'st';
-  }
-  
-  if (ttsRateValue) {
-    const rate = document.getElementById('ttsRate').value;
-    ttsRateValue.textContent = rate + 'x';
+async function speakWithRestOrBrowser(text) {
+  // Fallback to REST if key is present but SDK failed
+  if (azureConfig.key && azureConfig.region) {
+    try {
+      await speakWithAzure(text); // This function uses REST
+    } catch (error) {
+      console.warn('Azure REST TTS failed, falling back to browser TTS:', error);
+      await speakWithBrowserTTS(text);
+    }
+  } else {
+    // Use browser TTS if no Azure key
+    await speakWithBrowserTTS(text);
   }
 }
 
-// Update Azure TTS Config
-function updateAzureConfig() {
-  azureConfig.key = document.getElementById('azureKey').value;
-  azureConfig.region = document.getElementById('azureRegion').value;
-  azureConfig.voice = document.getElementById('voiceSelect').value;
-  azureConfig.volume = parseFloat(document.getElementById('ttsVolume').value);
-  azureConfig.pitch = parseFloat(document.getElementById('ttsPitch').value);
-  azureConfig.rate = parseFloat(document.getElementById('ttsRate').value);
-  
-  // Update range value displays
-  updateTTSRangeValues();
-  
-  // Save settings
-  saveUISettings();
-  
-  console.log('Azure TTS config updated:', azureConfig);
-}
-
-// Input level display
-function updateInputLevel() {
-  const inputLevel = document.getElementById('inputlevel');
-  const inputValue = document.getElementById('inputValue');
-  
-  if (inputLevel && inputValue) {
-    inputValue.textContent = inputLevel.value;
-  }
-}
-
-// Initialize UI
-function initializeUI() {
-  // Update range values
-  updateRangeValues();
-  
-  // Setup input level monitoring
-  setInterval(updateInputLevel, 100);
-
-  // Setup mic gain listener
-  document.getElementById('micGain').addEventListener('input', updateMicGain);
-  
-  // Show initial status
-  updateStatus('🎤', 'Ready to chat');
-  
-  // Hide loading screen
-  setTimeout(() => {
-    document.getElementById('loadingScreen').classList.remove('show');
-  }, 2000);
-}
-
-// Enhanced settings save/load
-
+// Save all UI settings
 function saveUISettings() {
   const settings = {
     azureConfig: azureConfig,
@@ -4298,1242 +4659,376 @@ function saveUISettings() {
       mouthboost: document.getElementById("mouthboost")?.value || 10,
       bodythreshold: document.getElementById("bodythreshold")?.value || 10,
       bodymotion: document.getElementById("bodymotion")?.value || 10,
-      expression: document.getElementById("expression")?.value || 80
+      expression: document.getElementById("expression")?.value || 80,
+      bustStiffness: document.getElementById("bustStiffness")?.value || 0.5
     },
     vrmConfig: vrmConfig,
-    armConfig: armConfig
+    armConfig: armConfig,
+    twitchSettings: {
+      channel: document.getElementById('twitchChannel')?.value || '',
+      messageAccumulation: document.getElementById('messageAccumulation')?.value || 15,
+      enabled: document.getElementById('enableStreamMode')?.checked || false
+    },
+    speechHotkey: document.getElementById('speechHotkey')?.value || 'Shift'
   };
   localStorage.setItem('neurolink-vrm-settings', JSON.stringify(settings));
 }
 
-// Initialize everything
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 Page loaded - Starting Whisper AI initialization...');
-  
-  // Initialize Whisper AI first for immediate speech recognition availability
-  initializeTranscriber();
-  
-  // Initialize microphone enumeration
-  enumerateMicrophones();
-  
-  // Initialize other components
-  loadUISettings();
-  initializeUI();
-  loadSavedBackground();
-  loadVRMConfig(); // Load VRM position settings
-  loadArmConfig(); // Load arm position settings
-  loadTwitchSettings(); // Load Twitch stream settings
-  
-  // Initialize accordion sections
-  // Close all accordion tabs by default
-  document.querySelectorAll('.accordion-content').forEach(content => {
-      content.style.display = 'none';
-      const header = content.previousElementSibling;
-      const icon = header.querySelector('.accordion-icon');
-      if (icon) icon.textContent = '▼';
-  });
-  
-  // Expand the VRM Controls section by default
-  const defaultSection = 'vrmControls';
-  const content = document.getElementById(defaultSection);
-  const header = content?.previousElementSibling;
-  if (content && header) {
-      content.classList.add('expanded');
-      header.classList.add('active');
-      content.style.display = 'block'; // Ensure it's visible
-      const icon = header.querySelector('.accordion-icon');
-      if (icon) icon.textContent = '▲';
-      console.log('Initialized accordion with default section:', defaultSection);
-  }
-  
-  // Setup range input listener for message accumulation
-  const messageAccumulationSlider = document.getElementById('messageAccumulation');
-  if (messageAccumulationSlider) {
-    messageAccumulationSlider.oninput = function() {
-      document.getElementById('messageAccumulationValue').textContent = this.value;
-      messageAccumulationTarget = parseInt(this.value);
-      document.getElementById('accumulationTarget').textContent = this.value;
-      saveTwitchSettings();
-    };
-  }
-  
-  // Initialize queue system for stream mode
-  setTimeout(addQueueControls, 500);
-  setInterval(() => {
-    if (queueProcessingEnabled && !isProcessingTTS && !isTTSPlaying) {
-      processQueue();
-    }
-  }, 1000); // Check every 1 second for faster response
-  
-  // Load saved AI provider (default to Gemini for reliability)
-  const savedProvider = localStorage.getItem('ai-selected-provider') || 'gemini';
-  const aiProviderSelect = document.getElementById('aiProvider');
-  if (aiProviderSelect) {
-      aiProviderSelect.value = savedProvider;
-      updateAIProviderFromHTML(); // Call the new function
-  }
-  
-  // Load saved Ollama model selection with fallback to llama3.1:8b
-  const savedModel = localStorage.getItem('ai-ollama-model');
-  setTimeout(() => {
-      const modelSelect = document.getElementById('ollamaModel');
-      if (modelSelect) {
-          if (savedModel) {
-              modelSelect.value = savedModel;
-              // Update the config
-              if (typeof ollamaConfig !== 'undefined') {
-                  ollamaConfig.model = savedModel;
-              }
-          } else {
-              // Try to set default model to llama3.1:8b if available
-              const defaultModel = 'llama3.1:8b';
-              const defaultOption = Array.from(modelSelect.options).find(opt => opt.value === defaultModel);
-              if (defaultOption) {
-                  modelSelect.value = defaultModel;
-                  if (typeof ollamaConfig !== 'undefined') {
-                      ollamaConfig.model = defaultModel;
-                  }
-                  localStorage.setItem('ai-ollama-model', defaultModel);
-                  console.log('Set default Ollama model to:', defaultModel);
-              }
-          }
-      }
-  }, 1000); // Wait for models to load
-  
-  // Load saved global system prompt
-  const savedPrompt = localStorage.getItem('ai-global-prompt');
-  if (savedPrompt) {
-      document.getElementById('globalSystemMessage').value = savedPrompt;
-      // No need to call updateGlobalSystemPrompt() during initialization - configs are already loaded
-  }
-  
-  // Initialize scroll indicators
-  initScrollIndicators();
-  
-  // Add keyboard navigation for accordion sections
-  document.addEventListener('keydown', function(e) {
-      if (e.ctrlKey && e.key >= '1' && e.key <= '9') {
-          e.preventDefault();
-          const sections = document.querySelectorAll('.accordion-section');
-          const index = parseInt(e.key) - 1;
-          if (sections[index]) {
-              const header = sections[index].querySelector('.accordion-header');
-              header.click();
-              header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-      }
-  });
-  
-  // Initialize draggable elements
-  setTimeout(() => {
-    const twitchChatOverlay = document.getElementById('twitchChatOverlay');
-    makeElementDraggable(
-        twitchChatOverlay,
-        twitchChatOverlay?.querySelector('.chat-drag-header'),
-        'twitchChatPosition'
-    );
-
-    const speechBubbleOverlay = document.getElementById('speechBubbleOverlay');
-    makeElementDraggable(
-        speechBubbleOverlay,
-        speechBubbleOverlay?.querySelector('.chat-drag-header'),
-        'speechBubblePosition'
-    );
-  }, 1000);
-  
-  setupGlobalHotkeyListeners(); // Setup always-active speech hotkeys
-  updateChatToggleButtonState(); // Set initial chat toggle button state
-  
-  // Load user name into input field
-  const userNameInput = document.getElementById('userName');
-  if (userNameInput) {
-    userNameInput.value = userName;
-  }
-  
-  // Load character name and description into input fields
-  const characterNameInput = document.getElementById('characterName');
-  if (characterNameInput) {
-    characterNameInput.value = characterName;
-  }
-  
-  const characterDescInput = document.getElementById('characterDescription');
-  if (characterDescInput) {
-    characterDescInput.value = characterDescription;
-  }
-  
-  // Update UI elements with character name
-  updateChatDisplayCharacterName();
-  
-  // Ensure stream mode is off by default
-  ensureStreamModeOff();
-  
-  // Initialize browser voices (wait for voices to load)
-  if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = () => {
-      populateBrowserVoices();
-      loadBrowserVoiceSettings();
-    };
-  }
-  // Try to populate immediately in case voices are already loaded
-  setTimeout(() => {
-    populateBrowserVoices();
-    loadBrowserVoiceSettings();
-  }, 200);
-  
-  // Only load Ollama models if Ollama is the current provider
-  if (currentProvider === 'ollama') {
-    console.log('Loading Ollama models - provider is Ollama');
-    refreshOllamaModels();
-  } else {
-    console.log('Skipping Ollama model load - current provider is:', currentProvider);
-  }
-});
-
-// ====================================
-// TWITCH STREAM INTEGRATION
-// ====================================
-
-function toggleChatOverlay() {
-    const chatOverlay = document.getElementById('twitchChatOverlay');
-    if (chatOverlay) {
-        if (chatOverlay.style.display === 'none') {
-            chatOverlay.style.display = 'flex';
-        } else {
-            chatOverlay.style.display = 'none';
-        }
-    }
-}
-
-function toggleFoldChat() {
-    const chatOverlay = document.getElementById('twitchChatOverlay');
-    const icon = document.querySelector('#dockBtn .accordion-icon');
-
-    if (chatOverlay.classList.contains('folded')) {
-        chatOverlay.classList.remove('folded');
-        icon.textContent = '▼';
-    } else {
-        chatOverlay.classList.add('folded');
-        icon.textContent = '▲';
-    }
-}
-
-let twitchSocket = null;
-let isStreamModeEnabled = false;
-let isTwitchConnected = false;
-let twitchChannel = '';
-let accumulatedMessages = [];
+// Twitch Integration
+let twitchClient = null;
+let messageQueue = [];
 let messageAccumulationTarget = 15;
-let speechHotkey = 'Shift';
-let hotkeyPressed = false;
-let totalTwitchMessages = 0;
+let queueProcessingEnabled = false;
 
-// Twitch Settings Management
+function toggleTwitchConnection() {
+  const connectBtn = document.getElementById('twitchConnectBtn');
+  if (twitchClient && twitchClient.readyState() === 'OPEN') {
+    twitchClient.disconnect();
+    updateStatus('🔌', 'Disconnected from Twitch');
+    connectBtn.textContent = 'Connect to Chat';
+    document.getElementById('twitchStatus').textContent = 'Disconnected';
+  } else {
+    const channel = document.getElementById('twitchChannel').value;
+    if (!channel) {
+      alert('Please enter a Twitch channel name.');
+      return;
+    }
+    connectToTwitch(channel);
+    connectBtn.textContent = 'Disconnect';
+    document.getElementById('twitchStatus').textContent = `Connecting to ${channel}...`;
+  }
+}
+
+function connectToTwitch(channel) {
+  twitchClient = new tmi.Client({
+    options: { debug: false },
+    channels: [channel]
+  });
+
+  twitchClient.on('message', (channel, tags, message, self) => {
+    if (self) return;
+    addMessageToTwitchChat(tags['display-name'], message, tags.color);
+    addToQueue(message, 'twitch', tags['display-name']);
+  });
+
+  twitchClient.on('connected', (address, port) => {
+    updateStatus('✅', `Connected to ${channel}`);
+    document.getElementById('twitchStatus').textContent = `Connected to ${channel}`;
+  });
+
+  twitchClient.on('disconnected', (reason) => {
+    updateStatus('🔌', `Disconnected: ${reason}`);
+    document.getElementById('twitchStatus').textContent = `Disconnected: ${reason || 'No reason'}`;
+  });
+
+  twitchClient.connect().catch(console.error);
+}
+
+function addMessageToTwitchChat(username, message, color) {
+  const chatContent = document.getElementById('twitchChatContent');
+  const placeholder = chatContent.querySelector('.chat-placeholder');
+  if (placeholder) placeholder.remove();
+
+  const messageEl = document.createElement('div');
+  messageEl.className = 'twitch-message';
+  messageEl.innerHTML = `
+    <span class="twitch-username" style="color: ${color || '#82eefd'}">${username}</span>: 
+    <span class="twitch-message-text">${message}</span>
+  `;
+  chatContent.appendChild(messageEl);
+  chatContent.scrollTop = chatContent.scrollHeight;
+
+  // Limit to 100 messages
+  while (chatContent.children.length > 100) {
+    chatContent.removeChild(chatContent.firstChild);
+  }
+}
+
+function clearTwitchChat() {
+  const chatContent = document.getElementById('twitchChatContent');
+  chatContent.innerHTML = '<div class="chat-placeholder">Twitch chat cleared.</div>';
+  messageQueue = [];
+  updateAccumulationProgress();
+}
+
 function saveTwitchSettings() {
   const settings = {
-    twitchChannel: document.getElementById('twitchChannel').value,
-    messageAccumulation: parseInt(document.getElementById('messageAccumulation').value),
-    speechHotkey: document.getElementById('speechHotkey').value,
-    streamModeEnabled: document.getElementById('enableStreamMode').checked
+    channel: document.getElementById('twitchChannel').value,
+    messageAccumulation: document.getElementById('messageAccumulation').value,
+    enabled: document.getElementById('enableStreamMode').checked
   };
-  
   localStorage.setItem('twitch-settings', JSON.stringify(settings));
   
-  // Update UI
-  messageAccumulationTarget = settings.messageAccumulation;
-  speechHotkey = settings.speechHotkey;
-  document.getElementById('messageAccumulationValue').textContent = settings.messageAccumulation;
-  document.getElementById('accumulationTarget').textContent = settings.messageAccumulation;
-  
-  console.log('Twitch settings saved:', settings);
+  // Update accumulation target
+  messageAccumulationTarget = parseInt(settings.messageAccumulation);
+  document.getElementById('accumulationTarget').textContent = messageAccumulationTarget;
 }
 
 function loadTwitchSettings() {
   const saved = localStorage.getItem('twitch-settings');
   if (saved) {
     const settings = JSON.parse(saved);
+    document.getElementById('twitchChannel').value = settings.channel || '';
+    document.getElementById('messageAccumulation').value = settings.messageAccumulation || 15;
+    document.getElementById('enableStreamMode').checked = settings.enabled || false;
     
-    if (document.getElementById('twitchChannel')) {
-      document.getElementById('twitchChannel').value = settings.twitchChannel || '';
-    }
-    if (document.getElementById('messageAccumulation')) {
-      document.getElementById('messageAccumulation').value = settings.messageAccumulation || 15;
-      document.getElementById('messageAccumulationValue').textContent = settings.messageAccumulation || 15;
-      document.getElementById('accumulationTarget').textContent = settings.messageAccumulation || 15;
-    }
-    if (document.getElementById('speechHotkey')) {
-      document.getElementById('speechHotkey').value = settings.speechHotkey || 'Shift';
-    }
-    if (document.getElementById('enableStreamMode')) {
-      document.getElementById('enableStreamMode').checked = settings.streamModeEnabled === true;
-    }
+    // Update display
+    document.getElementById('messageAccumulationValue').textContent = settings.messageAccumulation || 15;
+    messageAccumulationTarget = parseInt(settings.messageAccumulation || 15);
+    document.getElementById('accumulationTarget').textContent = messageAccumulationTarget;
     
-    messageAccumulationTarget = settings.messageAccumulation || 15;
-    speechHotkey = settings.speechHotkey || 'Shift';
-    twitchChannel = settings.twitchChannel || '';
-    
-    // Apply stream mode if explicitly enabled
-    if (settings.streamModeEnabled === true) {
+    // Apply stream mode if enabled
+    if (settings.enabled) {
       toggleStreamMode();
     }
   }
 }
 
-// Ensure stream mode is off by default
-function ensureStreamModeOff() {
-  const chatOverlay = document.getElementById('twitchChatOverlay');
-  const floatingChat = document.getElementById('floatingChat');
-  const appFooter = document.querySelector('.app-footer');
-  const streamModeCheckbox = document.getElementById('enableStreamMode');
-  
-  // Force stream mode off
-  if (streamModeCheckbox) {
-    streamModeCheckbox.checked = false;
-  }
-  
-  isStreamModeEnabled = false;
-  
-  // Ensure UI is in correct state
-  if (chatOverlay) {
-    chatOverlay.style.display = 'none';
-  }
-  if (floatingChat) {
-    floatingChat.classList.remove('stream-mode-hidden');
-  }
-  if (appFooter) {
-    appFooter.style.display = 'block';
-  }
-  
-  console.log('Stream mode forced off by default');
-}
-
-// Stream Mode Toggle
 function toggleStreamMode() {
-    isStreamModeEnabled = document.getElementById('enableStreamMode').checked;
-    const floatingChat = document.getElementById('floatingChat');
-    const appFooter = document.querySelector('.app-footer');
-
-    if (isStreamModeEnabled) {
-        floatingChat.classList.add('stream-mode-hidden');
-        if (appFooter) appFooter.style.display = 'none';
-        setupHotkeyListeners();
-        console.log('Stream mode enabled - Text input and footer hidden');
-    } else {
-        floatingChat.classList.remove('stream-mode-hidden');
-        if (appFooter) appFooter.style.display = 'block';
-        removeHotkeyListeners();
-        if (isTwitchConnected) {
-            disconnectFromTwitch();
-        }
-        console.log('Stream mode disabled - Text input and footer visible');
-    }
-    
-    // Update chat toggle button state to reflect current visibility
-    updateChatToggleButtonState();
-    
-    saveTwitchSettings();
-}
-
-
-// Global Hotkey Management (Always Active)
-function setupGlobalHotkeyListeners() {
-  document.addEventListener('keydown', handleGlobalHotkeyDown);
-  document.addEventListener('keyup', handleGlobalHotkeyUp);
-  console.log('Global hotkey listeners setup - Speech recognition always available');
-}
-
-function handleGlobalHotkeyDown(event) {
-  // Skip if user is typing in an input field
-  if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
+  const streamModeEnabled = document.getElementById('enableStreamMode').checked;
+  const twitchOverlay = document.getElementById('twitchChatOverlay');
+  const floatingChat = document.getElementById('floatingChat');
   
-  const key = event.code || event.key;
-  if ((speechHotkey === 'Shift' && event.shiftKey) ||
-      (speechHotkey === 'Control' && event.ctrlKey) ||
-      (speechHotkey === 'Alt' && event.altKey) ||
-      (speechHotkey === 'Space' && key === 'Space') ||
-      (key === speechHotkey)) {
-    
-    if (!hotkeyPressed) {
-      hotkeyPressed = true;
-      event.preventDefault();
-      startVoiceInput();
-    }
-  }
-}
-
-function handleGlobalHotkeyUp(event) {
-  const key = event.code || event.key;
-  if ((speechHotkey === 'Shift' && !event.shiftKey) ||
-      (speechHotkey === 'Control' && !event.ctrlKey) ||
-      (speechHotkey === 'Alt' && !event.altKey) ||
-      (speechHotkey === 'Space' && key === 'Space') ||
-      (key === speechHotkey)) {
-    
-    if (hotkeyPressed) {
-      hotkeyPressed = false;
-      stopVoiceInput();
-    }
-  }
-}
-
-function startVoiceInput() {
-  if (modelLoaded && !isListening) {
-    console.log('Starting voice input with hotkey:', speechHotkey);
-    startListening();
-  }
-}
-
-function stopVoiceInput() {
-  if (modelLoaded && isListening) {
-    console.log('Stopping voice input');
-    stopListening();
-  }
-}
-
-// Legacy functions for stream mode compatibility
-function setupHotkeyListeners() {
-  // No longer needed - global hotkeys are always active
-}
-
-function removeHotkeyListeners() {
-  // No longer needed - global hotkeys are always active
-}
-
-function startStreamVoiceInput() {
-  if (modelLoaded && !isListening) {
-    console.log('Starting stream voice input with hotkey:', speechHotkey);
-    startListening();
-  }
-}
-
-function stopStreamVoiceInput() {
-  if (modelLoaded && isListening) {
-    console.log('Stopping stream voice input');
-    stopListening();
-  }
-}
-
-// Twitch Connection Management
-function toggleTwitchConnection() {
-  if (isTwitchConnected) {
-    disconnectFromTwitch();
+  if (streamModeEnabled) {
+    twitchOverlay.style.display = 'block';
+    floatingChat.classList.add('stream-mode-hidden');
+    queueProcessingEnabled = true;
   } else {
-    connectToTwitch();
+    twitchOverlay.style.display = 'none';
+    floatingChat.classList.remove('stream-mode-hidden');
+    queueProcessingEnabled = false;
   }
+  saveTwitchSettings();
+  updateChatToggleButtonState();
 }
 
-function connectToTwitch() {
-  twitchChannel = document.getElementById('twitchChannel').value.trim();
-  if (!twitchChannel) {
-    alert('Please enter a Twitch channel name');
-    return;
-  }
-  
-  if (twitchSocket) {
-    twitchSocket.close();
-  }
-  
-  updateTwitchStatus('Connecting...', 'connecting');
-  
-  twitchSocket = new WebSocket('wss://irc-ws.chat.twitch.tv:443');
-  
-  twitchSocket.onopen = () => {
-    console.log('Connected to Twitch IRC for channel:', twitchChannel);
-    
-    // Send authentication (anonymous)
-    twitchSocket.send('PASS SCHMOOPIIE');
-    twitchSocket.send('NICK justinfan' + Math.floor(Math.random() * 100000));
-    twitchSocket.send(`JOIN #${twitchChannel.toLowerCase()}`);
-    
-    isTwitchConnected = true;
-    updateTwitchStatus('Connected', 'connected');
-    document.getElementById('twitchConnectBtn').textContent = 'Disconnect';
-  };
-  
-  twitchSocket.onmessage = (event) => {
-    const rawMessage = event.data.trim();
-    console.log('Twitch Raw:', rawMessage);
-    
-    handleTwitchMessage(rawMessage);
-  };
-  
-  twitchSocket.onclose = () => {
-    console.log('Disconnected from Twitch IRC');
-    isTwitchConnected = false;
-    updateTwitchStatus('Disconnected', 'disconnected');
-    document.getElementById('twitchConnectBtn').textContent = 'Connect to Chat';
-  };
-  
-  twitchSocket.onerror = (error) => {
-    console.error('Twitch WebSocket error:', error);
-    updateTwitchStatus('Connection Error', 'error');
-  };
-}
-
-function disconnectFromTwitch() {
-  if (twitchSocket) {
-    twitchSocket.close();
-  }
-  isTwitchConnected = false;
-  accumulatedMessages = [];
+// AI Message Queue System
+function addToQueue(message, source, username, priority = 'normal') {
+  messageQueue.push({ message, source, username, priority });
   updateAccumulationProgress();
-}
-
-function updateTwitchStatus(status, className) {
-  const statusEl = document.getElementById('chatConnectionStatus');
-  const twitchStatusEl = document.getElementById('twitchStatus');
   
-  if (statusEl) statusEl.textContent = status;
-  if (twitchStatusEl) twitchStatusEl.textContent = status;
-  
-  // Add color coding
-  const colors = {
-    'connected': '#4ecdc4',
-    'connecting': '#ffc107',
-    'disconnected': '#6c757d',
-    'error': '#dc3545'
-  };
-  
-  if (statusEl && colors[className]) {
-    statusEl.style.color = colors[className];
-  }
-}
-
-// Twitch Message Parsing
-function handleTwitchMessage(rawMessage) {
-  // Handle PING/PONG
-  if (rawMessage.startsWith('PING')) {
-    twitchSocket.send('PONG :tmi.twitch.tv');
-    return;
-  }
-  
-  // Parse PRIVMSG (chat messages)
-  if (rawMessage.includes('PRIVMSG')) {
-    const parsed = parseTwitchChatMessage(rawMessage);
-    if (parsed) {
-      addTwitchChatMessage(parsed.username, parsed.message);
-      accumulateMessage(parsed.username, parsed.message);
-    }
-  }
-}
-
-function parseTwitchChatMessage(rawMessage) {
-  try {
-    // Example: :username!username@username.tmi.twitch.tv PRIVMSG #channel :message text
-    const parts = rawMessage.split(' PRIVMSG ');
-    if (parts.length !== 2) return null;
-    
-    // Extract username
-    const userMatch = parts[0].match(/:([^!]+)!/);
-    if (!userMatch) return null;
-    const username = userMatch[1];
-    
-    // Extract message
-    const messageMatch = parts[1].match(/#\w+ :(.*)$/);
-    if (!messageMatch) return null;
-    const message = messageMatch[1];
-    
-    return { username, message };
-  } catch (error) {
-    console.error('Error parsing Twitch message:', error);
-    return null;
-  }
-}
-
-// Chat Display
-function addTwitchChatMessage(username, message) {
-  const chatContent = document.getElementById('twitchChatContent');
-  const chatOverlay = document.getElementById('twitchChatOverlay');
-  
-  // Don't write to chat if it doesn't exist or if the overlay is hidden
-  if (!chatContent || !chatOverlay || chatOverlay.style.display === 'none') {
-    return;
-  }
-  
-  // Remove placeholder if exists
-  const placeholder = chatContent.querySelector('.chat-placeholder');
-  if (placeholder) {
-    placeholder.remove();
-  }
-  
-  // Create message element
-  const messageEl = document.createElement('div');
-  messageEl.className = 'twitch-message';
-  
-  const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  messageEl.innerHTML = `
-    <div class="message-timestamp">${timestamp}</div>
-    <div class="twitch-username">${username}</div>
-    <div class="twitch-message-text">${message}</div>
-  `;
-  
-  chatContent.appendChild(messageEl);
-  chatContent.scrollTop = chatContent.scrollHeight;
-  
-  // Keep only last 50 messages
-  while (chatContent.children.length > 50) {
-    chatContent.removeChild(chatContent.firstChild);
-  }
-  
-  // Update message count
-  totalTwitchMessages++;
-  const chatMessageCount = document.getElementById('chatMessageCount');
-  if (chatMessageCount) {
-    chatMessageCount.textContent = `${totalTwitchMessages} messages`;
-  }
-}
-
-function clearTwitchChat() {
-  const chatContent = document.getElementById('twitchChatContent');
-  const chatOverlay = document.getElementById('twitchChatOverlay');
-  
-  // Only clear if chat exists and is visible
-  if (chatContent && chatOverlay && chatOverlay.style.display !== 'none') {
-    chatContent.innerHTML = '<div class="chat-placeholder">Chat cleared...</div>';
-  }
-  
-  accumulatedMessages = [];
-  totalTwitchMessages = 0;
-  updateAccumulationProgress();
-  document.getElementById('chatMessageCount').textContent = '0 messages';
-}
-
-
-function updateAccumulationProgress() {
-  const count = accumulatedMessages.length;
-  const target = messageAccumulationTarget;
-  const percentage = (count / target) * 100;
-  
-  document.getElementById('accumulationCount').textContent = count;
-  document.getElementById('accumulationTarget').textContent = target;
-  document.getElementById('accumulationProgress').style.width = `${Math.min(percentage, 100)}%`;
-}
-
-function sendAccumulatedMessagesToAI() {
-  if (accumulatedMessages.length === 0) return;
-  
-  // Format messages for AI
-  const chatSummary = accumulatedMessages
-    .map(msg => `${msg.username}: ${msg.message}`)
-    .join('\n');
-  
-  const prompt = `Here are recent chat messages from your Twitch viewers:\n\n${chatSummary}\n\nRespond to the chat! Be engaging and acknowledge some of the messages. Keep it conversational and fun!`;
-  
-  console.log('Sending accumulated messages to AI:', accumulatedMessages.length, 'messages');
-  
-  // Add to queue with high priority since it's accumulated messages
-  addToQueue(prompt, 'twitch', 'Multiple Users', 'high');
-  
-  // Clear accumulated messages
-  accumulatedMessages = [];
-  updateAccumulationProgress();
-}
-
-// Range input updates
-
-//ok
-
-// ====================================
-// ENHANCED QUEUE SYSTEM FOR STREAM MODE
-// ====================================
-
-// Queue system variables
-let messageQueue = [];
-let localUserQueue = [];
-let twitchUserQueue = [];
-let currentQueueMode = 'mixed'; // 'mixed', 'twitch-priority', 'local-priority'
-let queueProcessingEnabled = true;
-let lastResponseSource = null; // Track who was last responded to
-let responseHistory = []; // Track recent responses for context
-
-// Queue management functions
-function addToQueue(message, source, username = null, priority = 'normal') {
-  const queueItem = {
-    id: Date.now() + Math.random(),
-    message: message,
-    source: source, // 'twitch' or 'local'
-    username: username,
-    priority: priority, // 'high', 'normal', 'low'
-    timestamp: new Date(),
-    processed: false
-  };
-  
-  // For Twitch messages, check if we have multiple unique users
-  if (source === 'twitch') {
-    // Get unique users from recent Twitch messages
-    const recentTwitchMessages = twitchUserQueue.filter(item => 
-      (Date.now() - item.timestamp.getTime()) < 300000 // Last 5 minutes
-    );
-    const uniqueUsers = new Set(recentTwitchMessages.map(item => item.username));
-    
-    // Only add if we have multiple users or if it's a high priority message
-    if (uniqueUsers.size >= 2 || priority === 'high') {
-      twitchUserQueue.push(queueItem);
-      messageQueue.push(queueItem);
-      console.log(`Added to queue: ${source} - ${message.substring(0, 50)}... (${uniqueUsers.size} unique users)`);
-    } else {
-      console.log(`Skipped single user message: ${username} - ${message.substring(0, 50)}...`);
-      return; // Don't add single user messages
-    }
-  } else if (source === 'local') {
-    // Always add local user messages
-    addMessage(message, 'user', userName);
-    localUserQueue.push(queueItem);
-    messageQueue.push(queueItem);
-    console.log(`Added to queue: ${source} - ${message.substring(0, 50)}...`);
-  }
-  
-  updateQueueDisplay();
-  
-  // Process queue if enabled
-  if (queueProcessingEnabled) {
+  if (queueProcessingEnabled && messageQueue.length >= messageAccumulationTarget) {
+    processQueue();
+  } else if (!queueProcessingEnabled) {
+    // If not in stream mode, process immediately
     processQueue();
   }
-  
-  console.log(`Added to queue: ${source} - ${message}`);
 }
 
 function processQueue() {
   if (messageQueue.length === 0 || isProcessingTTS || isTTSPlaying) {
     return;
   }
-  
-  // Get next message based on queue mode and AI context
-  const nextMessage = getNextQueueMessage();
-  
-  if (nextMessage) {
-    // Mark as processed
-    nextMessage.processed = true;
-    
-    // Remove from queues
-    messageQueue = messageQueue.filter(item => item.id !== nextMessage.id);
-    twitchUserQueue = twitchUserQueue.filter(item => item.id !== nextMessage.id);
-    localUserQueue = localUserQueue.filter(item => item.id !== nextMessage.id);
-    
-    // Add to response history
-    responseHistory.push({
-      source: nextMessage.source,
-      username: nextMessage.username,
-      timestamp: new Date(),
-      message: nextMessage.message
-    });
-    
-    // Keep only last 10 responses in history
-    if (responseHistory.length > 10) {
-      responseHistory.shift();
-    }
-    
-    // Update last response source
-    lastResponseSource = nextMessage.source;
-    
-    // Process the message
-    processQueuedMessage(nextMessage);
-    
-    updateQueueDisplay();
-    
-    console.log(`Processing queue item from ${nextMessage.source}: ${nextMessage.message}`);
-  }
-}
 
-function getNextQueueMessage() {
-  if (messageQueue.length === 0) return null;
-  
-  // AI context-aware selection
-  const contextualChoice = getAIContextualChoice();
-  if (contextualChoice) {
-    return contextualChoice;
-  }
-  
-  // Fallback to queue mode logic
-  switch (currentQueueMode) {
-    case 'twitch-priority':
-      return twitchUserQueue.length > 0 ? twitchUserQueue[0] : localUserQueue[0];
-    case 'local-priority':
-      return localUserQueue.length > 0 ? localUserQueue[0] : twitchUserQueue[0];
-    case 'mixed':
-    default:
-      return messageQueue[0]; // First in, first out
-  }
-}
-
-function getAIContextualChoice() {
-  // AI logic to decide who to respond to based on context
-  const twitchCount = twitchUserQueue.length;
-  const localCount = localUserQueue.length;
-  
-  // If no messages, return null
-  if (twitchCount === 0 && localCount === 0) return null;
-  
-  // If only one type has messages, choose that
-  if (twitchCount === 0) return localUserQueue[0];
-  if (localCount === 0) return twitchUserQueue[0];
-  
-  // Check recent response history for balance
-  const recentTwitchResponses = responseHistory.filter(r => r.source === 'twitch').length;
-  const recentLocalResponses = responseHistory.filter(r => r.source === 'local').length;
-  
-  // Prioritize underrepresented source
-  if (recentTwitchResponses > recentLocalResponses + 2) {
-    return localUserQueue[0];
-  } else if (recentLocalResponses > recentTwitchResponses + 2) {
-    return twitchUserQueue[0];
-  }
-  
-  // Check for high priority messages
-  const highPriorityTwitch = twitchUserQueue.find(item => item.priority === 'high');
-  const highPriorityLocal = localUserQueue.find(item => item.priority === 'high');
-  
-  if (highPriorityTwitch && !highPriorityLocal) return highPriorityTwitch;
-  if (highPriorityLocal && !highPriorityTwitch) return highPriorityLocal;
-  
-  // Default to mixed mode (FIFO)
-  return messageQueue[0];
-}
-
-function processQueuedMessage(queueItem) {
-  let contextualPrompt = '';
-  
-  // Add context about the message source
-  if (queueItem.source === 'twitch') {
-    if (queueItem.username === 'Multiple Users') {
-      // This is an accumulated message summary - use as-is since it's already formatted
-      contextualPrompt = queueItem.message;
-    } else {
-      contextualPrompt = `[Twitch Chat] ${queueItem.username}: ${queueItem.message}`;
-    }
-  } else {
-    contextualPrompt = `[${userName}]: ${queueItem.message}`;
-  }
-  
-  // Add context about recent activity (skip for accumulated messages)
-  if (queueItem.username !== 'Multiple Users' && responseHistory.length > 0) {
-    const recentSources = responseHistory.slice(-3).map(r => r.source);
-    const sourceBalance = {
-      twitch: recentSources.filter(s => s === 'twitch').length,
-      local: recentSources.filter(s => s === 'local').length
-    };
-    
-    if (sourceBalance.twitch > sourceBalance.local) {
-      contextualPrompt += '\n\n[AI Context: You\'ve been responding more to Twitch chat recently. Consider acknowledging both audiences.]';
-    } else if (sourceBalance.local > sourceBalance.twitch) {
-      contextualPrompt += `
-
-[AI Context: You've been responding more to ${userName} recently. Consider acknowledging your Twitch viewers too.]`;
-    }
-  }
-  
-  // Add queue status context (skip for accumulated messages)
-  if (queueItem.username !== 'Multiple Users') {
-    const queueStatus = `\n\n[Queue Status: ${twitchUserQueue.length} Twitch messages, ${localUserQueue.length} local messages waiting]`;
-    contextualPrompt += queueStatus;
-  }
-  
-  // Send to AI directly to avoid infinite loop
-  sendMessageToAIInternal(contextualPrompt);
-}
-
-function updateQueueDisplay() {
-  // Update queue indicators if they exist
-  const queueIndicator = document.getElementById('queueIndicator');
-  if (queueIndicator) {
-    const totalMessages = messageQueue.length;
-    const twitchMessages = twitchUserQueue.length;
-    const localMessages = localUserQueue.length;
-    
-    queueIndicator.innerHTML = `
-      <div class="queue-status">
-        <span>Queue: ${totalMessages} total</span>
-        <span>📺 ${twitchMessages} | 💬 ${localMessages}</span>
-      </div>
-    `;
-  }
-}
-
-function clearQueue() {
-  messageQueue = [];
-  twitchUserQueue = [];
-  localUserQueue = [];
-  updateQueueDisplay();
-  console.log('Queue cleared');
-}
-
-function setQueueMode(mode) {
-  currentQueueMode = mode;
-  console.log(`Queue mode set to: ${mode}`);
-}
-
-function toggleQueueProcessing() {
-  queueProcessingEnabled = !queueProcessingEnabled;
-  console.log(`Queue processing ${queueProcessingEnabled ? 'enabled' : 'disabled'}`);
-  
+  let combinedMessage;
   if (queueProcessingEnabled) {
-    processQueue();
+    // In stream mode, combine all messages
+    combinedMessage = messageQueue.map(item => `${item.username} says: ${item.message}`).join('');
+    messageQueue = []; // Clear queue
+  } else {
+    // In normal mode, process one by one
+    const item = messageQueue.shift();
+    combinedMessage = item.message;
   }
-}
-
-// ====================================
-// ENHANCED MESSAGE HANDLING
-// ====================================
-
-// Message accumulation using queue system
-function accumulateMessage(username, message) {
-  // Add message to accumulation array
-  accumulatedMessages.push({ username, message, timestamp: new Date() });
+  
+  sendMessageToAIInternal(combinedMessage);
   updateAccumulationProgress();
+}
+
+function updateAccumulationProgress() {
+  const count = messageQueue.length;
+  const target = messageAccumulationTarget;
+  const progress = (count / target) * 100;
   
-  // Check if we've reached the target
-  if (accumulatedMessages.length >= messageAccumulationTarget) {
-    sendAccumulatedMessagesToAI();
+  document.getElementById('accumulationCount').textContent = count;
+  document.getElementById('accumulationProgress').style.width = `${progress}%`;
+}
+
+// Draggable UI Elements
+function makeDraggable(element, header) {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  
+  header.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    
+    const rect = element.getBoundingClientRect();
+    const newTop = rect.top - pos2;
+    const newLeft = rect.left - pos1;
+
+    // Prevent dragging off-screen
+    if (newTop > 0 && newTop < window.innerHeight - rect.height) {
+      element.style.top = newTop + "px";
+    }
+    if (newLeft > 0 && newLeft < window.innerWidth - rect.width) {
+      element.style.left = newLeft + "px";
+    }
+  }
+
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
   }
 }
 
-// Send chat message using queue system
-function sendChatMessage() {
-  const input = document.getElementById('chatInput');
-  const message = input.value.trim();
-  
-  if (!message) return;
-  
-  // Add to queue
-  addToQueue(message, 'local', userName, 'normal');
-  
-  // Clear input
-  input.value = '';
-};
+// Initialize draggable elements
+document.addEventListener('DOMContentLoaded', () => {
+  makeDraggable(document.getElementById('twitchChatOverlay'), document.querySelector('#twitchChatOverlay .chat-drag-header'));
+  makeDraggable(document.getElementById('speechBubbleOverlay'), document.querySelector('#speechBubbleOverlay .chat-drag-header'));
+});
 
-// ====================================
-// UI ENHANCEMENTS
-// ====================================
+// Global hotkey listener
+document.addEventListener('keydown', (e) => {
+  const hotkey = document.getElementById('speechHotkey')?.value || 'Shift';
+  if (e.key === hotkey && !isListening) {
+    startListening();
+  }
+});
 
-// Add queue controls to the UI
-function addQueueControls() {
-  const settingsContent = document.querySelector('.settings-content');
-  if (!settingsContent) return;
-  
-  const queueSection = document.createElement('div');
-  queueSection.className = 'accordion-section';
-  queueSection.innerHTML = `
-    <div class="accordion-header" onclick="toggleAccordionFromHTML('queueSettings')">
-      <span>⚡ Queue System</span>
-      <span class="accordion-icon">▼</span>
-    </div>
-    <div class="accordion-content" id="queueSettings">
-      <div class="control-group">
-        <label>Queue Mode</label>
-        <select id="queueMode" onchange="setQueueMode(this.value)">
-          <option value="mixed">Mixed (FIFO)</option>
-          <option value="twitch-priority">Twitch Priority</option>
-          <option value="local-priority">Local Priority</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label>
-          <input type="checkbox" id="queueProcessing" checked onchange="toggleQueueProcessing()">
-          Enable Queue Processing
-        </label>
-      </div>
-      <div class="control-group">
-        <div id="queueIndicator" class="queue-indicator">
-          <div class="queue-status">
-            <span>Queue: 0 total</span>
-            <span>📺 0 | 💬 0</span>
-          </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <button class="control-btn" onclick="clearQueue()">Clear Queue</button>
-      </div>
-    </div>
-  `;
-  
-  // Insert after Twitch settings
-  const twitchSection = document.querySelector('#twitchSettings').parentElement;
-  twitchSection.parentNode.insertBefore(queueSection, twitchSection.nextSibling);
-}
+document.addEventListener('keyup', (e) => {
+  const hotkey = document.getElementById('speechHotkey')?.value || 'Shift';
+  if (e.key === hotkey && isListening) {
+    stopListening();
+  }
+});
 
-// Initialize queue system
-
-console.log('Enhanced Queue System loaded successfully!');
-
-// Generic draggable utility function
-
-// Enhanced JavaScript functions for consolidated AI configuration
-
+// Save and load AI provider and global prompt separately for better persistence
 function updateAIProviderFromHTML() {
     const provider = document.getElementById('aiProvider').value;
-    
-    // Hide all provider configs
-    document.getElementById('ollamaConfig').style.display = 'none';
-    document.getElementById('openaiConfig').style.display = 'none';
-    document.getElementById('geminiConfig').style.display = 'none';
-    
-    // Show selected provider config
-    document.getElementById(provider + 'Config').style.display = 'block';
-    
-    // Update current provider in script.js
-    if (typeof currentProvider !== 'undefined') {
-        currentProvider = provider;
-    }
-    
-    // Save selection
     localStorage.setItem('ai-selected-provider', provider);
-    
-    // Trigger save of full settings if available
-    if (typeof saveUISettings === 'function') {
-        saveUISettings();
-    }
-    
-    // Load models for Ollama if selected
-    if (provider === 'ollama' && typeof refreshOllamaModels === 'function') {
-        setTimeout(() => {
-            refreshOllamaModels(true);
-        }, 100);
-    }
+    updateAIProvider();
 }
 
 function updateGlobalSystemPrompt() {
     const globalPrompt = document.getElementById('globalSystemMessage').value;
-    
-    // Update all provider-specific system prompts (these elements don't exist, so this will do nothing)
-    // The actual system_message/system_instruction is updated in the respective updateConfig functions
-    // const ollamaSystem = document.getElementById('ollamaSystemMessage');
-    // const openaiSystem = document.getElementById('openaiSystemMessage');
-    // const geminiSystem = document.getElementById('geminiSystemMessage');
-    
-    // if (ollamaSystem) ollamaSystem.value = globalPrompt;
-    // if (openaiSystem) openaiSystem.value = globalPrompt;
-    // if (geminiSystem) geminiSystem.value = globalPrompt;
-    
-    // Save to localStorage
     localStorage.setItem('ai-global-prompt', globalPrompt);
     
-    // Update only the system prompt in each config without full refresh
-    if (ollamaConfig) ollamaConfig.system_message = globalPrompt;
-    if (openaiConfig) openaiConfig.system_message = globalPrompt;
-    if (geminiConfig) geminiConfig.system_instruction = globalPrompt;
-    
-    // Save the updated settings
+    // Also update the respective provider's config
+    switch(currentProvider) {
+        case 'ollama':
+            ollamaConfig.system_message = globalPrompt;
+            break;
+        case 'openai':
+            openaiConfig.system_message = globalPrompt;
+            break;
+        case 'gemini':
+            geminiConfig.system_instruction = globalPrompt;
+            break;
+    }
     saveUISettings();
 }
 
-function setOllamaPreset(preset) {
-    const presets = {
-        creative: {
-            temperature: 1.2,
-            topP: 0.95,
-            topK: 60,
-            repeatPenalty: 1.1
-        },
-        balanced: {
-            temperature: 0.7,
-            topP: 0.9,
-            topK: 40,
-            repeatPenalty: 1.1
-        },
-        precise: {
-            temperature: 0.3,
-            topP: 0.8,
-            topK: 20,
-            repeatPenalty: 1.2
-        },
-        fast: {
-            temperature: 0.5,
-            topP: 0.85,
-            topK: 30,
-            repeatPenalty: 1.15,
-            maxTokens: 256
-        }
-    };
+function loadPersistentAISettings() {
+    const savedProvider = localStorage.getItem('ai-selected-provider') || 'gemini';
+    const savedPrompt = localStorage.getItem('ai-global-prompt') || '';
     
-    const config = presets[preset];
-    if (config) {
-        // Update DOM elements
-        document.getElementById('ollamaTemperature').value = config.temperature;
-        document.getElementById('ollamaTemperatureValue').textContent = config.temperature;
-        document.getElementById('ollamaTopP').value = config.topP;
-        document.getElementById('ollamaTopPValue').textContent = config.topP;
-        document.getElementById('ollamaTopK').value = config.topK;
-        document.getElementById('ollamaTopKValue').textContent = config.topK;
-        document.getElementById('ollamaRepeatPenalty').value = config.repeatPenalty;
-        document.getElementById('ollamaRepeatPenaltyValue').textContent = config.repeatPenalty;
-        
-        if (config.maxTokens) {
-            document.getElementById('ollamaMaxTokens').value = config.maxTokens;
-            document.getElementById('ollamaMaxTokensValue').textContent = config.maxTokens;
-        }
-        
-        // Update config object directly instead of circular DOM read
-        ollamaConfig.temperature = config.temperature;
-        ollamaConfig.top_p = config.topP;
-        ollamaConfig.top_k = config.topK;
-        ollamaConfig.repeat_penalty = config.repeatPenalty;
-        if (config.maxTokens) {
-            ollamaConfig.max_tokens = config.maxTokens;
-        }
-        
-        // Save settings
+    const aiProviderSelect = document.getElementById('aiProvider');
+    const globalPromptTextarea = document.getElementById('globalSystemMessage');
+    
+    if (aiProviderSelect) {
+        aiProviderSelect.value = savedProvider;
+        currentProvider = savedProvider;
+        updateAIProvider();
+    }
+    
+    if (globalPromptTextarea) {
+        globalPromptTextarea.value = savedPrompt;
+        updateGlobalSystemPrompt();
+    }
+}
+
+// Save Ollama model selection
+function saveOllamaModelSelection() {
+    const selectedModel = document.getElementById('ollamaModel').value;
+    if (selectedModel) {
+        localStorage.setItem('ai-ollama-model', selectedModel);
+        ollamaConfig.model = selectedModel;
         saveUISettings();
     }
 }
 
-
-function saveOllamaModelSelection() {
-    const modelSelect = document.getElementById('ollamaModel');
-    const selectedModel = modelSelect.value;
-    
-    // Save to localStorage for immediate persistence
-    localStorage.setItem('ai-ollama-model', selectedModel);
-    
-    // Update the ollamaConfig if it exists
-    if (typeof ollamaConfig !== 'undefined') {
-        ollamaConfig.model = selectedModel;
-    }
-    
-    console.log('Ollama model saved:', selectedModel);
-}
-
-function forceRefreshOllamaModelsFromHTML() {
-    // Refresh button animation
-    const btn = event.target;
-    btn.style.transform = 'rotate(360deg)';
-    setTimeout(() => {
-        btn.style.transform = 'rotate(0deg)';
-    }, 300);
-    
-    // Call existing refresh function if it exists
-    if (typeof refreshOllamaModels === 'function') {
-        refreshOllamaModels();
-    }
-}
-
-// Scroll indicator functionality
-function initScrollIndicators() {
-    const accordionContents = document.querySelectorAll('.accordion-content');
-    
-    accordionContents.forEach(content => {
-        content.addEventListener('scroll', function() {
-            if (this.scrollTop > 10) {
-                this.classList.add('scrolled');
-            } else {
-                this.classList.remove('scrolled');
-            }
-        });
-    });
-}
-
-// Enhanced accordion toggle with scroll reset
-function toggleAccordionFromHTML(sectionId) {
-    const content = document.getElementById(sectionId);
-    const header = content.previousElementSibling;
-    const icon = header.querySelector('.accordion-icon');
-    
-    if (content.style.display === 'block') {
-        content.style.display = 'none';
-        icon.textContent = '▼';
-        content.classList.remove('scrolled');
-    } else {
-        // Close other accordions first (optional)
-        document.querySelectorAll('.accordion-content').forEach(other => {
-            if (other !== content && other.style.display === 'block') {
-                other.style.display = 'none';
-                const otherIcon = other.previousElementSibling.querySelector('.accordion-icon');
-                if (otherIcon) otherIcon.textContent = '▼';
-                other.classList.remove('scrolled');
-            }
-        });
-        
-        content.style.display = 'block';
-        icon.textContent = '▲';
-        
-        // Reset scroll position when opening
-        setTimeout(() => {
-            content.scrollTop = 0;
-        }, 10);
-    }
-}
-
-// Smooth scroll to top of accordion when opening
-function scrollToAccordion(sectionId) {
-    const section = document.getElementById(sectionId);
-    const header = section.previousElementSibling;
-    
-    header.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest'
-    });
-}
-
-// Initialize on page load
-
-// Generic draggable utility function
-function makeElementDraggable(element, dragHandle, storageKey) {
-    if (!element || !dragHandle) return;
-
-    // Load saved position
-    const savedPosition = localStorage.getItem(storageKey);
-    if (savedPosition) {
-        const { x, y } = JSON.parse(savedPosition);
-        element.style.left = `${x}px`;
-        element.style.top = `${y}px`;
-        element.style.right = 'auto';
-        element.style.bottom = 'auto';
-    }
-
-    let isDragging = false;
-    let dragOffset = { x: 0, y: 0 };
-
-    dragHandle.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', stopDrag);
-
-    function startDrag(e) {
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
-        isDragging = true;
+// Draggable UI Persistence
+function saveElementPosition(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
         const rect = element.getBoundingClientRect();
-        dragOffset.x = e.clientX - rect.left;
-        dragOffset.y = e.clientY - rect.top;
-        element.style.position = 'absolute';
-        element.style.zIndex = '1200';
-        e.preventDefault();
-    }
-
-    function drag(e) {
-        if (!isDragging) return;
-        const x = e.clientX - dragOffset.x;
-        const y = e.clientY - dragOffset.y;
-        const maxX = window.innerWidth - element.offsetWidth;
-        const maxY = window.innerHeight - element.offsetHeight;
-        element.style.left = `${Math.max(0, Math.min(x, maxX))}px`;
-        element.style.top = `${Math.max(0, Math.min(y, maxY))}px`;
-    }
-
-    function stopDrag() {
-        if (!isDragging) return;
-        isDragging = false;
-        const rect = element.getBoundingClientRect();
+        const storageKey = `webwaifu-pos-${elementId}`;
         localStorage.setItem(storageKey, JSON.stringify({ x: rect.left, y: rect.top }));
     }
 }
 
-// Initialize draggable elements when DOM is ready
-
-
-
-
-
-function showChatbot() {
-  // Show the floating chat input
-  const floatingChat = document.getElementById('floatingChat');
-  if (floatingChat) {
-    floatingChat.classList.remove('stream-mode-hidden');
-    floatingChat.style.opacity = '1';
-    floatingChat.style.pointerEvents = 'auto';
-    
-    // Focus on the chat input
-    const chatInput = document.getElementById('chatInput');
-    if (chatInput) {
-      setTimeout(() => chatInput.focus(), 100);
+function loadElementPosition(elementId) {
+    const element = document.getElementById(elementId);
+    const storageKey = `webwaifu-pos-${elementId}`;
+    const savedPos = localStorage.getItem(storageKey);
+    if (element && savedPos) {
+        try {
+            const { x, y } = JSON.parse(savedPos);
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+        } catch (e) {
+            console.error('Failed to load element position:', e);
+        }
     }
-    
-    console.log('Chatbot shown via double-click');
-  }
 }
+
+// Load positions on startup
+document.addEventListener('DOMContentLoaded', () => {
+    loadElementPosition('twitchChatOverlay');
+    loadElementPosition('speechBubbleOverlay');
+});
+
+// Save positions when dragging ends
+document.addEventListener('DOMContentLoaded', () => {
+    const twitchHeader = document.querySelector('#twitchChatOverlay .chat-drag-header');
+    const speechHeader = document.querySelector('#speechBubbleOverlay .chat-drag-header');
+    
+    if (twitchHeader) {
+        new MutationObserver(() => saveElementPosition('twitchChatOverlay')).observe(document.getElementById('twitchChatOverlay'), { attributes: true, attributeFilter: ['style'] });
+    }
+    if (speechHeader) {
+        new MutationObserver(() => saveElementPosition('speechBubbleOverlay')).observe(document.getElementById('speechBubbleOverlay'), { attributes: true, attributeFilter: ['style'] });
+    }
+});
+
+// Test talking animation helper
+function testTalkingAnimation(){ try{ startTalkingAnimation(); setTimeout(stopTalkingAnimation, 2000); }catch(e){ console.warn(e); } }
+
+// Ensure LLM + TTS functions are exposed globally for inline handlers
+try {
+  if (typeof updateGeminiConfig === 'function') window.updateGeminiConfig = updateGeminiConfig;
+} catch(_) {}
+try {
+  if (typeof getGeminiResponse === 'function') window.getGeminiResponse = getGeminiResponse;
+} catch(_) {}
+try {
+  if (typeof updateOpenAIConfig === 'function') window.updateOpenAIConfig = updateOpenAIConfig;
+} catch(_) {}
+try {
+  if (typeof getOpenAIResponse === 'function') window.getOpenAIResponse = getOpenAIResponse;
+} catch(_) {}
+try {
+  if (typeof updateOllamaConfig === 'function') window.updateOllamaConfig = updateOllamaConfig;
+} catch(_) {}
+try {
+  if (typeof getOllamaResponse === 'function') window.getOllamaResponse = getOllamaResponse;
+} catch(_) {}
+try {
+  if (typeof sendMessageToAI === 'function') window.sendMessageToAI = sendMessageToAI;
+} catch(_) {}
+

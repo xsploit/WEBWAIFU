@@ -1,6 +1,7 @@
 # Backup files
 backup/
 *.backup
+old_files/
 
 # OS generated files
 .DS_Store
