@@ -149,15 +149,15 @@
                         </div>
                         <div class="control-group">
                             <label>Mouth Threshold: <span id="mouthValue">10</span></label>
-                            <input type="range" id="mouthThreshold" min="0" max="50" value="10">
+                            <input type="range" id="mouthThreshold" min="0" max="50" value="10" oninput="updateVRMControlsSetting()">
                         </div>
                         <div class="control-group">
                             <label>Mouth Gain: <span id="gainValue">0.1</span></label>
-                            <input type="range" id="mouthGain" min="0" max="30" value="1">
+                            <input type="range" id="mouthGain" min="0" max="30" value="1" oninput="updateVRMControlsSetting()">
                         </div>
                         <div class="control-group">
                             <label>Mouth Smoothing: <span id="mouthSmoothValue">0.3</span></label>
-                            <input type="range" id="mouthSmoothing" min="0" max="100" value="30">
+                            <input type="range" id="mouthSmoothing" min="0" max="100" value="30" oninput="updateVRMControlsSetting()">
                         </div>
                         <div class="control-group">
                             <label>Expression (Serious ↔ Smiling)</label>
@@ -3283,6 +3283,7 @@
                         openaiConfig,
                         geminiConfig,
                         currentProvider,
+                        enableStreaming,
                         timestamp: Date.now()
                     };
                     localStorage.setItem('webwaifu-llm-settings', JSON.stringify(settings));
@@ -3304,6 +3305,7 @@
                         if (settings.openaiConfig) Object.assign(openaiConfig, settings.openaiConfig);
                         if (settings.geminiConfig) Object.assign(geminiConfig, settings.geminiConfig);
                         if (settings.currentProvider) currentProvider = settings.currentProvider;
+                        if (typeof settings.enableStreaming !== 'undefined') enableStreaming = settings.enableStreaming;
 
                         console.log('📁 LLM settings loaded from localStorage');
                         updateLLMUI(); // Update UI with loaded settings
@@ -3636,7 +3638,64 @@
                 const streamingCheckbox = document.getElementById('enableStreaming');
                 if (streamingCheckbox) {
                     enableStreaming = streamingCheckbox.checked;
+                    saveLLMSettings();
                     console.log('⚡ Streaming', enableStreaming ? 'enabled' : 'disabled');
+                }
+            }
+
+            // VRM Controls localStorage
+            function updateVRMControlsSetting() {
+                const mouthThreshold = document.getElementById('mouthThreshold')?.value;
+                const mouthGain = document.getElementById('mouthGain')?.value;
+                const mouthSmoothing = document.getElementById('mouthSmoothing')?.value;
+                const expression = document.getElementById('expression')?.value;
+
+                const settings = {
+                    mouthThreshold: mouthThreshold ? parseFloat(mouthThreshold) : 10,
+                    mouthGain: mouthGain ? parseFloat(mouthGain) : 1,
+                    mouthSmoothing: mouthSmoothing ? parseFloat(mouthSmoothing) : 30,
+                    expression: expression ? parseFloat(expression) : 80
+                };
+
+                localStorage.setItem('webwaifu-vrm-controls', JSON.stringify(settings));
+
+                // Update display values
+                if (mouthThreshold) document.getElementById('mouthValue').textContent = mouthThreshold;
+                if (mouthGain) document.getElementById('gainValue').textContent = (parseFloat(mouthGain) / 10).toFixed(1);
+                if (mouthSmoothing) document.getElementById('mouthSmoothValue').textContent = (parseFloat(mouthSmoothing) / 100).toFixed(1);
+                if (expression) document.getElementById('expressionValue').textContent = expression;
+
+                console.log('💾 VRM controls saved to localStorage');
+            }
+
+            function loadVRMControlsSettings() {
+                try {
+                    const saved = localStorage.getItem('webwaifu-vrm-controls');
+                    if (saved) {
+                        const settings = JSON.parse(saved);
+
+                        if (settings.mouthThreshold && document.getElementById('mouthThreshold')) {
+                            document.getElementById('mouthThreshold').value = settings.mouthThreshold;
+                            document.getElementById('mouthValue').textContent = settings.mouthThreshold;
+                        }
+                        if (settings.mouthGain && document.getElementById('mouthGain')) {
+                            document.getElementById('mouthGain').value = settings.mouthGain;
+                            document.getElementById('gainValue').textContent = (settings.mouthGain / 10).toFixed(1);
+                        }
+                        if (settings.mouthSmoothing && document.getElementById('mouthSmoothing')) {
+                            document.getElementById('mouthSmoothing').value = settings.mouthSmoothing;
+                            document.getElementById('mouthSmoothValue').textContent = (settings.mouthSmoothing / 100).toFixed(1);
+                            mouthSmoothing = settings.mouthSmoothing / 100; // Update global variable
+                        }
+                        if (settings.expression && document.getElementById('expression')) {
+                            document.getElementById('expression').value = settings.expression;
+                            document.getElementById('expressionValue').textContent = settings.expression;
+                        }
+
+                        console.log('📁 VRM controls loaded from localStorage');
+                    }
+                } catch (error) {
+                    console.warn('Could not load VRM controls:', error);
                 }
             }
 
@@ -3930,12 +3989,12 @@
 
             // Simple UI settings save function (placeholder)
             function loadUISettings() {
-                // Use the same key as saveLLMSettings for consistency
+                // Load LLM settings
                 const saved = localStorage.getItem('webwaifu-llm-settings');
                 if (saved) {
                     try {
                         const settings = JSON.parse(saved);
-                        
+
                         // Update configs
                         if (settings.azureConfig) Object.assign(azureConfig, settings.azureConfig);
                         if (settings.ollamaConfig) Object.assign(ollamaConfig, settings.ollamaConfig);
@@ -3949,11 +4008,65 @@
                         console.error('Error loading settings:', error);
                     }
                 }
+
+                // Load display settings
+                const savedDisplay = localStorage.getItem('webwaifu-display-settings');
+                if (savedDisplay) {
+                    try {
+                        const settings = JSON.parse(savedDisplay);
+                        if (settings.showChatBubble !== undefined) {
+                            const checkbox = document.getElementById('showChatBubble');
+                            if (checkbox) checkbox.checked = settings.showChatBubble;
+                        }
+                        if (settings.enableTTS !== undefined) {
+                            const checkbox = document.getElementById('enableTTS');
+                            if (checkbox) checkbox.checked = settings.enableTTS;
+                        }
+                        console.log('📁 Display settings loaded from localStorage');
+                    } catch (error) {
+                        console.error('Error loading display settings:', error);
+                    }
+                }
+
+                // Load character settings
+                const savedUserName = localStorage.getItem('userName');
+                if (savedUserName) {
+                    const input = document.getElementById('userName');
+                    if (input) input.value = savedUserName;
+                }
+
+                const savedCharName = localStorage.getItem('characterName');
+                if (savedCharName) {
+                    const input = document.getElementById('characterName');
+                    if (input) input.value = savedCharName;
+                }
+
+                const savedCharDesc = localStorage.getItem('characterDescription');
+                if (savedCharDesc) {
+                    const input = document.getElementById('characterDescription');
+                    if (input) input.value = savedCharDesc;
+                }
             }
 
             function saveUISettings() {
-                console.log('💾 UI settings saved (conversation history maintained in memory)');
+                const showChatBubble = document.getElementById('showChatBubble')?.checked;
+                const enableTTS = document.getElementById('enableTTS')?.checked;
+
+                const settings = {
+                    showChatBubble: showChatBubble !== undefined ? showChatBubble : true,
+                    enableTTS: enableTTS !== undefined ? enableTTS : true
+                };
+
+                localStorage.setItem('webwaifu-display-settings', JSON.stringify(settings));
+                console.log('💾 Display settings saved to localStorage');
             }
+
+            function toggleChatBubble() {
+                saveUISettings();
+            }
+
+            // Expose to window
+            window.toggleChatBubble = toggleChatBubble;
 
             // LLM Response Functions
             // Streaming Ollama response with sentence-by-sentence TTS
@@ -4553,13 +4666,47 @@
                 }
             }
     
+            function updateUserName() {
+                const userNameInput = document.getElementById('userName');
+                if (userNameInput) {
+                    const newName = userNameInput.value || 'User';
+                    localStorage.setItem('userName', newName);
+                    console.log('User name updated to:', newName);
+                }
+            }
+
+            function updateCharacterName() {
+                const characterNameInput = document.getElementById('characterName');
+                if (characterNameInput) {
+                    const newName = characterNameInput.value || 'Character';
+                    localStorage.setItem('characterName', newName);
+                    console.log('Character name updated to:', newName);
+                }
+            }
+
+            function updateCharacterDescription() {
+                const characterDescInput = document.getElementById('characterDescription');
+                if (characterDescInput) {
+                    const newDesc = characterDescInput.value || '';
+                    localStorage.setItem('characterDescription', newDesc);
+                    console.log('Character description updated');
+                }
+            }
+
             function generateCharacter() {
                 console.log('generateCharacter called');
             }
-    
+
             function applyCharacterToChat() {
                 console.log('applyCharacterToChat called');
             }
+
+            // Expose functions to window for inline event handlers
+            window.updateUserName = updateUserName;
+            window.updateCharacterName = updateCharacterName;
+            window.updateCharacterDescription = updateCharacterDescription;
+            window.generateCharacter = generateCharacter;
+            window.applyCharacterToChat = applyCharacterToChat;
     
             // Initialize Whisper Worker
             function initializeWhisperWorker() {
@@ -4852,6 +4999,10 @@
                 console.log('🚀 Initializing Whisper worker...');
                 initializeWhisperWorker();
                 enumerateMicrophones();
+
+                // Load all settings from localStorage
+                loadVRMControlsSettings();
+                loadTwitchSettings();
 
                 // Initialize draggable elements
                 setTimeout(() => {
