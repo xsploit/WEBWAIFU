@@ -6224,6 +6224,12 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 background: rgba(255, 255, 255, 0.04);
                 border-top: 1px solid rgba(255, 255, 255, 0.06);
             }
+            /* Ensure chat content flexes and footer stays pinned at bottom */
+            .twitch-chat-overlay #twitchChatContent {
+                flex: 1 1 auto;
+                overflow-y: auto;
+                max-height: none !important;
+            }
             
             @media (max-width: 768px) {
                 .title-logo {
