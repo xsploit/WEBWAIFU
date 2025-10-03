@@ -6191,6 +6191,40 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 transform: scale(1.05);
             }
             
+            /* Twitch chat overlay: cleaner look and hidden by default */
+            .twitch-chat-overlay {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                width: 320px;
+                max-height: 50vh;
+                display: none; /* default hidden */
+                display: flex;
+                flex-direction: column;
+                background: rgba(0, 0, 0, 0.55);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+                backdrop-filter: blur(6px);
+                overflow: hidden;
+            }
+            .twitch-chat-overlay .chat-drag-header {
+                padding: 6px 8px;
+                background: rgba(255, 255, 255, 0.06);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+            .twitch-chat-overlay .chat-overlay-content {
+                padding: 8px;
+                flex: 1 1 auto;
+                overflow-y: auto;
+            }
+            .twitch-chat-overlay .chat-overlay-footer {
+                margin-top: auto;
+                padding: 8px;
+                background: rgba(255, 255, 255, 0.06);
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
+            
             @media (max-width: 768px) {
                 .title-logo {
                     height: 45px;
