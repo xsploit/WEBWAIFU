@@ -49,27 +49,7 @@
             </div>
         </header>
     
-    
-        <!-- Speech Bubble (appears when AI responds) -->
-        <div class="speech-bubble-overlay" id="speechBubbleOverlay" style="display: none;">
-            <div class="chat-drag-header">
-                <div class="header-left">
-                </div>
-                <div class="header-center">
-                    <span class="drag-handle">⋮⋮</span>
-                    <h4>🤖 AI Response</h4>
-                </div>
-                <div class="header-right">
-                    <button class="dock-btn" onclick="toggleSpeechBubbleDock()" title="Dock/Undock">⚹</button>
-                </div>
-            </div>
-            <div class="speech-overlay-content" id="speechBubbleContent">
-                <div class="ai-response-text" id="aiResponseText">
-                    AI response will appear here when speaking...
-                </div>
-            </div>
-        </div>
-    
+        
         <!-- Floating Chat Input -->
         <div class="floating-chat" id="floatingChat">
             <div class="chat-input-container">
@@ -2666,27 +2646,9 @@ RESPONSE FORMAT:
                 }, duration);
             }
 
-            function showSpeechBubble(aiResponse) {
-                // Check if chat bubble is enabled in display options
-                if (!document.getElementById('showChatBubble')?.checked) {
-                    return;
-                }
-                
-                const speechOverlay = document.getElementById('speechBubbleOverlay');
-                const aiResponseText = document.getElementById('aiResponseText');
-                
-                if (speechOverlay && aiResponseText) {
-                    aiResponseText.textContent = aiResponse;
-                    speechOverlay.style.display = 'flex';
-                }
-            }
-
-            function hideSpeechBubble() {
-                const speechOverlay = document.getElementById('speechBubbleOverlay');
-                if (speechOverlay) {
-                    speechOverlay.style.display = 'none';
-                }
-            }
+            // Removed AI response overlay: no-op stubs for compatibility
+            function showSpeechBubble(aiResponse) {}
+            function hideSpeechBubble() {}
 
             // Debug function to check VRM structure
             function debugVRMStructure() {
