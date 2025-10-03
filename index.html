@@ -3155,6 +3155,37 @@
                 systemMessage: ''
             };
 
+            // Keep old provider configs for backwards compat and advanced settings
+            let ollamaConfig = {
+                url: 'http://localhost:11434',
+                model: '',
+                temperature: 0.7,
+                top_k: 40,
+                top_p: 0.9,
+                repeat_penalty: 1.1,
+                num_ctx: 2048,
+                num_predict: 512
+            };
+
+            let openaiConfig = {
+                key: '',
+                model: 'gpt-4o',
+                temperature: 0.7,
+                max_tokens: 512,
+                top_p: 1.0,
+                frequency_penalty: 0,
+                presence_penalty: 0
+            };
+
+            let geminiConfig = {
+                key: '',
+                model: 'gemini-2.0-flash-exp',
+                temperature: 0.7,
+                max_output_tokens: 2048,
+                top_p: 0.95,
+                top_k: 40
+            };
+
             let currentProvider = 'ollama';
             llmConfig.provider = currentProvider; // Keep in sync
             let conversationHistory = [];
@@ -4176,12 +4207,30 @@ async function callLLM(message, streaming = false, onChunk = null) {
         requestBody.presence_penalty = llmConfig.presencePenalty || 0;
     }
     else if (llmConfig.provider === 'ollama') {
-        // Ollama uses max_tokens and supports OpenAI params
+        // Ollama OpenAI-compatible endpoint - try advanced params
         requestBody.max_tokens = llmConfig.maxTokens;
         requestBody.top_p = llmConfig.topP;
-        // Ollama supports these via options, but OpenAI-compatible endpoint may vary
+
+        // OpenAI-compatible params
         if (llmConfig.frequencyPenalty) requestBody.frequency_penalty = llmConfig.frequencyPenalty;
         if (llmConfig.presencePenalty) requestBody.presence_penalty = llmConfig.presencePenalty;
+
+        // Try to pass Ollama-specific options if available (may or may not work on OpenAI endpoint)
+        // These are loaded from the old ollamaConfig
+        if (typeof ollamaConfig !== 'undefined' && ollamaConfig) {
+            // NOTE: Flash attention, mmap, f16_kv are MODEL-LEVEL settings (set in Modelfile)
+            // But we can try passing runtime options
+            const ollamaOptions = {};
+            if (ollamaConfig.top_k) ollamaOptions.top_k = ollamaConfig.top_k;
+            if (ollamaConfig.repeat_penalty) ollamaOptions.repeat_penalty = ollamaConfig.repeat_penalty;
+            if (ollamaConfig.num_ctx) ollamaOptions.num_ctx = ollamaConfig.num_ctx;
+            if (ollamaConfig.num_predict) ollamaOptions.num_predict = ollamaConfig.num_predict;
+
+            // Only add options if we have any
+            if (Object.keys(ollamaOptions).length > 0) {
+                requestBody.options = ollamaOptions;
+            }
+        }
     }
 
     // Build headers
