@@ -348,8 +348,8 @@
     
                         <!-- Shared System Prompt for All Providers -->
                         <div class="control-group">
-                            <label>🎭 AI Personality &amp; System Prompt</label>
-                            <textarea id="globalSystemMessage" rows="6" onchange="updateGlobalSystemPrompt()" placeholder="Define your AI's personality here...">You are an AI waifu with a sweet, caring, and playful personality! You're here to be a companion, friend, and source of comfort and entertainment.
+                            <label>⚙️ System Prompt (Technical Instructions)</label>
+                            <textarea id="globalSystemMessage" rows="6" onchange="updateGlobalSystemPrompt()" placeholder="Technical instructions for the AI (format, behavior rules, etc.)">You are an AI waifu with a sweet, caring, and playful personality! You're here to be a companion, friend, and source of comfort and entertainment.
     
     Key traits:
     - You're warm, affectionate, and genuinely care about the user's wellbeing
@@ -669,10 +669,45 @@
                                 <span class="range-value" id="openaiPresencePenaltyValue">0</span>
                             </div>
                         </div>
-    
+
+                        <!-- OpenRouter Config -->
+                        <div id="openrouterConfig" class="provider-config" style="display: none;">
+                            <div class="provider-header">
+                                <h4>🌐 OpenRouter Settings</h4>
+                            </div>
+
+                            <div class="control-group">
+                                <label>API Key</label>
+                                <div class="input-with-eye">
+                                    <input type="password" id="openrouterKey" placeholder="Enter OpenRouter API key" onchange="updateOpenRouterConfig()">
+                                    <button type="button" class="eye-btn" onclick="togglePasswordVisibility('openrouterKey', this)">👁️</button>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label>Model</label>
+                                <input type="text" id="openrouterModel" placeholder="e.g., anthropic/claude-3.5-sonnet" onchange="updateOpenRouterConfig()">
+                                <small style="color: #888; font-size: 11px;">Find models at <a href="https://openrouter.ai/models" target="_blank">openrouter.ai/models</a></small>
+                            </div>
+                            <div class="control-group">
+                                <label>Temperature</label>
+                                <input type="range" id="openrouterTemperature" min="0" max="2" step="0.1" value="0.7" onchange="updateOpenRouterConfig()">
+                                <span class="range-value" id="openrouterTemperatureValue">0.7</span>
+                            </div>
+                            <div class="control-group">
+                                <label>Max Tokens</label>
+                                <input type="range" id="openrouterMaxTokens" min="1" max="4096" step="1" value="512" onchange="updateOpenRouterConfig()">
+                                <span class="range-value" id="openrouterMaxTokensValue">512</span>
+                            </div>
+                            <div class="control-group">
+                                <label>Top P</label>
+                                <input type="range" id="openrouterTopP" min="0" max="1" step="0.05" value="1" onchange="updateOpenRouterConfig()">
+                                <span class="range-value" id="openrouterTopPValue">1.0</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-    
+
                 <!-- Twitch Stream Integration -->
                 <div class="accordion-section">
                     <div class="accordion-header" onclick="toggleAccordionFromHTML('twitchSettings')">
@@ -737,13 +772,13 @@
                             <p class="upload-hint">AI will generate a personality description based on your prompt</p>
                         </div>
                         <div class="control-group">
-                            <label>Character Personality</label>
-                            <textarea id="characterDescription" rows="4" onchange="updateCharacterDescription()" 
+                            <label>🎭 Character Personality</label>
+                            <textarea id="characterDescription" rows="4" onchange="updateCharacterDescription()"
                                       placeholder="Describe your character's personality, traits, and behavior..."></textarea>
                             <button class="control-btn" onclick="applyCharacterToChat()" style="background-color: #4CAF50; margin-top: 5px;">
                                 ✅ Apply Character to Chat
                             </button>
-                            <p class="upload-hint">Pure personality description - separate from technical system prompt</p>
+                            <p class="upload-hint">Character personality only (name, traits, speaking style). This gets applied to the System Prompt in AI Config.</p>
                         </div>
                         <div class="control-group">
                             <label>
@@ -3156,6 +3191,14 @@
                 top_k: 40
             };
 
+            let openrouterConfig = {
+                key: '',
+                model: 'anthropic/claude-3.5-sonnet',
+                temperature: 0.7,
+                max_tokens: 512,
+                top_p: 1.0
+            };
+
             let currentProvider = 'ollama';
             llmConfig.provider = currentProvider; // Keep in sync
             let conversationHistory = [];
@@ -3268,6 +3311,7 @@
                         ollamaConfig,
                         openaiConfig,
                         geminiConfig,
+                        openrouterConfig,
                         currentProvider,
                         enableStreaming,
                         timestamp: Date.now()
@@ -3290,6 +3334,7 @@
                         if (settings.ollamaConfig) Object.assign(ollamaConfig, settings.ollamaConfig);
                         if (settings.openaiConfig) Object.assign(openaiConfig, settings.openaiConfig);
                         if (settings.geminiConfig) Object.assign(geminiConfig, settings.geminiConfig);
+                        if (settings.openrouterConfig) Object.assign(openrouterConfig, settings.openrouterConfig);
                         if (settings.currentProvider) currentProvider = settings.currentProvider;
                         if (typeof settings.enableStreaming !== 'undefined') enableStreaming = settings.enableStreaming;
 
@@ -3359,6 +3404,13 @@
                 if (document.getElementById('geminiMaxTokens')) document.getElementById('geminiMaxTokens').value = geminiConfig.max_output_tokens;
                 if (document.getElementById('geminiTopP')) document.getElementById('geminiTopP').value = geminiConfig.top_p;
                 if (document.getElementById('geminiTopK')) document.getElementById('geminiTopK').value = geminiConfig.top_k;
+
+                // Update OpenRouter settings
+                if (document.getElementById('openrouterKey')) document.getElementById('openrouterKey').value = openrouterConfig.key;
+                if (document.getElementById('openrouterModel')) document.getElementById('openrouterModel').value = openrouterConfig.model;
+                if (document.getElementById('openrouterTemperature')) document.getElementById('openrouterTemperature').value = openrouterConfig.temperature;
+                if (document.getElementById('openrouterMaxTokens')) document.getElementById('openrouterMaxTokens').value = openrouterConfig.max_tokens;
+                if (document.getElementById('openrouterTopP')) document.getElementById('openrouterTopP').value = openrouterConfig.top_p;
 
                 // Update Azure TTS settings
                 if (document.getElementById('azureKey')) document.getElementById('azureKey').value = azureConfig.key;
@@ -3671,12 +3723,58 @@
                 console.log('🔧 Gemini config updated and saved to unified llmConfig');
             }
 
+            function updateOpenRouterConfig() {
+                if (document.getElementById('openrouterKey')) {
+                    openrouterConfig.key = document.getElementById('openrouterKey').value;
+                    llmConfig.apiKey = openrouterConfig.key;
+                }
+                if (document.getElementById('openrouterModel')) {
+                    openrouterConfig.model = document.getElementById('openrouterModel').value;
+                    llmConfig.model = openrouterConfig.model;
+                }
+                if (document.getElementById('openrouterTemperature')) {
+                    openrouterConfig.temperature = parseFloat(document.getElementById('openrouterTemperature').value) || 0.7;
+                    llmConfig.temperature = openrouterConfig.temperature;
+                }
+                if (document.getElementById('openrouterMaxTokens')) {
+                    openrouterConfig.max_tokens = parseInt(document.getElementById('openrouterMaxTokens').value) || 512;
+                    llmConfig.maxTokens = openrouterConfig.max_tokens;
+                }
+                if (document.getElementById('openrouterTopP')) {
+                    openrouterConfig.top_p = parseFloat(document.getElementById('openrouterTopP').value) || 1.0;
+                    llmConfig.topP = openrouterConfig.top_p;
+                }
+
+                // Update display values
+                if (document.getElementById('openrouterTemperatureValue')) {
+                    document.getElementById('openrouterTemperatureValue').textContent = openrouterConfig.temperature.toFixed(1);
+                }
+                if (document.getElementById('openrouterMaxTokensValue')) {
+                    document.getElementById('openrouterMaxTokensValue').textContent = openrouterConfig.max_tokens;
+                }
+                if (document.getElementById('openrouterTopPValue')) {
+                    document.getElementById('openrouterTopPValue').textContent = openrouterConfig.top_p.toFixed(2);
+                }
+
+                saveLLMSettings();
+                console.log('🔧 OpenRouter config updated and saved to unified llmConfig');
+            }
+
             function updateStreamingSetting() {
                 const streamingCheckbox = document.getElementById('enableStreaming');
                 if (streamingCheckbox) {
                     enableStreaming = streamingCheckbox.checked;
                     saveLLMSettings();
                     console.log('⚡ Streaming', enableStreaming ? 'enabled' : 'disabled');
+                }
+            }
+
+            function updateGlobalSystemPrompt() {
+                const systemMsg = document.getElementById('globalSystemMessage');
+                if (systemMsg) {
+                    llmConfig.systemMessage = systemMsg.value;
+                    localStorage.setItem('globalSystemMessage', systemMsg.value);
+                    console.log('⚙️ System prompt updated');
                 }
             }
 
@@ -3745,21 +3843,25 @@
                     console.log('🔧 AI provider changed to:', currentProvider);
                     
                     // Hide all provider configs first
-                    const geminiConfig = document.getElementById('geminiConfig');
-                    const openaiConfig = document.getElementById('openaiConfig');
-                    const ollamaConfig = document.getElementById('ollamaConfig');
-                    
-                    if (geminiConfig) geminiConfig.style.display = 'none';
-                    if (openaiConfig) openaiConfig.style.display = 'none';
-                    if (ollamaConfig) ollamaConfig.style.display = 'none';
-                    
+                    const geminiConfigEl = document.getElementById('geminiConfig');
+                    const openaiConfigEl = document.getElementById('openaiConfig');
+                    const ollamaConfigEl = document.getElementById('ollamaConfig');
+                    const openrouterConfigEl = document.getElementById('openrouterConfig');
+
+                    if (geminiConfigEl) geminiConfigEl.style.display = 'none';
+                    if (openaiConfigEl) openaiConfigEl.style.display = 'none';
+                    if (ollamaConfigEl) ollamaConfigEl.style.display = 'none';
+                    if (openrouterConfigEl) openrouterConfigEl.style.display = 'none';
+
                     // Show the selected provider config
-                    if (currentProvider === 'gemini' && geminiConfig) {
-                        geminiConfig.style.display = 'block';
-                    } else if (currentProvider === 'openai' && openaiConfig) {
-                        openaiConfig.style.display = 'block';
-                    } else if (currentProvider === 'ollama' && ollamaConfig) {
-                        ollamaConfig.style.display = 'block';
+                    if (currentProvider === 'gemini' && geminiConfigEl) {
+                        geminiConfigEl.style.display = 'block';
+                    } else if (currentProvider === 'openai' && openaiConfigEl) {
+                        openaiConfigEl.style.display = 'block';
+                    } else if (currentProvider === 'openrouter' && openrouterConfigEl) {
+                        openrouterConfigEl.style.display = 'block';
+                    } else if (currentProvider === 'ollama' && ollamaConfigEl) {
+                        ollamaConfigEl.style.display = 'block';
                         
                         // Load Ollama models when switching to Ollama
                         const modelSelect = document.getElementById('ollamaModel');
@@ -3982,6 +4084,14 @@
                                     processTTSQueue();
                                 });
                                 break;
+                            case 'openrouter':
+                                // OpenRouter uses unified callLLM
+                                fullResponse = await callLLM(message, true, (sentence) => {
+                                    console.log('📝 Sentence complete:', sentence);
+                                    ttsQueue.push(sentence);
+                                    processTTSQueue();
+                                });
+                                break;
                             default:
                                 throw new Error('No AI provider selected');
                         }
@@ -3996,6 +4106,10 @@
                                 break;
                             case 'gemini':
                                 fullResponse = await getGeminiResponse(message);
+                                break;
+                            case 'openrouter':
+                                // OpenRouter uses unified callLLM
+                                fullResponse = await callLLM(message, false);
                                 break;
                             default:
                                 throw new Error('No AI provider selected');
@@ -4058,6 +4172,12 @@
                             llmConfig.topP = openaiConfig.top_p || 1.0;
                             llmConfig.frequencyPenalty = openaiConfig.frequency_penalty || 0;
                             llmConfig.presencePenalty = openaiConfig.presence_penalty || 0;
+                        } else if (currentProvider === 'openrouter' && openrouterConfig) {
+                            llmConfig.apiKey = openrouterConfig.key || '';
+                            llmConfig.model = openrouterConfig.model || '';
+                            llmConfig.temperature = openrouterConfig.temperature || 0.7;
+                            llmConfig.maxTokens = openrouterConfig.max_tokens || 512;
+                            llmConfig.topP = openrouterConfig.top_p || 1.0;
                         } else if (currentProvider === 'ollama' && ollamaConfig) {
                             llmConfig.apiKey = 'ollama'; // Not used but required by some code
                             llmConfig.model = ollamaConfig.model || '';
@@ -4230,7 +4350,15 @@ async function callLLM(message, streaming = false, onChunk = null) {
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`${provider.name} API error (${response.status}): ${errorText}`);
+            console.error(`${provider.name} API error (${response.status}):`, errorText);
+
+            // Try to parse error as JSON
+            try {
+                const errorJson = JSON.parse(errorText);
+                throw new Error(`${provider.name} error: ${errorJson.error?.message || errorText}`);
+            } catch {
+                throw new Error(`${provider.name} API error (${response.status}): ${errorText}`);
+            }
         }
 
         // STREAMING RESPONSE
@@ -4257,6 +4385,13 @@ async function callLLM(message, streaming = false, onChunk = null) {
 
                     try {
                         const data = JSON.parse(jsonStr);
+
+                        // Check for error in response
+                        if (data.error) {
+                            console.error('Streaming error:', data.error);
+                            throw new Error(data.error.message || 'Unknown streaming error');
+                        }
+
                         const content = data.choices?.[0]?.delta?.content || '';
 
                         if (content) {
@@ -4279,7 +4414,12 @@ async function callLLM(message, streaming = false, onChunk = null) {
                             currentSentence = currentSentence.substring(lastIndex);
                         }
                     } catch (parseError) {
-                        console.warn('Failed to parse streaming chunk:', parseError);
+                        // Log the problematic line for debugging
+                        if (jsonStr.length < 100) {
+                            console.warn('Failed to parse streaming chunk:', parseError.message, '| Line:', jsonStr);
+                        } else {
+                            console.warn('Failed to parse streaming chunk:', parseError.message);
+                        }
                     }
                 }
             }
@@ -5029,6 +5169,7 @@ Make the character interesting and unique. No extra text, just the JSON.`;
             window.updateOllamaConfig = updateOllamaConfig;
             window.updateOpenAIConfig = updateOpenAIConfig;
             window.updateGeminiConfig = updateGeminiConfig;
+            window.updateOpenRouterConfig = updateOpenRouterConfig;
             window.updateCurrentProvider = updateCurrentProvider;
     
             // Camera eye tracking - eyes follow the camera position (simple method)
