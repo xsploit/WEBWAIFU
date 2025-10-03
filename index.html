@@ -1038,7 +1038,7 @@
                 scene = new THREE.Scene();
                 scene.background = new THREE.Color(0x212121);
     
-                camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.1, 20);
+                camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.01, 20);
                 camera.position.set(0.0, 1.45, -3);
     
                 renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -1332,37 +1332,7 @@
                     cameraMovement.rotationIntensity *= 0.9;
                 }, 16); // 60fps decay
             }
-            async function loadVRMFromFile(file){
-                if(!file) return;
-                const url=URL.createObjectURL(file);
-                const loader=new GLTFLoader();
-                loader.crossOrigin='anonymous';
-                loader.register(p=>new VRMLoaderPlugin(p));
-                try{
-                    const gltf=await loader.loadAsync(url);
-                    if(vrm){ scene.remove(vrm.scene); vrm.dispose?.(); }
-                    vrm=gltf;
-                    currentVrm = gltf.userData?.vrm; // Set global currentVrm for compatibility
-                    scene.add(gltf.scene);
-    
-                    // Setup eye tracking for manually loaded VRM
-                    if (gltf.userData?.vrm?.lookAt && lookAtTarget) {
-                        gltf.userData.vrm.lookAt.target = lookAtTarget;
-                        console.log('👀 Eye tracking enabled for loaded VRM');
-                    }
-                    
-                    // Ensure lookAt target is set after a short delay
-                    setTimeout(() => {
-                        if (gltf.userData?.vrm?.lookAt && lookAtTarget) {
-                            gltf.userData.vrm.lookAt.target = lookAtTarget;
-                            console.log('👀 Eye tracking target confirmed for loaded VRM');
-                        }
-                    }, 100);
-    
-                    resetVRMPosition();
-                }catch(e){ console.error('VRM load error', e);}
-                finally{ URL.revokeObjectURL(url);}
-            }
+            // loadVRMFromFile is now defined later using the unified loader
     
     
     
@@ -3526,8 +3496,8 @@
                     }
                     
                     updateStatus('🔄', 'Loading Ollama models...');
-                    
-                    const models = await loadOllamaModels();
+
+                    const models = await fetchModelsForProvider('ollama');
                     modelSelect.innerHTML = '<option value="">Select model...</option>';
                     
                     if (models && models.length > 0) {
@@ -4238,14 +4208,9 @@ async function callLLM(message, streaming = false, onChunk = null) {
         'Content-Type': 'application/json'
     };
 
-    // Add API key if required
+    // Add API key if required (all providers use Bearer token for OpenAI-compatible endpoints)
     if (provider.apiKeyRequired && llmConfig.apiKey) {
-        if (llmConfig.provider === 'gemini') {
-            // Gemini uses query param for some endpoints, but OpenAI-compatible uses header
-            headers['x-goog-api-key'] = llmConfig.apiKey;
-        } else {
-            headers['Authorization'] = `Bearer ${llmConfig.apiKey}`;
-        }
+        headers['Authorization'] = `Bearer ${llmConfig.apiKey}`;
     }
 
     // OpenRouter specific headers
@@ -4407,12 +4372,92 @@ async function getGeminiResponse(message) {
                 }
             }
 
-            function generateCharacter() {
-                console.log('generateCharacter called');
+            async function generateCharacter() {
+                console.log('🎭 Generating AI character...');
+
+                try {
+                    const prompt = `Generate a unique anime character with personality. Return ONLY valid JSON in this exact format:
+{
+  "name": "character name here",
+  "personality": "detailed personality description (2-3 sentences)",
+  "traits": ["trait1", "trait2", "trait3"],
+  "speaking_style": "how they talk and express themselves"
+}
+
+Make the character interesting and unique. No extra text, just the JSON.`;
+
+                    const response = await callLLM(prompt, false);
+
+                    // Try to extract JSON from response
+                    let jsonMatch = response.match(/\{[\s\S]*\}/);
+                    if (!jsonMatch) {
+                        throw new Error('No JSON found in response');
+                    }
+
+                    const character = JSON.parse(jsonMatch[0]);
+
+                    // Apply to UI
+                    const nameInput = document.getElementById('characterName');
+                    const descInput = document.getElementById('characterDescription');
+
+                    if (nameInput) {
+                        nameInput.value = character.name;
+                        localStorage.setItem('characterName', character.name);
+                    }
+
+                    if (descInput) {
+                        const fullDesc = `${character.personality}\n\nTraits: ${character.traits.join(', ')}\n\nSpeaking Style: ${character.speaking_style}`;
+                        descInput.value = fullDesc;
+                        localStorage.setItem('characterDescription', fullDesc);
+                    }
+
+                    console.log('✅ Character generated:', character.name);
+                    alert(`Character Generated: ${character.name}\n\n${character.personality}`);
+
+                } catch (error) {
+                    console.error('❌ Error generating character:', error);
+                    alert('Failed to generate character. Make sure an LLM provider is configured.');
+                }
             }
 
             function applyCharacterToChat() {
-                console.log('applyCharacterToChat called');
+                console.log('🎭 Applying character to chat...');
+
+                const characterName = localStorage.getItem('characterName') || '';
+                const characterDesc = localStorage.getItem('characterDescription') || '';
+                const userName = localStorage.getItem('userName') || 'User';
+
+                if (!characterName && !characterDesc) {
+                    alert('Please set a character name and description first!');
+                    return;
+                }
+
+                // Build character-based system prompt
+                let systemPrompt = '';
+
+                if (characterName) {
+                    systemPrompt += `You are ${characterName}.`;
+                }
+
+                if (characterDesc) {
+                    systemPrompt += `\n\n${characterDesc}`;
+                }
+
+                if (userName && userName !== 'User') {
+                    systemPrompt += `\n\nYou are talking to ${userName}.`;
+                }
+
+                systemPrompt += '\n\nRespond in character, staying true to your personality and speaking style.';
+
+                // Apply to global system message
+                const systemMsgInput = document.getElementById('globalSystemMessage');
+                if (systemMsgInput) {
+                    systemMsgInput.value = systemPrompt;
+                    localStorage.setItem('globalSystemMessage', systemPrompt);
+                }
+
+                console.log('✅ Character applied to chat system prompt');
+                alert(`Character applied! ${characterName} is now active in the conversation.`);
             }
 
             // Expose functions to window for inline event handlers
@@ -4737,12 +4782,34 @@ async function getGeminiResponse(message) {
             });
     
             function clearConversationHistory() {
-                console.log('clearConversationHistory called');
+                console.log('🗑️ Clearing conversation history...');
+
+                // Clear the conversation history array
+                conversationHistory = [];
+
+                // Clear the chat UI
+                const chatContent = document.getElementById('twitchChatContent');
+                if (chatContent) {
+                    chatContent.innerHTML = '<div class="chat-placeholder">No messages yet. Start chatting!</div>';
+                }
+
+                // Update message count
+                const chatMessageCount = document.getElementById('chatMessageCount');
+                if (chatMessageCount) {
+                    chatMessageCount.textContent = '0';
+                }
+
+                console.log('✅ Conversation history cleared');
             }
     
     
             function forceRefreshOllamaModelsFromHTML() {
-                console.log('forceRefreshOllamaModelsFromHTML called');
+                console.log('🔄 Force refreshing Ollama models...');
+                if (typeof refreshOllamaModels === 'function') {
+                    refreshOllamaModels(true); // Force refresh
+                } else {
+                    console.error('refreshOllamaModels function not found');
+                }
             }
     
             function setOllamaPreset(preset) {
@@ -4802,20 +4869,47 @@ async function getGeminiResponse(message) {
             window.updateVRMPosition = updateVRMPosition;
     
             // Model detection and management
-            const availableModels = [
-                { name: "AvatarSample_H", path: "assets/models/AvatarSample_H.vrm" },
-                { name: "Model 165071072471339578", path: "assets/models/165071072471339578.vrm" },
-                { name: "Model 1768080537824958249", path: "assets/models/1768080537824958249.vrm" },
-                { name: "Model 5936120875254998949", path: "assets/models/5936120875254998949.vrm" }
-            ];
-    
-            function refreshModelList() {
+            let availableModels = [];
+            let currentModelPath = null; // Track currently loaded model
+
+            // Scan assets/models folder for VRM files
+            async function scanVRMModels() {
+                const modelPaths = [
+                    'assets/models/AvatarSample_H.vrm',
+                    'assets/models/AvatarSample_H3.vrm',
+                    'assets/models/165071072471339578.vrm',
+                    'assets/models/1768080537824958249.vrm',
+                    'assets/models/5936120875254998949.vrm'
+                ];
+
+                availableModels = [];
+
+                for (const path of modelPaths) {
+                    try {
+                        const response = await fetch(path, { method: 'HEAD' });
+                        if (response.ok) {
+                            const fileName = path.split('/').pop().replace('.vrm', '');
+                            availableModels.push({ name: fileName, path: path });
+                        }
+                    } catch (err) {
+                        // File doesn't exist, skip
+                    }
+                }
+
+                console.log('📂 VRM models scanned:', availableModels.length, 'found');
+                return availableModels;
+            }
+
+            async function refreshModelList() {
                 const selector = document.getElementById('modelSelector');
                 if (!selector) return;
-    
+
+                // Scan for models
+                await scanVRMModels();
+
                 // Clear existing options except the first one
                 selector.innerHTML = '<option value="">Select a model...</option>';
-    
+
                 // Add available models
                 availableModels.forEach(model => {
                     const option = document.createElement('option');
@@ -4823,12 +4917,87 @@ async function getGeminiResponse(message) {
                     option.textContent = model.name;
                     selector.appendChild(option);
                 });
-    
+
                 console.log('📂 Model list refreshed:', availableModels.length, 'models found');
             }
-    
-            let currentModelPath = null; // Track currently loaded model
 
+            // UNIFIED VRM LOADING FUNCTION - used by both upload and dropdown
+            async function loadVRMUnified(source) {
+                try {
+                    updateLoadingStatus('Loading VRM model...');
+
+                    const gltfLoader = new GLTFLoader();
+                    gltfLoader.crossOrigin = 'anonymous';
+                    gltfLoader.register((parser) => new VRMLoaderPlugin(parser));
+
+                    let gltf;
+
+                    // Handle file upload (Blob/File)
+                    if (source instanceof File || source instanceof Blob) {
+                        const url = URL.createObjectURL(source);
+                        try {
+                            gltf = await gltfLoader.loadAsync(url);
+                        } finally {
+                            URL.revokeObjectURL(url);
+                        }
+                    }
+                    // Handle path string (from dropdown)
+                    else if (typeof source === 'string') {
+                        gltf = await gltfLoader.loadAsync(source);
+                        currentModelPath = source; // Track loaded model path
+                    }
+
+                    // Remove existing VRM properly
+                    if (vrm && vrm.scene) {
+                        scene.remove(vrm.scene);
+                        if (vrm.dispose) vrm.dispose();
+                        if (currentMixer) {
+                            currentMixer.stopAllAction();
+                            currentMixer = null;
+                        }
+                    }
+
+                    // Setup new VRM with consistent structure
+                    const vrmInstance = gltf.userData.vrm;
+                    vrm = { userData: { vrm: vrmInstance }, scene: gltf.scene };
+                    currentVrm = vrmInstance;
+                    gltf.scene.name = 'VRM';
+                    scene.add(gltf.scene);
+
+                    // Setup eye tracking
+                    if (vrmInstance?.lookAt && lookAtTarget) {
+                        vrmInstance.lookAt.target = lookAtTarget;
+                        console.log('👀 Eye tracking enabled');
+
+                        // Ensure lookAt target is set after a short delay
+                        setTimeout(() => {
+                            if (vrmInstance.lookAt && lookAtTarget) {
+                                vrmInstance.lookAt.target = lookAtTarget;
+                                console.log('👀 Eye tracking confirmed');
+                            }
+                        }, 100);
+                    }
+
+                    // Apply VRM position config
+                    resetVRMPosition();
+
+                    // Load default animations if available
+                    setTimeout(() => {
+                        if (typeof loadDefaultAnimations === 'function') {
+                            loadDefaultAnimations();
+                        }
+                    }, 500);
+
+                    console.log('✅ VRM loaded successfully');
+                    updateLoadingStatus('VRM loaded successfully');
+
+                } catch (error) {
+                    console.error('❌ Error loading VRM:', error);
+                    updateLoadingStatus('Error loading VRM: ' + error.message);
+                }
+            }
+
+            // Dropdown model loader - uses unified function
             async function loadSelectedModel() {
                 const selector = document.getElementById('modelSelector');
                 if (!selector || !selector.value) return;
@@ -4842,74 +5011,17 @@ async function getGeminiResponse(message) {
                     return;
                 }
 
-                console.log('🎭 Loading selected model:', modelPath);
+                await loadVRMUnified(modelPath);
+            }
 
-                try {
-                    updateLoadingStatus('Loading selected model...');
-
-                    // Load the VRM model
-                    const gltfLoader = new GLTFLoader();
-                    gltfLoader.register((parser) => new VRMLoaderPlugin(parser));
-
-                    const gltf = await gltfLoader.loadAsync(modelPath);
-
-                    // Remove existing VRM properly
-                    if (vrm && vrm.scene) {
-                        scene.remove(vrm.scene);
-                        if (currentMixer) {
-                            currentMixer.stopAllAction();
-                            currentMixer = null;
-                        }
-                    }
-
-                    // Add new VRM using same structure as initial load
-                    const vrmInstance = gltf.userData.vrm;
-                    vrm = { userData: { vrm: vrmInstance }, scene: gltf.scene };
-                    currentVrm = vrmInstance;
-                    gltf.scene.name = 'VRM';
-                    scene.add(gltf.scene);
-    
-                    // Setup VRM
-                    if (gltf.userData?.vrm) {
-                        // Setup eye tracking
-                        if (gltf.userData.vrm.lookAt && lookAtTarget) {
-                            gltf.userData.vrm.lookAt.target = lookAtTarget;
-                            console.log('👀 Eye tracking enabled for selected model');
-                        }
-                        
-                        // Ensure lookAt target is set after a short delay
-                        setTimeout(() => {
-                            if (gltf.userData.vrm.lookAt && lookAtTarget) {
-                                gltf.userData.vrm.lookAt.target = lookAtTarget;
-                                console.log('👀 Eye tracking target confirmed for selected model');
-                            }
-                        }, 100);
-    
-                        // Apply VRM position config
-                        updateVRMPosition();
-
-                        // Track the loaded model path
-                        currentModelPath = modelPath;
-
-                        console.log('✅ Selected model loaded successfully');
-                        updateLoadingStatus('Selected model loaded successfully');
-                    } else {
-                        console.warn('⚠️ Selected model is not a valid VRM');
-                        updateLoadingStatus('Warning: Selected file is not a valid VRM');
-                    }
-    
-                    // Load default animations if available
-                    setTimeout(() => {
-                        loadDefaultAnimations();
-                    }, 500);
-    
-                } catch (error) {
-                    console.error('❌ Error loading selected model:', error);
-                    updateLoadingStatus('Error loading selected model: ' + error.message);
-                }
+            // Update old upload function to use unified loader
+            async function loadVRMFromFile(file) {
+                if (!file) return;
+                await loadVRMUnified(file);
             }
     
             // Make functions globally available
+            window.loadVRMFromFile = loadVRMFromFile;
             window.refreshModelList = refreshModelList;
             window.loadSelectedModel = loadSelectedModel;
             window.saveLLMSettings = saveLLMSettings;
