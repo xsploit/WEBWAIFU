@@ -4037,9 +4037,35 @@
                         if (settings.ollamaConfig) Object.assign(ollamaConfig, settings.ollamaConfig);
                         if (settings.openaiConfig) Object.assign(openaiConfig, settings.openaiConfig);
                         if (settings.geminiConfig) Object.assign(geminiConfig, settings.geminiConfig);
-                        if (settings.currentProvider) currentProvider = settings.currentProvider;
+                        if (settings.currentProvider) {
+                            currentProvider = settings.currentProvider;
+                            llmConfig.provider = currentProvider;
+                        }
 
-                        console.log('📁 LLM settings loaded from localStorage');
+                        // Sync to unified llmConfig based on current provider
+                        if (currentProvider === 'gemini' && geminiConfig) {
+                            llmConfig.apiKey = geminiConfig.key || '';
+                            llmConfig.model = geminiConfig.model || '';
+                            llmConfig.temperature = geminiConfig.temperature || 0.7;
+                            llmConfig.maxTokens = geminiConfig.max_output_tokens || 2048;
+                            llmConfig.topP = geminiConfig.top_p || 0.95;
+                        } else if (currentProvider === 'openai' && openaiConfig) {
+                            llmConfig.apiKey = openaiConfig.key || '';
+                            llmConfig.model = openaiConfig.model || '';
+                            llmConfig.temperature = openaiConfig.temperature || 0.7;
+                            llmConfig.maxTokens = openaiConfig.max_tokens || 512;
+                            llmConfig.topP = openaiConfig.top_p || 1.0;
+                            llmConfig.frequencyPenalty = openaiConfig.frequency_penalty || 0;
+                            llmConfig.presencePenalty = openaiConfig.presence_penalty || 0;
+                        } else if (currentProvider === 'ollama' && ollamaConfig) {
+                            llmConfig.apiKey = 'ollama'; // Not used but required by some code
+                            llmConfig.model = ollamaConfig.model || '';
+                            llmConfig.temperature = ollamaConfig.temperature || 0.7;
+                            llmConfig.maxTokens = ollamaConfig.max_tokens || 512;
+                            llmConfig.topP = ollamaConfig.top_p || 0.9;
+                        }
+
+                        console.log('📁 LLM settings loaded from localStorage and synced to llmConfig');
                         updateLLMUI(); // Update UI with loaded settings
                     } catch (error) {
                         console.error('Error loading settings:', error);
@@ -4128,17 +4154,35 @@ async function callLLM(message, streaming = false, onChunk = null) {
         { role: 'user', content: message }
     ];
 
-    // Build request body (OpenAI-compatible format)
+    // Build request body - provider-specific params
     const requestBody = {
         model: llmConfig.model,
         messages: messages,
         temperature: llmConfig.temperature,
-        max_tokens: llmConfig.maxTokens,
-        top_p: llmConfig.topP,
-        frequency_penalty: llmConfig.frequencyPenalty,
-        presence_penalty: llmConfig.presencePenalty,
         stream: streaming
     };
+
+    // Add provider-specific parameters
+    if (llmConfig.provider === 'gemini') {
+        // Gemini uses max_tokens (not frequency/presence penalty)
+        requestBody.max_tokens = llmConfig.maxTokens;
+        if (llmConfig.topP) requestBody.top_p = llmConfig.topP;
+    }
+    else if (llmConfig.provider === 'openai' || llmConfig.provider === 'openrouter') {
+        // OpenAI and OpenRouter support full params
+        requestBody.max_tokens = llmConfig.maxTokens;
+        requestBody.top_p = llmConfig.topP;
+        requestBody.frequency_penalty = llmConfig.frequencyPenalty || 0;
+        requestBody.presence_penalty = llmConfig.presencePenalty || 0;
+    }
+    else if (llmConfig.provider === 'ollama') {
+        // Ollama uses max_tokens and supports OpenAI params
+        requestBody.max_tokens = llmConfig.maxTokens;
+        requestBody.top_p = llmConfig.topP;
+        // Ollama supports these via options, but OpenAI-compatible endpoint may vary
+        if (llmConfig.frequencyPenalty) requestBody.frequency_penalty = llmConfig.frequencyPenalty;
+        if (llmConfig.presencePenalty) requestBody.presence_penalty = llmConfig.presencePenalty;
+    }
 
     // Build headers
     const headers = {
