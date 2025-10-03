@@ -6191,7 +6191,7 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 transform: scale(1.05);
             }
             
-            /* Twitch chat overlay: cleaner look, transparent like before, hidden by default */
+            /* Twitch chat overlay: fully translucent, minimal chrome, hidden by default */
             .twitch-chat-overlay {
                 position: fixed;
                 top: 20px;
@@ -6201,17 +6201,17 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 display: none; /* default hidden */
                 display: flex;
                 flex-direction: column;
-                background: rgba(0, 0, 0, 0.4); /* ~60% transparent overall */
-                border: 1px solid rgba(255, 255, 255, 0.08);
+                background: transparent; /* no color */
+                border: none;
                 border-radius: 10px;
-                box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-                backdrop-filter: blur(3px);
+                box-shadow: none;
+                backdrop-filter: none;
                 overflow: hidden;
             }
             .twitch-chat-overlay .chat-drag-header {
                 padding: 6px 8px;
-                background: rgba(255, 255, 255, 0.04);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                background: transparent; /* no bar */
+                border-bottom: none;
             }
             .twitch-chat-overlay .chat-overlay-content {
                 padding: 8px;
@@ -6223,8 +6223,8 @@ Make the character interesting and unique. No extra text, just the JSON.`;
             .twitch-chat-overlay .chat-overlay-footer {
                 margin-top: auto;
                 padding: 8px;
-                background: rgba(255, 255, 255, 0.04);
-                border-top: 1px solid rgba(255, 255, 255, 0.06);
+                background: transparent;
+                border-top: none;
             }
 
             /* Revert floating chat box to original styling */
