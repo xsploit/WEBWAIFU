@@ -5461,7 +5461,9 @@ Make the character interesting and unique. No extra text, just the JSON.`;
             function onKeyDown(event) {
                 // Don't process keys when typing in input fields
                 if (event.target.matches('input, textarea, select')) return;
-    
+                // Ignore movement keys when Alt/Meta is held (avoid Alt+S moving the avatar)
+                if (event.altKey || event.metaKey) return;
+
                 const key = event.key.toLowerCase();
     
                 // WASD movement keys
@@ -5504,7 +5506,9 @@ Make the character interesting and unique. No extra text, just the JSON.`;
             function onKeyUp(event) {
                 // Don't process keys when typing in input fields
                 if (event.target.matches('input, textarea, select')) return;
-    
+                // Ignore when Alt/Meta is held to avoid interfering with hotkeys
+                if (event.altKey || event.metaKey) return;
+
                 const key = event.key.toLowerCase();
     
                 // WASD movement keys
