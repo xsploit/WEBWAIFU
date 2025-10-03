@@ -6220,6 +6220,13 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 display: flex;
                 flex-direction: column;
             }
+            /* Apply same translucent "card" styling to the Twitch chat content area */
+            .twitch-chat-overlay #twitchChatContent {
+                background: rgba(0, 0, 0, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 10px;
+                padding: 12px;
+            }
             .twitch-chat-overlay .chat-overlay-footer {
                 margin-top: auto;
                 padding: 8px;
