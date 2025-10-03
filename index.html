@@ -3129,7 +3129,7 @@ RESPONSE FORMAT:
                 const twitchOverlay = document.getElementById('twitchChatOverlay');
 
                 if (streamModeEnabled) {
-                    if (twitchOverlay) twitchOverlay.style.display = 'block';
+                    if (twitchOverlay) twitchOverlay.style.display = 'flex'; // ensure flex layout so footer pins at bottom
                 } else {
                     if (twitchOverlay) twitchOverlay.style.display = 'none';
                 }
@@ -6217,12 +6217,27 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 padding: 8px;
                 flex: 1 1 auto;
                 overflow-y: auto;
+                display: flex;
+                flex-direction: column;
             }
             .twitch-chat-overlay .chat-overlay-footer {
                 margin-top: auto;
                 padding: 8px;
                 background: rgba(255, 255, 255, 0.04);
                 border-top: 1px solid rgba(255, 255, 255, 0.06);
+            }
+
+            /* Floating chat box ~60% transparent */
+            .floating-chat {
+                background: rgba(0, 0, 0, 0.4) !important; /* ~60% transparent */
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                backdrop-filter: blur(3px);
+            }
+            .floating-chat .chat-input-container { background: transparent !important; }
+            .floating-chat .input-wrapper {
+                background: rgba(0, 0, 0, 0.4) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 10px;
             }
             /* Ensure chat content flexes and footer stays pinned at bottom */
             .twitch-chat-overlay #twitchChatContent {
