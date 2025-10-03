@@ -755,6 +755,13 @@ RESPONSE FORMAT:
                     </div>
                     <div class="accordion-content" id="displayOptions">
                         <div class="control-group">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="stealthMode" onchange="toggleStealthMode()">
+                                <span>🥷 Stealth Mode</span>
+                            </label>
+                            <p class="upload-hint">Hide header, footer, and make background transparent (perfect for desktop overlay)</p>
+                        </div>
+                        <div class="control-group">
                             <label>Your Name</label>
                             <input type="text" id="userName" placeholder="Enter your name..." onchange="updateUserName()">
                             <p class="upload-hint">This name will appear in chat logs and interactions</p>
@@ -1165,7 +1172,10 @@ RESPONSE FORMAT:
     
                 // Update VRM movement from keyboard controls
                 updateVRMMovement();
-    
+
+                // Apply movement decay (mouse & camera)
+                applyMovementDecay();
+
                 // Use audio-reactive mouth movement (always enabled for backup)
                 // Even during visemes, volume-based movement can provide additional motion
                 updateMouthMovement();
@@ -1220,7 +1230,6 @@ RESPONSE FORMAT:
 
                     // Save to localStorage
                     saveLLMSettings();
-                    console.log('🔧 Azure TTS config updated and saved');
                 };
                 window.refreshAzureVoices = async function(){
                     // Minimal voice list fetch
@@ -1359,25 +1368,28 @@ RESPONSE FORMAT:
             }
     
             function setupMovementDecay() {
-                // Decay mouse and camera movement over time
-                setInterval(() => {
-                    mouseMovement.intensity *= 0.95;
-                    mouseMovement.x *= 0.9;
-                    mouseMovement.y *= 0.9;
-    
-                    // Decay camera movement
-                    cameraMovement.intensity *= 0.9;
-                    cameraMovement.deltaX *= 0.85;
-                    cameraMovement.deltaY *= 0.85;
-                    cameraMovement.deltaZ *= 0.85;
-                    cameraMovement.rotationIntensity *= 0.9;
-                }, 16); // 60fps decay
+                // PERFORMANCE: Decay moved to main animation loop instead of separate setInterval
+                // This avoids running a redundant 60fps interval alongside requestAnimationFrame
+            }
+
+            function applyMovementDecay() {
+                // Called from main animation loop for efficiency
+                mouseMovement.intensity *= 0.95;
+                mouseMovement.x *= 0.9;
+                mouseMovement.y *= 0.9;
+
+                // Decay camera movement
+                cameraMovement.intensity *= 0.9;
+                cameraMovement.deltaX *= 0.85;
+                cameraMovement.deltaY *= 0.85;
+                cameraMovement.deltaZ *= 0.85;
+                cameraMovement.rotationIntensity *= 0.9;
             }
             // loadVRMFromFile is now defined later using the unified loader
     
     
     
-            function loadRoom(ev){ const file=ev.target.files[0]; if(!file) return; const url=URL.createObjectURL(file); const loader=new GLTFLoader(); loader.load(url,(gltf)=>{ if(room) scene.remove(room); room=gltf.scene; isDemoRoomLoaded=false; scene.add(room); room.traverse(c=>{ if(c.isMesh){ c.receiveShadow=true; if(c.material) c.material.side=THREE.DoubleSide; } }); URL.revokeObjectURL(url); },undefined,(err)=>{ console.error('Room load error', err); URL.revokeObjectURL(url); }); }
+            function loadRoom(ev){ const file=ev.target.files[0]; if(!file) return; const url=URL.createObjectURL(file); const loader=new GLTFLoader(); loader.load(url,(gltf)=>{ if(room){ scene.remove(room); room.traverse(c=>{ if(c.isMesh){ c.geometry?.dispose(); if(Array.isArray(c.material)){ c.material.forEach(m=>m.dispose()); }else{ c.material?.dispose(); } } }); } room=gltf.scene; isDemoRoomLoaded=false; scene.add(room); room.traverse(c=>{ if(c.isMesh){ c.receiveShadow=true; if(c.material) c.material.side=THREE.DoubleSide; } }); URL.revokeObjectURL(url); },undefined,(err)=>{ console.error('Room load error', err); URL.revokeObjectURL(url); }); }
             function createFloorTexture(){ if(customFloorTexture) return customFloorTexture; const canvas=document.createElement('canvas'); canvas.width=256; canvas.height=256; const ctx=canvas.getContext('2d'); ctx.fillStyle='#8B4513'; ctx.fillRect(0,0,256,256); ctx.strokeStyle='#654321'; ctx.lineWidth=2; for(let i=0;i<256;i+=32){ ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,256); ctx.stroke(); } ctx.strokeStyle='#A0522D'; ctx.lineWidth=1; for(let i=0;i<256;i+=64){ ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(256,i); ctx.stroke(); } const tex=new THREE.CanvasTexture(canvas); tex.wrapS=THREE.RepeatWrapping; tex.wrapT=THREE.RepeatWrapping; tex.repeat.set(4,4); return tex; }
             function loadDemoRoom(){ if(room) scene.remove(room); room=new THREE.Group(); isDemoRoomLoaded=true; const floorTex=createFloorTexture(); const floor=new THREE.Mesh(new THREE.PlaneGeometry(10,10), new THREE.MeshLambertMaterial({ map: floorTex, color:0xFFFFFF })); floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; room.add(floor); const wallMat=new THREE.MeshLambertMaterial({ color:0xF5F5DC }); const back=new THREE.Mesh(new THREE.PlaneGeometry(10,5),wallMat); back.position.set(0,2.5,-5); back.receiveShadow=true; room.add(back); const left=new THREE.Mesh(new THREE.PlaneGeometry(10,5),wallMat); left.position.set(-5,2.5,0); left.rotation.y=Math.PI/2; left.receiveShadow=true; room.add(left); const right=new THREE.Mesh(new THREE.PlaneGeometry(10,5),wallMat); right.position.set(5,2.5,0); right.rotation.y=-Math.PI/2; right.receiveShadow=true; room.add(right); scene.add(room); }
             function loadFloorTexture(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=(ev)=>{ const img=new Image(); img.onload=()=>{ const loader=new THREE.TextureLoader(); customFloorTexture=loader.load(ev.target.result); customFloorTexture.wrapS=THREE.RepeatWrapping; customFloorTexture.wrapT=THREE.RepeatWrapping; customFloorTexture.repeat.set(4,4); if(room&&isDemoRoomLoaded) loadDemoRoom(); }; img.src=ev.target.result; }; reader.readAsDataURL(file); }
@@ -1639,7 +1651,6 @@ RESPONSE FORMAT:
                         talkingAnimation = talkingClip;
                         animationClip = idleClip; // Set current clip to idle
 
-                        console.log('✅ Auto-loaded idle and talking animations');
                     } else {
                         console.error('Failed to load default animations');
                     }
@@ -1758,7 +1769,6 @@ RESPONSE FORMAT:
                     return;
                 }
                 idleAnimation = animationClip;
-                console.log('✅ Current animation assigned as idle animation');
             };
     
             window.assignCurrentAsTalking = function() {
@@ -1767,7 +1777,6 @@ RESPONSE FORMAT:
                     return;
                 }
                 talkingAnimation = animationClip;
-                console.log('✅ Current animation assigned as talking animation');
             };
     
             // Test talking animation function
@@ -1906,7 +1915,6 @@ RESPONSE FORMAT:
                         ssml,
                         result => {
                             if (result.reason === SDK.ResultReason.SynthesizingAudioCompleted) {
-                                console.log('✅ Speech SDK: Synthesis complete');
                                 console.log(`📊 Collected ${collectedVisemes.length} visemes`);
 
                                 // Get audio data and play it through an audio element
@@ -2143,7 +2151,6 @@ RESPONSE FORMAT:
             function processVisemeQueue() {
                 console.log('🔄 processVisemeQueue called, queue length:', currentVisemeQueue.length);
                 if (currentVisemeQueue.length === 0) {
-                    console.log('✅ Viseme queue empty');
                     return;
                 }
 
@@ -2211,7 +2218,6 @@ RESPONSE FORMAT:
                     return;
                 }
 
-                console.log('✅ Using expressionManager for VRM 1.0+ viseme', visemeId, 'intensity:', intensity);
 
                 // Boost intensity for more visible mouth movement
                 intensity = Math.min(intensity * 1.5, 1.0);
@@ -2629,24 +2635,34 @@ RESPONSE FORMAT:
                 }
             }
 
+            // PERFORMANCE: Cache DOM elements
+            let cachedStatusIndicator = null;
+            let cachedStatusIcon = null;
+            let cachedStatusText = null;
+
             function updateStatus(icon, text, duration = 4000) {
-                const statusIndicator = document.getElementById('statusIndicator');
-                if (!statusIndicator) {
+                // Cache DOM lookups
+                if (!cachedStatusIndicator) {
+                    cachedStatusIndicator = document.getElementById('statusIndicator');
+                    if (cachedStatusIndicator) {
+                        cachedStatusIcon = cachedStatusIndicator.querySelector('.status-icon');
+                        cachedStatusText = cachedStatusIndicator.querySelector('.status-text');
+                    }
+                }
+
+                if (!cachedStatusIndicator) {
                     console.log('Status:', icon, text);
                     return;
                 }
-                
-                const statusIcon = statusIndicator.querySelector('.status-icon');
-                const statusText = statusIndicator.querySelector('.status-text');
-                
-                if (statusIcon) statusIcon.textContent = icon;
-                if (statusText) statusText.textContent = text;
-                
-                statusIndicator.classList.add('show');
-                
+
+                if (cachedStatusIcon) cachedStatusIcon.textContent = icon;
+                if (cachedStatusText) cachedStatusText.textContent = text;
+
+                cachedStatusIndicator.classList.add('show');
+
                 // Hide after duration
                 setTimeout(() => {
-                    statusIndicator.classList.remove('show');
+                    cachedStatusIndicator.classList.remove('show');
                 }, duration);
             }
 
@@ -2831,6 +2847,29 @@ RESPONSE FORMAT:
                 if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
 
                 const key = event.code || event.key;
+
+                // Toggle UI visibility with Ctrl+H
+                if (event.ctrlKey && key === 'KeyH') {
+                    event.preventDefault();
+                    toggleAllUI();
+                    return;
+                }
+
+                // Ctrl+Alt+S => Toggle Stealth Mode (hide header/footer + transparent BG)
+                if ((event.ctrlKey || event.metaKey) && event.altKey && (key === 'KeyS' || key === 's' || key === 'S')) {
+                    event.preventDefault();
+                    const current = localStorage.getItem('stealthMode') === 'true';
+                    toggleStealthMode(!current);
+                    return;
+                }
+
+                // Ctrl+Alt+U => Toggle Full UI Hide (hide all overlays/panels)
+                if ((event.ctrlKey || event.metaKey) && event.altKey && (key === 'KeyU' || key === 'u' || key === 'U')) {
+                    event.preventDefault();
+                    toggleFullUIHide();
+                    return;
+                }
+
                 if ((speechHotkey === 'Shift' && event.shiftKey) ||
                     (speechHotkey === 'Control' && event.ctrlKey) ||
                     (speechHotkey === 'Alt' && event.altKey) ||
@@ -3208,7 +3247,7 @@ RESPONSE FORMAT:
             let currentProvider = 'ollama';
             llmConfig.provider = currentProvider; // Keep in sync
             let conversationHistory = [];
-            let userName = localStorage.getItem('user-name') || 'You';
+            let userName = localStorage.getItem('userName') || 'You';
 
             // TTS and Audio
             // (isListening declared in Whisper Worker section below)
@@ -3303,7 +3342,6 @@ RESPONSE FORMAT:
                     console.warn('⚠️ Some required features are not available:', 
                         Object.keys(checks).filter(key => !checks[key]));
                 } else {
-                    console.log('✅ All required features are available');
                 }
 
                 return results;
@@ -3323,7 +3361,6 @@ RESPONSE FORMAT:
                         timestamp: Date.now()
                     };
                     localStorage.setItem('webwaifu-llm-settings', JSON.stringify(settings));
-                    console.log('💾 LLM settings saved to localStorage');
                 } catch (error) {
                     console.warn('Could not save LLM settings:', error);
                 }
@@ -3344,7 +3381,6 @@ RESPONSE FORMAT:
                         if (settings.currentProvider) currentProvider = settings.currentProvider;
                         if (typeof settings.enableStreaming !== 'undefined') enableStreaming = settings.enableStreaming;
 
-                        console.log('📁 LLM settings loaded from localStorage');
                         updateLLMUI(); // Update UI with loaded settings
                     }
                 } catch (error) {
@@ -3426,7 +3462,6 @@ RESPONSE FORMAT:
                 if (document.getElementById('ttsPitch')) document.getElementById('ttsPitch').value = azureConfig.pitch;
                 if (document.getElementById('ttsRate')) document.getElementById('ttsRate').value = azureConfig.rate;
 
-                console.log('🎛️ LLM UI updated with saved settings');
             }
 
             // Auto-save functions for LLM settings
@@ -3579,7 +3614,6 @@ RESPONSE FORMAT:
                         }
                         
                         updateStatus('✅', `Loaded ${models.length} models`);
-                        console.log(`Successfully loaded ${models.length} Ollama models`);
                     } else {
                         modelSelect.innerHTML = '<option value="">No models found</option>';
                         updateStatus('❌', 'No models found');
@@ -3667,7 +3701,6 @@ RESPONSE FORMAT:
                 if (document.getElementById('ollamaKeepAlive')) ollamaConfig.keep_alive = document.getElementById('ollamaKeepAlive').value || '5m';
                 
                 saveLLMSettings();
-                console.log('🔧 Ollama config updated and saved');
             }
 
             function updateOpenAIConfig() {
@@ -3700,7 +3733,6 @@ RESPONSE FORMAT:
                     llmConfig.presencePenalty = openaiConfig.presence_penalty;
                 }
                 saveLLMSettings();
-                console.log('🔧 OpenAI config updated and saved to unified llmConfig');
             }
 
             function updateGeminiConfig() {
@@ -3726,7 +3758,6 @@ RESPONSE FORMAT:
                 }
                 if (document.getElementById('geminiTopK')) geminiConfig.top_k = parseInt(document.getElementById('geminiTopK').value) || 40;
                 saveLLMSettings();
-                console.log('🔧 Gemini config updated and saved to unified llmConfig');
             }
 
             function updateOpenRouterConfig() {
@@ -3763,7 +3794,6 @@ RESPONSE FORMAT:
                 }
 
                 saveLLMSettings();
-                console.log('🔧 OpenRouter config updated and saved to unified llmConfig');
             }
 
             function updateStreamingSetting() {
@@ -3806,7 +3836,6 @@ RESPONSE FORMAT:
                 if (mouthSmoothing) document.getElementById('mouthSmoothValue').textContent = (parseFloat(mouthSmoothing) / 100).toFixed(1);
                 if (expression) document.getElementById('expressionValue').textContent = expression;
 
-                console.log('💾 VRM controls saved to localStorage');
             }
 
             function loadVRMControlsSettings() {
@@ -3833,7 +3862,6 @@ RESPONSE FORMAT:
                             document.getElementById('expressionValue').textContent = settings.expression;
                         }
 
-                        console.log('📁 VRM controls loaded from localStorage');
                     }
                 } catch (error) {
                     console.warn('Could not load VRM controls:', error);
@@ -3859,15 +3887,41 @@ RESPONSE FORMAT:
                     if (ollamaConfigEl) ollamaConfigEl.style.display = 'none';
                     if (openrouterConfigEl) openrouterConfigEl.style.display = 'none';
 
-                    // Show the selected provider config
+                    // Show the selected provider config and sync to llmConfig
                     if (currentProvider === 'gemini' && geminiConfigEl) {
                         geminiConfigEl.style.display = 'block';
+                        // Sync gemini config to unified llmConfig
+                        llmConfig.apiKey = geminiConfig.key || '';
+                        llmConfig.model = geminiConfig.model || '';
+                        llmConfig.temperature = geminiConfig.temperature || 0.7;
+                        llmConfig.maxTokens = geminiConfig.max_output_tokens || 2048;
+                        llmConfig.topP = geminiConfig.top_p || 0.95;
                     } else if (currentProvider === 'openai' && openaiConfigEl) {
                         openaiConfigEl.style.display = 'block';
+                        // Sync openai config to unified llmConfig
+                        llmConfig.apiKey = openaiConfig.key || '';
+                        llmConfig.model = openaiConfig.model || '';
+                        llmConfig.temperature = openaiConfig.temperature || 0.7;
+                        llmConfig.maxTokens = openaiConfig.max_tokens || 512;
+                        llmConfig.topP = openaiConfig.top_p || 1.0;
+                        llmConfig.frequencyPenalty = openaiConfig.frequency_penalty || 0;
+                        llmConfig.presencePenalty = openaiConfig.presence_penalty || 0;
                     } else if (currentProvider === 'openrouter' && openrouterConfigEl) {
                         openrouterConfigEl.style.display = 'block';
+                        // Sync openrouter config to unified llmConfig
+                        llmConfig.apiKey = openrouterConfig.key || '';
+                        llmConfig.model = openrouterConfig.model || '';
+                        llmConfig.temperature = openrouterConfig.temperature || 0.7;
+                        llmConfig.maxTokens = openrouterConfig.max_tokens || 512;
+                        llmConfig.topP = openrouterConfig.top_p || 1.0;
                     } else if (currentProvider === 'ollama' && ollamaConfigEl) {
                         ollamaConfigEl.style.display = 'block';
+                        // Sync ollama config to unified llmConfig
+                        llmConfig.apiKey = 'ollama';
+                        llmConfig.model = ollamaConfig.model || '';
+                        llmConfig.temperature = ollamaConfig.temperature || 0.7;
+                        llmConfig.maxTokens = ollamaConfig.num_predict || 512;
+                        llmConfig.topP = ollamaConfig.top_p || 0.9;
                         
                         // Load Ollama models when switching to Ollama
                         const modelSelect = document.getElementById('ollamaModel');
@@ -3877,7 +3931,6 @@ RESPONSE FORMAT:
                             console.log('Loading Ollama models for first time switch');
                             debouncedRefreshOllamaModels();
                         } else {
-                            console.log('Ollama models already loaded');
                         }
                     }
                 }
@@ -3891,7 +3944,6 @@ RESPONSE FORMAT:
                 if (document.getElementById('ttsPitch')) azureConfig.pitch = parseFloat(document.getElementById('ttsPitch').value) || 0;
                 if (document.getElementById('ttsRate')) azureConfig.rate = parseFloat(document.getElementById('ttsRate').value) || 1.0;
                 saveLLMSettings();
-                console.log('🔧 Azure TTS config updated and saved');
             }
 
             // Chat functions
@@ -3952,7 +4004,6 @@ RESPONSE FORMAT:
                 }
 
                 // Queue is now empty - stop everything
-                console.log('✅ Audio queue empty, stopping animations');
                 isPlayingAudio = false;
                 isProcessingTTS = false;
                 isTTSPlaying = false;
@@ -4047,7 +4098,6 @@ RESPONSE FORMAT:
                     }
                 }
 
-                console.log('✅ TTS synthesis complete');
                 isProcessingTTSQueue = false;
             }
 
@@ -4120,7 +4170,6 @@ RESPONSE FORMAT:
                         processTTSQueue();
                     }
 
-                    console.log('✅ AI response complete:', fullResponse);
 
                     // Update conversation history with full response
                     conversationHistory.push({ role: 'user', content: message });
@@ -4208,7 +4257,6 @@ RESPONSE FORMAT:
                             const checkbox = document.getElementById('enableTTS');
                             if (checkbox) checkbox.checked = settings.enableTTS;
                         }
-                        console.log('📁 Display settings loaded from localStorage');
                     } catch (error) {
                         console.error('Error loading display settings:', error);
                     }
@@ -4217,6 +4265,7 @@ RESPONSE FORMAT:
                 // Load character settings
                 const savedUserName = localStorage.getItem('userName');
                 if (savedUserName) {
+                    userName = savedUserName; // Update global userName variable
                     const input = document.getElementById('userName');
                     if (input) input.value = savedUserName;
                 }
@@ -4232,6 +4281,21 @@ RESPONSE FORMAT:
                     const input = document.getElementById('characterDescription');
                     if (input) input.value = savedCharDesc;
                 }
+
+                // Load stealth mode state
+                const stealthMode = localStorage.getItem('stealthMode') === 'true';
+                const stealthCheckbox = document.getElementById('stealthMode');
+                if (stealthCheckbox) {
+                    stealthCheckbox.checked = stealthMode;
+                    if (stealthMode) {
+                        // Apply stealth mode on load
+                        const header = document.querySelector('.app-header');
+                        const footer = document.querySelector('.app-footer');
+                        if (header) header.style.display = 'none';
+                        if (footer) footer.style.display = 'none';
+                        document.body.style.background = 'transparent';
+                    }
+                }
             }
 
             function saveUISettings() {
@@ -4244,7 +4308,6 @@ RESPONSE FORMAT:
                 };
 
                 localStorage.setItem('webwaifu-display-settings', JSON.stringify(settings));
-                console.log('💾 Display settings saved to localStorage');
             }
 
             function toggleChatBubble() {
@@ -4266,13 +4329,40 @@ async function callLLM(message, streaming = false, onChunk = null) {
         throw new Error(`No model selected for ${provider.name}`);
     }
 
-    // Build messages array
-    const systemMessage = llmConfig.systemMessage ||
-                         document.getElementById('globalSystemMessage')?.value ||
-                         'You are a helpful AI assistant.';
+    // Build messages array with full context
+    // System Prompt = Technical rules (TTS formatting, etc.)
+    const systemPrompt = llmConfig.systemMessage ||
+                        document.getElementById('globalSystemMessage')?.value ||
+                        'You are a helpful AI assistant.';
+
+    // Get character context
+    const characterName = localStorage.getItem('characterName') || '';
+    const characterPersonality = localStorage.getItem('characterDescription') || '';
+    const currentUserName = localStorage.getItem('userName') || 'User';
+
+    // Build complete system message: Identity + Technical Rules + Personality + User Context
+    let fullSystemMessage = '';
+
+    // 1. Character Identity
+    if (characterName) {
+        fullSystemMessage = `You are ${characterName}.\n\n`;
+    }
+
+    // 2. Technical Rules (System Prompt from AI Config tab)
+    fullSystemMessage += systemPrompt;
+
+    // 3. Character Personality (from Character tab)
+    if (characterPersonality) {
+        fullSystemMessage += `\n\n--- YOUR PERSONALITY ---\n${characterPersonality}`;
+    }
+
+    // 4. User Context
+    if (currentUserName && currentUserName !== 'User') {
+        fullSystemMessage += `\n\n--- CONVERSATION CONTEXT ---\nYou are talking to ${currentUserName}.`;
+    }
 
     const messages = [
-        { role: 'system', content: systemMessage },
+        { role: 'system', content: fullSystemMessage },
         ...conversationHistory,
         { role: 'user', content: message }
     ];
@@ -4381,6 +4471,9 @@ async function callLLM(message, streaming = false, onChunk = null) {
 
                 for (const line of lines) {
                     if (!line.trim() || line.trim() === 'data: [DONE]') continue;
+
+                    // Skip SSE comment lines (start with ':')
+                    if (line.trim().startsWith(':')) continue;
 
                     const jsonStr = line.replace(/^data: /, '');
                     if (!jsonStr.trim()) continue;
@@ -4491,6 +4584,7 @@ async function getGeminiResponse(message) {
                 const userNameInput = document.getElementById('userName');
                 if (userNameInput) {
                     const newName = userNameInput.value || 'User';
+                    userName = newName; // Update global variable
                     localStorage.setItem('userName', newName);
                     console.log('User name updated to:', newName);
                 }
@@ -4505,6 +4599,60 @@ async function getGeminiResponse(message) {
                 }
             }
 
+            // Stealth mode: hide header/footer and make background transparent
+            function toggleStealthMode(forceValue) {
+                try {
+                    const checkbox = document.getElementById('stealthMode');
+                    const enabled = typeof forceValue === 'boolean' ? forceValue : (checkbox ? checkbox.checked : false);
+
+                    const header = document.querySelector('.app-header');
+                    const footer = document.querySelector('.app-footer');
+                    const settingsPanel = document.getElementById('settingsPanel');
+
+                    if (enabled) {
+                        if (header) header.style.display = 'none';
+                        if (footer) footer.style.display = 'none';
+                        document.body.style.background = 'transparent';
+                    } else {
+                        if (header) header.style.display = '';
+                        if (footer) footer.style.display = '';
+                        document.body.style.background = '';
+                    }
+
+                    if (checkbox) checkbox.checked = enabled;
+                    localStorage.setItem('stealthMode', String(enabled));
+                } catch (e) {
+                    console.warn('toggleStealthMode error:', e);
+                }
+            }
+
+            // Full UI hide: hide all overlay UI for desktop overlay/recording (kept separate from stealth)
+            function toggleFullUIHide(forceValue) {
+                try {
+                    const current = localStorage.getItem('fullUIHidden') === 'true';
+                    const enabled = typeof forceValue === 'boolean' ? forceValue : !current;
+
+                    const elementsToToggle = [
+                        document.querySelector('.app-header'),
+                        document.querySelector('.app-footer'),
+                        document.getElementById('settingsPanel'),
+                        document.getElementById('floatingChat'),
+                        document.getElementById('twitchChatOverlay'),
+                        document.getElementById('speechBubbleOverlay'),
+                        document.getElementById('statusIndicator')
+                    ];
+
+                    elementsToToggle.forEach(el => { if (!el) return; el.style.display = enabled ? 'none' : ''; });
+
+                    // Make background transparent when hiding all UI; restore default when showing
+                    document.body.style.background = enabled ? 'transparent' : '';
+
+                    localStorage.setItem('fullUIHidden', String(enabled));
+                } catch (e) {
+                    console.warn('toggleFullUIHide error:', e);
+                }
+            }
+
             function updateCharacterDescription() {
                 const characterDescInput = document.getElementById('characterDescription');
                 if (characterDescInput) {
@@ -4514,11 +4662,67 @@ async function getGeminiResponse(message) {
                 }
             }
 
+            // Expose functions to window for inline handlers
+            window.toggleStealthMode = toggleStealthMode;
+            window.toggleFullUIHide = toggleFullUIHide;
+
+            // Settings panel toggle for header button
+            window.toggleSettings = function() {
+                const panel = document.getElementById('settingsPanel');
+                if (!panel) return;
+                const isHidden = getComputedStyle(panel).display === 'none';
+                panel.style.display = isHidden ? 'block' : '';
+                if (panel.classList) panel.classList.toggle('active', isHidden);
+            };
+
+            let uiHidden = false;
+
+            function toggleAllUI() {
+                const header = document.querySelector('.app-header');
+                const footer = document.querySelector('.app-footer');
+                const sidebar = document.getElementById('settingsPanel');
+                const chatOverlay = document.getElementById('chatOverlay');
+                const speechBubble = document.getElementById('speechBubbleOverlay');
+                const twitchChat = document.getElementById('twitchChatOverlay');
+
+                uiHidden = !uiHidden;
+
+                const display = uiHidden ? 'none' : '';
+
+                if (header) header.style.display = display;
+                if (footer) footer.style.display = display;
+                if (sidebar && sidebar.classList.contains('active')) sidebar.classList.remove('active');
+                if (chatOverlay) chatOverlay.style.display = display;
+                if (speechBubble) speechBubble.style.display = display;
+                if (twitchChat) twitchChat.style.display = display;
+
+                updateStatus(uiHidden ? '🥷' : '👁️', uiHidden ? 'UI hidden (Ctrl+H to show)' : 'UI visible', 2000);
+            }
+
             async function generateCharacter() {
                 console.log('🎭 Generating AI character...');
 
                 try {
-                    const prompt = `Generate a unique anime character with personality. Return ONLY valid JSON in this exact format:
+                    // Get user input from character prompt field
+                    const userPrompt = document.getElementById('characterPrompt')?.value?.trim();
+
+                    let prompt;
+                    if (userPrompt) {
+                        // User provided description - use it to guide generation
+                        prompt = `Generate a character based on this description: "${userPrompt}"
+
+Return ONLY valid JSON in this exact format:
+{
+  "name": "character name here",
+  "personality": "detailed personality description (2-3 sentences)",
+  "traits": ["trait1", "trait2", "trait3"],
+  "speaking_style": "how they talk and express themselves"
+}
+
+No extra text, just the JSON.`;
+                    } else {
+                        // No user input - generate random character
+                        prompt = `Generate a unique anime character with personality. Return ONLY valid JSON in this exact format:
 {
   "name": "character name here",
   "personality": "detailed personality description (2-3 sentences)",
@@ -4527,6 +4731,7 @@ async function getGeminiResponse(message) {
 }
 
 Make the character interesting and unique. No extra text, just the JSON.`;
+                    }
 
                     const response = await callLLM(prompt, false);
 
@@ -4553,12 +4758,11 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                         localStorage.setItem('characterDescription', fullDesc);
                     }
 
-                    console.log('✅ Character generated:', character.name);
-                    alert(`Character Generated: ${character.name}\n\n${character.personality}`);
+                    updateStatus('✨', `Character generated: ${character.name}`);
 
                 } catch (error) {
                     console.error('❌ Error generating character:', error);
-                    alert('Failed to generate character. Make sure an LLM provider is configured.');
+                    updateStatus('❌', 'Failed to generate character');
                 }
             }
 
@@ -4598,7 +4802,6 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                     localStorage.setItem('globalSystemMessage', systemPrompt);
                 }
 
-                console.log('✅ Character applied to chat system prompt');
                 alert(`Character applied! ${characterName} is now active in the conversation.`);
             }
 
@@ -4623,7 +4826,6 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                             case 'model-ready':
                                 modelLoaded = true;
                                 isInitializingModel = false;
-                                console.log('✅ Whisper model loaded in worker');
                                 updateStatus('✅', 'Model loaded. Ready to record.');
                                 break;
 
@@ -4724,7 +4926,6 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                     console.log('📝 Whisper transcription result:', transcript || 'No text detected');
 
                     if (transcript) {
-                        console.log('✅ Whisper successfully transcribed speech:', transcript);
                         updateStatus('✅', 'Speech recognized');
 
                         // Add to chat and send to AI
@@ -4785,7 +4986,6 @@ Make the character interesting and unique. No extra text, just the JSON.`;
 
                     mediaRecorder.start();
                     isListening = true;
-                    console.log('✅ Recording started - using Whisper for transcription');
                     updateStatus('🎤', 'Listening...');
                     updateButtonStates();
                 } catch (error) {
@@ -4941,7 +5141,6 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                     chatMessageCount.textContent = '0';
                 }
 
-                console.log('✅ Conversation history cleared');
             }
     
     
@@ -5130,7 +5329,6 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                         }
                     }, 500);
 
-                    console.log('✅ VRM loaded successfully');
                     updateLoadingStatus('VRM loaded successfully');
 
                 } catch (error) {
@@ -5148,7 +5346,6 @@ Make the character interesting and unique. No extra text, just the JSON.`;
 
                 // Check if this model is already loaded
                 if (currentModelPath === modelPath && vrm) {
-                    console.log('✅ Model already loaded:', modelPath);
                     updateLoadingStatus('Model already loaded');
                     return;
                 }
