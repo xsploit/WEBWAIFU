@@ -6201,7 +6201,7 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 display: none; /* default hidden */
                 display: flex;
                 flex-direction: column;
-                background: rgba(0, 0, 0, 0.25);
+                background: rgba(0, 0, 0, 0.4); /* ~60% transparent overall */
                 border: 1px solid rgba(255, 255, 255, 0.08);
                 border-radius: 10px;
                 box-shadow: 0 6px 18px rgba(0,0,0,0.25);
@@ -6227,18 +6227,10 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 border-top: 1px solid rgba(255, 255, 255, 0.06);
             }
 
-            /* Floating chat box ~60% transparent */
-            .floating-chat {
-                background: rgba(0, 0, 0, 0.4) !important; /* ~60% transparent */
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                backdrop-filter: blur(3px);
-            }
-            .floating-chat .chat-input-container { background: transparent !important; }
-            .floating-chat .input-wrapper {
-                background: rgba(0, 0, 0, 0.4) !important;
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                border-radius: 10px;
-            }
+            /* Revert floating chat box to original styling */
+            .floating-chat { background: unset !important; border: unset !important; backdrop-filter: unset !important; }
+            .floating-chat .chat-input-container { background: unset !important; }
+            .floating-chat .input-wrapper { background: unset !important; border: unset !important; border-radius: unset !important; }
             /* Ensure chat content flexes and footer stays pinned at bottom */
             .twitch-chat-overlay #twitchChatContent {
                 flex: 1 1 auto;
