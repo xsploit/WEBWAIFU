@@ -2855,16 +2855,32 @@ RESPONSE FORMAT:
                     return;
                 }
 
-                // Ctrl+Alt+S => Toggle Stealth Mode (hide header/footer + transparent BG)
-                if ((event.ctrlKey || event.metaKey) && event.altKey && (key === 'KeyS' || key === 's' || key === 'S')) {
+                // Alt+H => Toggle Settings Sidebar (settings panel)
+                if (event.altKey && (key === 'KeyH' || key === 'h' || key === 'H')) {
+                    event.preventDefault();
+                    if (typeof toggleSettings === 'function') {
+                        toggleSettings();
+                    } else {
+                        const panel = document.getElementById('settingsPanel');
+                        if (panel) {
+                            const isHidden = getComputedStyle(panel).display === 'none';
+                            panel.style.display = isHidden ? 'block' : '';
+                            if (panel.classList) panel.classList.toggle('active', isHidden);
+                        }
+                    }
+                    return;
+                }
+
+                // Alt+S => Toggle Stealth Mode (hide header/footer + transparent BG)
+                if (event.altKey && (key === 'KeyS' || key === 's' || key === 'S')) {
                     event.preventDefault();
                     const current = localStorage.getItem('stealthMode') === 'true';
                     toggleStealthMode(!current);
                     return;
                 }
 
-                // Ctrl+Alt+U => Toggle Full UI Hide (hide all overlays/panels)
-                if ((event.ctrlKey || event.metaKey) && event.altKey && (key === 'KeyU' || key === 'u' || key === 'U')) {
+                // Alt+U => Toggle Full UI Hide (hide all overlays/panels)
+                if (event.altKey && (key === 'KeyU' || key === 'u' || key === 'U')) {
                     event.preventDefault();
                     toggleFullUIHide();
                     return;
