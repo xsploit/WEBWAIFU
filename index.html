@@ -332,6 +332,7 @@
                             <select id="aiProvider" onchange="updateCurrentProvider()">
                                 <option value="gemini">💎 Google Gemini</option>
                                 <option value="openai">🔥 OpenAI</option>
+                                <option value="openrouter">🌐 OpenRouter</option>
                                 <option value="ollama" selected>🧠 Ollama (Local)</option>
                             </select>
                         </div>
@@ -3109,68 +3110,51 @@
     
             // LLM Configuration (azureConfig already declared above)
     
-            let ollamaConfig = {
-                url: 'http://localhost:11434',
+            // UNIFIED LLM PROVIDER SYSTEM - All use OpenAI-compatible endpoints
+            const LLM_PROVIDERS = {
+                ollama: {
+                    name: 'Ollama (Local)',
+                    baseUrl: 'http://localhost:11434/v1',
+                    modelsEndpoint: 'http://localhost:11434/api/tags',
+                    apiKeyRequired: false,
+                    defaultModel: 'llama2'
+                },
+                openai: {
+                    name: 'OpenAI',
+                    baseUrl: 'https://api.openai.com/v1',
+                    modelsEndpoint: 'https://api.openai.com/v1/models',
+                    apiKeyRequired: true,
+                    defaultModel: 'gpt-4o'
+                },
+                gemini: {
+                    name: 'Google Gemini',
+                    baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
+                    modelsEndpoint: 'https://generativelanguage.googleapis.com/v1beta/models',
+                    apiKeyRequired: true,
+                    defaultModel: 'gemini-2.0-flash-exp'
+                },
+                openrouter: {
+                    name: 'OpenRouter',
+                    baseUrl: 'https://openrouter.ai/api/v1',
+                    modelsEndpoint: null,
+                    apiKeyRequired: true,
+                    defaultModel: 'openai/gpt-4o'
+                }
+            };
+
+            // Unified LLM Configuration
+            let llmConfig = {
+                provider: 'ollama',
+                apiKey: '',
                 model: '',
                 temperature: 0.7,
-                top_p: 0.9,
-                top_k: 40,
-                repeat_penalty: 1.1,
-                context_length: 2048,
-                max_tokens: 512,
-                seed: 0,
-                mirostat: 0,
-                mirostat_tau: 5.0,
-                mirostat_eta: 0.1,
-                gpu_layers: 0,
-                threads: 4,
-                batch_size: 512,
-                penalty_alpha: 0,
-                presence_penalty: 0,
-                frequency_penalty: 0,
-                system_message: '',
-                // Advanced optimization parameters
-                flash_attention: true,
-                use_mmap: true,
-                use_mlock: false,
-                numa: false,
-                f16_kv: true,
-                logits_all: false,
-                vocab_only: false,
-                embedding_only: false,
-                rope_freq_base: 10000.0,
-                rope_freq_scale: 1.0,
-                yarn_ext_factor: -1.0,
-                yarn_attn_factor: 1.0,
-                yarn_beta_fast: 32.0,
-                yarn_beta_slow: 1.0,
-                yarn_orig_ctx: 0,
-                mul_mat_q: true,
-                ftype: 'f16',
-                keep_alive: '5m'
+                maxTokens: 512,
+                topP: 1.0,
+                frequencyPenalty: 0,
+                presencePenalty: 0,
+                systemMessage: ''
             };
-    
-            let openaiConfig = {
-                key: '',
-                model: 'gpt-4.1',
-                temperature: 0.7,
-                max_tokens: 512,
-                top_p: 1.0,
-                frequency_penalty: 0,
-                presence_penalty: 0,
-                system_message: ''
-            };
-    
-            let geminiConfig = {
-                key: '',
-                model: 'gemini-2.0-flash',
-                temperature: 0.7,
-                max_output_tokens: 2048,
-                top_p: 0.95,
-                top_k: 40,
-                system_instruction: ''
-            };
-    
+
             let currentProvider = 'ollama';
             let conversationHistory = [];
             let userName = localStorage.getItem('user-name') || 'You';
@@ -3392,40 +3376,49 @@
             let lastOllamaUrl = '';
 
             // Load Ollama models
-            async function loadOllamaModels() {
+            // UNIFIED MODEL FETCHING - Works for all providers with OpenAI-compatible endpoints
+            async function fetchModelsForProvider(provider) {
+                const providerConfig = LLM_PROVIDERS[provider];
+
+                if (!providerConfig || !providerConfig.modelsEndpoint) {
+                    console.log(`No model fetching for ${provider}`);
+                    return [];
+                }
+
                 try {
-                    const url = `${ollamaConfig.url}/api/tags`;
-                    console.log('Fetching Ollama models from:', url);
-                    
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    });
+                    const headers = {'Content-Type': 'application/json'};
 
-                    if (!response.ok) {
-                        throw new Error(`Failed to fetch models: ${response.status} ${response.statusText}`);
+                    // Add authentication based on provider
+                    if (provider === 'ollama') {
+                        // Ollama doesn't need auth
+                        const response = await fetch(providerConfig.modelsEndpoint, {headers});
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        const data = await response.json();
+                        return data.models || [];
+                    }
+                    else if (provider === 'openai') {
+                        if (!llmConfig.apiKey) throw new Error('API key required');
+                        headers['Authorization'] = `Bearer ${llmConfig.apiKey}`;
+                        const response = await fetch(providerConfig.modelsEndpoint, {headers});
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        const data = await response.json();
+                        return (data.data || []).map(m => ({name: m.id, id: m.id}));
+                    }
+                    else if (provider === 'gemini') {
+                        if (!llmConfig.apiKey) throw new Error('API key required');
+                        const url = `${providerConfig.modelsEndpoint}?key=${llmConfig.apiKey}`;
+                        const response = await fetch(url, {headers});
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        const data = await response.json();
+                        return (data.models || []).map(m => ({
+                            name: m.name.replace('models/', ''),
+                            id: m.name
+                        }));
                     }
 
-                    const data = await response.json();
-                    console.log('Ollama API response:', data);
-                    
-                    if (data.models && Array.isArray(data.models)) {
-                        console.log('Available Ollama models:', data.models);
-                        return data.models;
-                    } else {
-                        console.warn('No models array in response:', data);
-                        return [];
-                    }
+                    return [];
                 } catch (error) {
-                    console.error('Error loading Ollama models:', error);
-                    
-                    // Check if it's a network error
-                    if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                        console.error('Network error - Make sure Ollama is running at:', ollamaConfig.url);
-                    }
-                    
+                    console.error(`Error fetching ${provider} models:`, error);
                     return [];
                 }
             }
