@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2025-10-01T09:51:55.143Z",
+  "projectName": "WEBWAIFU",
+  "stats": {
+    "totalDuplicateFunctions": 109,
+    "trueDuplicates": 49,
+    "needReview": 60,
+    "emptyFunctions": 4,
+    "duplicateStrings": 205,
+    "duplicateCodeBlocks": 401
+  },
+  "criticalIssue": {
+    "problem": "Dual code structure (index.html + script.js)",
+    "recommendation": "Remove script.js or refactor to use external JS properly",
+    "estimatedEffort": "1-2 hours (Option A) or 4-6 hours (Option B)"
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Architecture Decision",
+      "priority": "CRITICAL",
+      "effort": "1-2 hours",
+      "tasks": [
+        "Decide on code structure",
+        "Remove duplicate file or refactor"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Implement Stub Functions",
+      "priority": "HIGH",
+      "effort": "2-4 hours",
+      "tasks": [
+        "Implement generateCharacter",
+        "Implement applyCharacterToChat",
+        "Implement clearConversationHistory",
+        "Implement forceRefreshOllamaModelsFromHTML"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Review Different Implementations",
+      "priority": "MEDIUM",
+      "effort": "3-6 hours",
+      "tasks": [
+        "Review 3 functions with different implementations"
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Code Quality Improvements",
+      "priority": "LOW",
+      "effort": "2-4 hours",
+      "tasks": [
+        "Extract constants",
+        "Refactor code blocks",
+        "Add documentation"
+      ]
+    }
+  ],
+  "totalEstimatedEffort": "8-16 hours"
+}

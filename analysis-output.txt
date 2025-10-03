@@ -1,0 +1,633 @@
+🔍 Starting code analysis...
+
+📄 Analyzing index.html...
+📄 Analyzing script.js...
+📄 Analyzing whisper-worker.js...
+
+================================================================================
+CODE ANALYSIS REPORT
+================================================================================
+
+📋 DUPLICATE FUNCTIONS (109)
+--------------------------------------------------------------------------------
+
+⚠️  Function: animate
+   - index.html:1116 (1122 chars)
+   - script.js:633 (282 chars)
+
+⚠️  Function: loadDefaultVRM
+   - index.html:1209 (416 chars)
+   - index.html:1209 (416 chars)
+
+⚠️  Function: resetVRMPosition
+   - index.html:1237 (981 chars)
+   - script.js:1971 (723 chars)
+
+⚠️  Function: updateVRMPosition
+   - index.html:1257 (1350 chars)
+   - script.js:1924 (595 chars)
+
+⚠️  Function: applyVRMPosition
+   - index.html:1277 (418 chars)
+   - script.js:1956 (433 chars)
+
+⚠️  Function: saveVRMConfig
+   - index.html:1290 (99 chars)
+   - script.js:1992 (77 chars)
+
+⚠️  Function: loadVRMConfig
+   - index.html:1298 (1007 chars)
+   - script.js:2000 (861 chars)
+
+⚠️  Function: loadVRMFromFile
+   - index.html:1334 (377 chars)
+   - index.html:1334 (377 chars)
+
+⚠️  Function: loadRoom
+   - index.html:1368 (333 chars)
+   - script.js:793 (429 chars)
+
+⚠️  Function: createFloorTexture
+   - index.html:1369 (357 chars)
+   - script.js:742 (385 chars)
+
+⚠️  Function: loadDemoRoom
+   - index.html:1370 (233 chars)
+   - script.js:757 (259 chars)
+
+⚠️  Function: loadFloorTexture
+   - index.html:1371 (403 chars)
+   - script.js:771 (435 chars)
+
+⚠️  Function: clearFloorTexture
+   - index.html:1372 (141 chars)
+   - script.js:786 (157 chars)
+
+⚠️  Function: resetCamera
+   - index.html:1373 (87 chars)
+   - script.js:806 (84 chars)
+
+⚠️  Function: loadVRMA
+   - index.html:1384 (154 chars)
+   - index.html:1384 (154 chars)
+
+⚠️  Function: loadFBX
+   - index.html:1444 (154 chars)
+   - index.html:1444 (154 chars)
+
+⚠️  Function: loadDefaultAnimations
+   - index.html:1580 (492 chars)
+   - index.html:1580 (492 chars)
+
+⚠️  Function: startTalkingAnimation
+   - index.html:1671 (353 chars)
+   - script.js:411 (175 chars)
+
+⚠️  Function: stopTalkingAnimation
+   - index.html:1691 (344 chars)
+   - script.js:419 (138 chars)
+
+⚠️  Function: speakTextWithAzure
+   - index.html:1792 (220 chars)
+   - index.html:1792 (220 chars)
+
+⚠️  Function: speakTextWithSDK
+   - index.html:1816 (123 chars)
+   - index.html:1816 (123 chars)
+   - script.js:3024 (199 chars)
+   - script.js:3024 (199 chars)
+
+⚠️  Function: speakWithAzureREST
+   - index.html:1969 (510 chars)
+   - index.html:1969 (510 chars)
+
+⚠️  Function: synthesizeWithAzure
+   - index.html:2037 (23 chars)
+   - index.html:2037 (23 chars)
+   - script.js:3723 (63 chars)
+   - script.js:3723 (63 chars)
+
+⚠️  Function: processVisemeQueue
+   - index.html:2131 (226 chars)
+   - script.js:3104 (552 chars)
+
+⚠️  Function: applyVisemeToVRM
+   - index.html:2177 (359 chars)
+   - script.js:3128 (2639 chars)
+
+⚠️  Function: updateMouthMovement
+   - index.html:2310 (1435 chars)
+   - script.js:584 (793 chars)
+
+⚠️  Function: updateVRMMotionSettings
+   - index.html:2428 (481 chars)
+   - script.js:1417 (536 chars)
+
+⚠️  Function: speakWithBrowserTTS
+   - index.html:2499 (667 chars)
+   - index.html:2499 (667 chars)
+   - script.js:3630 (124 chars)
+   - script.js:3630 (124 chars)
+
+⚠️  Function: setupTTSAudioProcessing
+   - index.html:2528 (119 chars)
+   - script.js:44 (103 chars)
+
+⚠️  Function: processTTSAudio
+   - index.html:2545 (465 chars)
+   - script.js:59 (262 chars)
+
+⚠️  Function: updateButtonStates
+   - index.html:2601 (474 chars)
+   - script.js:4454 (360 chars)
+
+⚠️  Function: updateStatus
+   - index.html:2620 (191 chars)
+   - script.js:4550 (411 chars)
+
+⚠️  Function: showSpeechBubble
+   - index.html:2641 (156 chars)
+   - script.js:2586 (125 chars)
+
+⚠️  Function: hideSpeechBubble
+   - index.html:2656 (164 chars)
+   - script.js:2601 (134 chars)
+
+⚠️  Function: toggleSettings
+   - index.html:2714 (300 chars)
+   - script.js:4489 (275 chars)
+
+⚠️  Function: handleSettingsClickOutside
+   - index.html:2729 (387 chars)
+   - script.js:4507 (397 chars)
+
+⚠️  Function: togglePasswordVisibility
+   - index.html:2739 (232 chars)
+   - script.js:4519 (170 chars)
+
+⚠️  Function: toggleChatVisibility
+   - index.html:2752 (730 chars)
+   - script.js:2523 (787 chars)
+
+⚠️  Function: toggleDock
+   - index.html:2772 (160 chars)
+   - script.js:2571 (130 chars)
+
+⚠️  Function: toggleSpeechBubbleDock
+   - index.html:2779 (168 chars)
+   - script.js:2579 (138 chars)
+
+⚠️  Function: updateSpeechHotkey
+   - index.html:2809 (301 chars)
+   - script.js:4580 (129 chars)
+
+⚠️  Function: toggleTwitchConnection
+   - index.html:2871 (68 chars)
+   - script.js:4683 (330 chars)
+
+⚠️  Function: connectToTwitch
+   - index.html:2879 (201 chars)
+   - script.js:4702 (59 chars)
+
+⚠️  Function: updateAccumulationProgress
+   - index.html:3048 (607 chars)
+   - script.js:4838 (268 chars)
+
+⚠️  Function: saveTwitchSettings
+   - index.html:3062 (271 chars)
+   - script.js:4754 (223 chars)
+
+⚠️  Function: loadTwitchSettings
+   - index.html:3074 (1112 chars)
+   - script.js:4767 (763 chars)
+
+⚠️  Function: toggleStreamMode
+   - index.html:3098 (282 chars)
+   - script.js:4787 (374 chars)
+
+⚠️  Function: createAPITimeoutController
+   - index.html:3224 (272 chars)
+   - script.js:32 (198 chars)
+
+⚠️  Function: loadOllamaModels
+   - index.html:3395 (57 chars)
+   - index.html:3395 (57 chars)
+   - script.js:3968 (41 chars)
+   - script.js:3968 (41 chars)
+
+⚠️  Function: initializeOllamaModels
+   - index.html:3434 (634 chars)
+   - script.js:4008 (482 chars)
+
+⚠️  Function: forceRefreshOllamaModels
+   - index.html:3455 (113 chars)
+   - script.js:4034 (99 chars)
+
+⚠️  Function: refreshOllamaModels
+   - index.html:3461 (349 chars)
+   - index.html:3461 (349 chars)
+   - script.js:4340 (275 chars)
+   - script.js:4340 (275 chars)
+
+⚠️  Function: debouncedRefreshOllamaModels
+   - index.html:3552 (89 chars)
+   - script.js:4438 (101 chars)
+
+⚠️  Function: saveOllamaModelSelection
+   - index.html:3563 (334 chars)
+   - script.js:4956 (226 chars)
+
+⚠️  Function: updateOllamaConfig
+   - index.html:3572 (4444 chars)
+   - script.js:4189 (1835 chars)
+
+⚠️  Function: updateOpenAIConfig
+   - index.html:3614 (1141 chars)
+   - script.js:4265 (1296 chars)
+
+⚠️  Function: updateGeminiConfig
+   - index.html:3626 (948 chars)
+   - script.js:4286 (1049 chars)
+
+⚠️  Function: sendChatMessage
+   - index.html:3752 (427 chars)
+   - index.html:3752 (427 chars)
+
+⚠️  Function: playAudioQueue
+   - index.html:3786 (425 chars)
+   - index.html:3786 (425 chars)
+
+⚠️  Function: synthesizeToAudioQueue
+   - index.html:3819 (163 chars)
+   - index.html:3819 (163 chars)
+
+⚠️  Function: processTTSQueue
+   - index.html:3882 (218 chars)
+   - index.html:3882 (218 chars)
+
+⚠️  Function: sendMessageToAI
+   - index.html:3908 (137 chars)
+   - index.html:3908 (137 chars)
+   - script.js:3238 (115 chars)
+   - script.js:3238 (115 chars)
+
+⚠️  Function: loadUISettings
+   - index.html:3991 (917 chars)
+   - script.js:4039 (1144 chars)
+
+⚠️  Function: saveUISettings
+   - index.html:4051 (355 chars)
+   - script.js:4639 (379 chars)
+
+⚠️  Function: getOllamaResponseStreaming
+   - index.html:4073 (142 chars)
+   - index.html:4073 (142 chars)
+
+⚠️  Function: getOllamaResponse
+   - index.html:4157 (142 chars)
+   - index.html:4157 (142 chars)
+   - script.js:3274 (126 chars)
+   - script.js:3274 (126 chars)
+
+⚠️  Function: getOpenAIResponseStreaming
+   - index.html:4267 (91 chars)
+   - index.html:4267 (91 chars)
+
+⚠️  Function: getOpenAIResponse
+   - index.html:4342 (91 chars)
+   - index.html:4342 (91 chars)
+   - script.js:3364 (75 chars)
+   - script.js:3364 (75 chars)
+
+⚠️  Function: getGeminiResponseStreaming
+   - index.html:4402 (91 chars)
+   - index.html:4402 (91 chars)
+
+⚠️  Function: getGeminiResponse
+   - index.html:4502 (91 chars)
+   - index.html:4502 (91 chars)
+   - script.js:3423 (75 chars)
+   - script.js:3423 (75 chars)
+
+⚠️  Function: clearTwitchChat
+   - index.html:4651 (337 chars)
+   - script.js:4747 (204 chars)
+
+⚠️  Function: updateUserName
+   - index.html:4669 (292 chars)
+   - script.js:2312 (324 chars)
+
+⚠️  Function: updateCharacterName
+   - index.html:4678 (327 chars)
+   - script.js:2323 (373 chars)
+
+⚠️  Function: updateCharacterDescription
+   - index.html:4687 (326 chars)
+   - script.js:2334 (367 chars)
+
+⚠️  Function: generateCharacter
+   - index.html:4696 (40 chars)
+   - script.js:2390 (436 chars)
+   - script.js:2390 (436 chars)
+
+⚠️  Function: applyCharacterToChat
+   - index.html:4700 (43 chars)
+   - script.js:2344 (291 chars)
+
+⚠️  Function: initializeWhisperWorker
+   - index.html:4712 (242 chars)
+   - script.js:2630 (214 chars)
+
+⚠️  Function: transcribeAudioWithWorker
+   - index.html:4768 (402 chars)
+   - script.js:2693 (264 chars)
+
+⚠️  Function: decodeAndResample
+   - index.html:4785 (116 chars)
+   - index.html:4785 (116 chars)
+   - script.js:2857 (102 chars)
+   - script.js:2857 (102 chars)
+
+⚠️  Function: processAudio
+   - index.html:4793 (203 chars)
+   - index.html:4793 (203 chars)
+   - script.js:2798 (139 chars)
+   - script.js:2798 (139 chars)
+
+⚠️  Function: startListening
+   - index.html:4847 (128 chars)
+   - index.html:4847 (128 chars)
+   - script.js:2745 (96 chars)
+   - script.js:2745 (96 chars)
+
+⚠️  Function: stopListening
+   - index.html:4897 (176 chars)
+   - script.js:2790 (144 chars)
+
+⚠️  Function: enumerateMicrophones
+   - index.html:4905 (696 chars)
+   - index.html:4905 (696 chars)
+   - script.js:2156 (525 chars)
+   - script.js:2156 (525 chars)
+
+⚠️  Function: changeMicrophone
+   - index.html:4932 (297 chars)
+   - script.js:2182 (240 chars)
+
+⚠️  Function: clearConversationHistory
+   - index.html:5025 (47 chars)
+   - script.js:1464 (430 chars)
+
+⚠️  Function: toggleTransparentBackground
+   - index.html:5044 (401 chars)
+   - script.js:850 (240 chars)
+
+⚠️  Function: loadSelectedModel
+   - index.html:5118 (450 chars)
+   - index.html:5118 (450 chars)
+
+⚠️  Function: updateEyeTracking
+   - index.html:5209 (311 chars)
+   - script.js:1370 (238 chars)
+
+⚠️  Function: blink
+   - index.html:5247 (868 chars)
+   - script.js:1326 (667 chars)
+
+⚠️  Function: addMessage
+   - index.html:5463 (357 chars)
+   - script.js:3200 (285 chars)
+
+⚠️  Function: speakAIResponse
+   - index.html:5499 (335 chars)
+   - index.html:5499 (335 chars)
+   - script.js:3560 (241 chars)
+   - script.js:3560 (241 chars)
+
+⚠️  Function: speakWithAzure
+   - index.html:5523 (538 chars)
+   - index.html:5523 (538 chars)
+   - script.js:3584 (356 chars)
+   - script.js:3584 (356 chars)
+
+⚠️  Function: createSSML
+   - index.html:5570 (72 chars)
+   - script.js:3702 (72 chars)
+
+⚠️  Function: getSelectedBrowserVoice
+   - index.html:5593 (312 chars)
+   - script.js:3767 (238 chars)
+
+⚠️  Function: getAutoSelectedFemaleVoice
+   - index.html:5606 (1486 chars)
+   - script.js:3780 (1106 chars)
+
+⚠️  Function: fetchAzureVoices
+   - index.html:5634 (321 chars)
+   - index.html:5634 (321 chars)
+   - script.js:3808 (247 chars)
+   - script.js:3808 (247 chars)
+
+⚠️  Function: populateBrowserVoices
+   - index.html:5679 (865 chars)
+   - script.js:3903 (631 chars)
+
+⚠️  Function: updateBrowserVoice
+   - index.html:5718 (423 chars)
+   - script.js:3942 (267 chars)
+
+⚠️  Function: autoLoadDefaultAnimations
+   - script.js:429 (271 chars)
+   - script.js:429 (271 chars)
+
+⚠️  Function: loadFBXLegacy
+   - script.js:1011 (73 chars)
+   - script.js:1011 (73 chars)
+
+⚠️  Function: sendCharacterGenerationRequest
+   - script.js:2461 (599 chars)
+   - script.js:2461 (599 chars)
+
+⚠️  Function: initializeTranscriber
+   - script.js:2740 (26 chars)
+   - script.js:2740 (26 chars)
+
+⚠️  Function: sendMessageToAIInternal
+   - script.js:3243 (528 chars)
+   - script.js:3243 (528 chars)
+
+⚠️  Function: refreshAzureVoices
+   - script.js:3852 (191 chars)
+   - script.js:3852 (191 chars)
+
+⚠️  Function: enhancedSpeakAIResponse
+   - script.js:4598 (198 chars)
+   - script.js:4598 (198 chars)
+
+⚠️  Function: speakWithRestOrBrowser
+   - script.js:4623 (170 chars)
+   - script.js:4623 (170 chars)
+
+⚠️  Function: loadTransformers
+   - whisper-worker.js:8 (147 chars)
+   - whisper-worker.js:8 (147 chars)
+
+⚠️  Function: initializeWhisperModel
+   - whisper-worker.js:24 (392 chars)
+   - whisper-worker.js:24 (392 chars)
+
+⚠️  Function: processAudioTranscription
+   - whisper-worker.js:68 (73 chars)
+   - whisper-worker.js:68 (73 chars)
+
+🔍 EMPTY OR STUB FUNCTIONS (4)
+--------------------------------------------------------------------------------
+
+⚠️  generateCharacter (stub)
+   Location: index.html:4696
+   Content: console.log('generateCharacter called');
+
+⚠️  applyCharacterToChat (stub)
+   Location: index.html:4700
+   Content: console.log('applyCharacterToChat called');
+
+⚠️  clearConversationHistory (stub)
+   Location: index.html:5025
+   Content: console.log('clearConversationHistory called');
+
+⚠️  forceRefreshOllamaModelsFromHTML (stub)
+   Location: index.html:5030
+   Content: console.log('forceRefreshOllamaModelsFromHTML called');
+
+📝 DUPLICATE STRINGS (205)
+--------------------------------------------------------------------------------
+
+⚠️  String (8 occurrences):
+   ">
+            <div class="
+   Locations: index.html:31, index.html:54, index.html:74, index.html:102, index.html:131, index.html:877, index.html:883, index.html:891
+
+⚠️  String (11 occurrences):
+   ">
+                    <div class="
+   Locations: index.html:33, index.html:139, index.html:171, index.html:213, index.html:243, index.html:322, index.html:676, index.html:714, index.html:764, index.html:815, index.html:847
+
+⚠️  String (5 occurrences):
+   ">
+                    <button class="
+   Locations: index.html:41, index.html:62, index.html:76, index.html:104, index.html:111
+
+⚠️  String (4 occurrences):
+   ">
+                        <svg width="
+   Locations: index.html:42, index.html:77, index.html:83, index.html:91
+
+⚠️  String (6 occurrences):
+   ">
+                <div class="
+   Locations: index.html:55, index.html:66, index.html:75, index.html:103, index.html:120, index.html:884
+
+⚠️  String (2 occurrences):
+   ">
+                    <span class="
+   Locations: index.html:58, index.html:107
+
+⚠️  String (2 occurrences):
+   ">
+                            <path d="
+   Locations: index.html:78, index.html:84
+
+⚠️  String (10 occurrences):
+   ">
+                        <div class="
+   Locations: index.html:123, index.html:144, index.html:176, index.html:218, index.html:248, index.html:681, index.html:719, index.html:769, index.html:820, index.html:852
+
+⚠️  String (10 occurrences):
+   "toggleAccordionFromHTML("
+   Locations: index.html:140, index.html:172, index.html:214, index.html:244, index.html:323, index.html:677, index.html:715, index.html:765, index.html:816, index.html:848
+
+⚠️  String (8 occurrences):
+   ">▼</span>
+                    </div>
+                    <div class="
+   Locations: index.html:142, index.html:174, index.html:216, index.html:246, index.html:325, index.html:679, index.html:717, index.html:767
+
+... and 195 more
+
+🔁 DUPLICATE CODE BLOCKS (401)
+--------------------------------------------------------------------------------
+
+⚠️  Code block (2 occurrences):
+   <div class="twitch-message-text">${message}</div>
+                `;
+
+                chatContent.ap...
+   Locations: index.html:3005, index.html:5487
+
+⚠️  Code block (2 occurrences):
+   window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize(){...
+   Locations: script.js:1400, script.js:1401
+
+⚠️  Code block (2 occurrences):
+   // Handle viseme events
+  speechSynthesizer.visemeReceived = function (s, e) {
+    currentVisemeQueu...
+   Locations: script.js:3057, script.js:3058
+
+⚠️  Code block (2 occurrences):
+   // Only load Ollama models when switching TO Ollama (and not already loaded)
+  if (currentProvider =...
+   Locations: script.js:4324, script.js:4325
+
+⚠️  Code block (2 occurrences):
+   if (!ollamaConfig.model) {
+                    throw new Error('No Ollama model selected. Please sel...
+   Locations: index.html:4074, index.html:4158
+
+⚠️  Code block (2 occurrences):
+   // Filter for neural voices and sort by locale
+    const neuralVoices = voices
+      .filter(voice =...
+   Locations: script.js:3835, script.js:3836
+
+⚠️  Code block (2 occurrences):
+   if (!response.ok) {
+                    const errorText = await response.text();
+                   ...
+   Locations: index.html:2053, index.html:2054
+
+⚠️  Code block (2 occurrences):
+   const voweldamp = 53;
+    const vowelmin = 12;
+
+    let currentVolume = ttsInputVolume; // Default t...
+   Locations: script.js:591, script.js:592
+
+⚠️  Code block (3 occurrences):
+   const {done, value} = await reader.read();
+                    if (done) break;
+
+                   ...
+   Locations: index.html:4117, index.html:4304, index.html:4464
+
+⚠️  Code block (2 occurrences):
+   ollamaModelsLoadTimeout = setTimeout(() => {
+                    refreshOllamaModels(false);
+       ...
+   Locations: index.html:3556, index.html:3557
+
+... and 391 more
+
+================================================================================
+SUMMARY
+================================================================================
+Duplicate Functions: 109
+Empty/Stub Functions: 4
+Duplicate Strings: 205
+Duplicate Code Blocks: 401
+================================================================================
+
+📊 Full report saved to: C:\Users\SUBSECT\Documents\GitHub\WEBWAIFU\code-analysis-report.json
+

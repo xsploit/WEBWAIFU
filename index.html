@@ -3156,6 +3156,7 @@
             };
 
             let currentProvider = 'ollama';
+            llmConfig.provider = currentProvider; // Keep in sync
             let conversationHistory = [];
             let userName = localStorage.getItem('user-name') || 'You';
 
@@ -3565,8 +3566,14 @@
             function updateOllamaConfig() {
                 // Basic settings
                 if (document.getElementById('ollamaUrl')) ollamaConfig.url = document.getElementById('ollamaUrl').value;
-                if (document.getElementById('ollamaModel')) ollamaConfig.model = document.getElementById('ollamaModel').value;
-                if (document.getElementById('ollamaTemperature')) ollamaConfig.temperature = parseFloat(document.getElementById('ollamaTemperature').value) || 0.7;
+                if (document.getElementById('ollamaModel')) {
+                    ollamaConfig.model = document.getElementById('ollamaModel').value;
+                    llmConfig.model = ollamaConfig.model; // Sync to unified
+                }
+                if (document.getElementById('ollamaTemperature')) {
+                    ollamaConfig.temperature = parseFloat(document.getElementById('ollamaTemperature').value) || 0.7;
+                    llmConfig.temperature = ollamaConfig.temperature; // Sync to unified
+                }
                 if (document.getElementById('ollamaTopP')) ollamaConfig.top_p = parseFloat(document.getElementById('ollamaTopP').value) || 0.9;
                 if (document.getElementById('ollamaTopK')) ollamaConfig.top_k = parseInt(document.getElementById('ollamaTopK').value) || 40;
                 if (document.getElementById('ollamaRepeatPenalty')) ollamaConfig.repeat_penalty = parseFloat(document.getElementById('ollamaRepeatPenalty').value) || 1.1;
@@ -3605,26 +3612,62 @@
             }
 
             function updateOpenAIConfig() {
-                if (document.getElementById('openaiKey')) openaiConfig.key = document.getElementById('openaiKey').value;
-                if (document.getElementById('openaiModel')) openaiConfig.model = document.getElementById('openaiModel').value;
-                if (document.getElementById('openaiTemperature')) openaiConfig.temperature = parseFloat(document.getElementById('openaiTemperature').value) || 0.7;
-                if (document.getElementById('openaiMaxTokens')) openaiConfig.max_tokens = parseInt(document.getElementById('openaiMaxTokens').value) || 512;
-                if (document.getElementById('openaiTopP')) openaiConfig.top_p = parseFloat(document.getElementById('openaiTopP').value) || 1.0;
-                if (document.getElementById('openaiFreqPenalty')) openaiConfig.frequency_penalty = parseFloat(document.getElementById('openaiFreqPenalty').value) || 0;
-                if (document.getElementById('openaiPresencePenalty')) openaiConfig.presence_penalty = parseFloat(document.getElementById('openaiPresencePenalty').value) || 0;
+                if (document.getElementById('openaiKey')) {
+                    openaiConfig.key = document.getElementById('openaiKey').value;
+                    llmConfig.apiKey = openaiConfig.key;
+                }
+                if (document.getElementById('openaiModel')) {
+                    openaiConfig.model = document.getElementById('openaiModel').value;
+                    llmConfig.model = openaiConfig.model;
+                }
+                if (document.getElementById('openaiTemperature')) {
+                    openaiConfig.temperature = parseFloat(document.getElementById('openaiTemperature').value) || 0.7;
+                    llmConfig.temperature = openaiConfig.temperature;
+                }
+                if (document.getElementById('openaiMaxTokens')) {
+                    openaiConfig.max_tokens = parseInt(document.getElementById('openaiMaxTokens').value) || 512;
+                    llmConfig.maxTokens = openaiConfig.max_tokens;
+                }
+                if (document.getElementById('openaiTopP')) {
+                    openaiConfig.top_p = parseFloat(document.getElementById('openaiTopP').value) || 1.0;
+                    llmConfig.topP = openaiConfig.top_p;
+                }
+                if (document.getElementById('openaiFreqPenalty')) {
+                    openaiConfig.frequency_penalty = parseFloat(document.getElementById('openaiFreqPenalty').value) || 0;
+                    llmConfig.frequencyPenalty = openaiConfig.frequency_penalty;
+                }
+                if (document.getElementById('openaiPresencePenalty')) {
+                    openaiConfig.presence_penalty = parseFloat(document.getElementById('openaiPresencePenalty').value) || 0;
+                    llmConfig.presencePenalty = openaiConfig.presence_penalty;
+                }
                 saveLLMSettings();
-                console.log('🔧 OpenAI config updated and saved');
+                console.log('🔧 OpenAI config updated and saved to unified llmConfig');
             }
 
             function updateGeminiConfig() {
-                if (document.getElementById('geminiKey')) geminiConfig.key = document.getElementById('geminiKey').value;
-                if (document.getElementById('geminiModel')) geminiConfig.model = document.getElementById('geminiModel').value;
-                if (document.getElementById('geminiTemperature')) geminiConfig.temperature = parseFloat(document.getElementById('geminiTemperature').value) || 0.7;
-                if (document.getElementById('geminiMaxTokens')) geminiConfig.max_output_tokens = parseInt(document.getElementById('geminiMaxTokens').value) || 1024;
-                if (document.getElementById('geminiTopP')) geminiConfig.top_p = parseFloat(document.getElementById('geminiTopP').value) || 0.95;
+                if (document.getElementById('geminiKey')) {
+                    geminiConfig.key = document.getElementById('geminiKey').value;
+                    llmConfig.apiKey = geminiConfig.key; // Sync to unified config
+                }
+                if (document.getElementById('geminiModel')) {
+                    geminiConfig.model = document.getElementById('geminiModel').value;
+                    llmConfig.model = geminiConfig.model; // Sync to unified config
+                }
+                if (document.getElementById('geminiTemperature')) {
+                    geminiConfig.temperature = parseFloat(document.getElementById('geminiTemperature').value) || 0.7;
+                    llmConfig.temperature = geminiConfig.temperature; // Sync to unified config
+                }
+                if (document.getElementById('geminiMaxTokens')) {
+                    geminiConfig.max_output_tokens = parseInt(document.getElementById('geminiMaxTokens').value) || 1024;
+                    llmConfig.maxTokens = geminiConfig.max_output_tokens; // Sync to unified config
+                }
+                if (document.getElementById('geminiTopP')) {
+                    geminiConfig.top_p = parseFloat(document.getElementById('geminiTopP').value) || 0.95;
+                    llmConfig.topP = geminiConfig.top_p; // Sync to unified config
+                }
                 if (document.getElementById('geminiTopK')) geminiConfig.top_k = parseInt(document.getElementById('geminiTopK').value) || 40;
                 saveLLMSettings();
-                console.log('🔧 Gemini config updated and saved');
+                console.log('🔧 Gemini config updated and saved to unified llmConfig');
             }
 
             function updateStreamingSetting() {
@@ -3696,6 +3739,7 @@
                 const providerSelect = document.getElementById('aiProvider');
                 if (providerSelect) {
                     currentProvider = providerSelect.value;
+                    llmConfig.provider = currentProvider; // Keep unified config in sync
                     saveLLMSettings();
                     console.log('🔧 AI provider changed to:', currentProvider);
                     

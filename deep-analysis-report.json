@@ -1,0 +1,4847 @@
+{
+  "trueDuplicates": [
+    {
+      "functionName": "loadDefaultVRM",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1209,
+          "length": 1609,
+          "preview": "async function loadDefaultVRM(){\n                try{\n                    const url = './assets/models/AvatarSample_H.vrm';\n                    const "
+        },
+        {
+          "file": "index.html",
+          "line": 1209,
+          "length": 1609,
+          "preview": "async function loadDefaultVRM(){\n                try{\n                    const url = './assets/models/AvatarSample_H.vrm';\n                    const "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1209 <-> index.html:1209",
+          "similarity": 100,
+          "code1Length": 1609,
+          "code2Length": 1609
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "loadVRMFromFile",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1334,
+          "length": 1519,
+          "preview": "async function loadVRMFromFile(file){\n                if(!file) return;\n                const url=URL.createObjectURL(file);\n                const loa"
+        },
+        {
+          "file": "index.html",
+          "line": 1334,
+          "length": 1519,
+          "preview": "async function loadVRMFromFile(file){\n                if(!file) return;\n                const url=URL.createObjectURL(file);\n                const loa"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1334 <-> index.html:1334",
+          "similarity": 100,
+          "code1Length": 1519,
+          "code2Length": 1519
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "loadVRMA",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1384,
+          "length": 2446,
+          "preview": "async function loadVRMA(file) {\n                if (!file) return;\n    \n                if (!vrm) {\n                    updateLoadingStatus('Please lo"
+        },
+        {
+          "file": "index.html",
+          "line": 1384,
+          "length": 2446,
+          "preview": "async function loadVRMA(file) {\n                if (!file) return;\n    \n                if (!vrm) {\n                    updateLoadingStatus('Please lo"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1384 <-> index.html:1384",
+          "similarity": 100,
+          "code1Length": 2446,
+          "code2Length": 2446
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "loadFBX",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1444,
+          "length": 3411,
+          "preview": "async function loadFBX(file) {\n                if (!file) return;\n    \n                if (!vrm) {\n                    updateLoadingStatus('Please loa"
+        },
+        {
+          "file": "index.html",
+          "line": 1444,
+          "length": 3411,
+          "preview": "async function loadFBX(file) {\n                if (!file) return;\n    \n                if (!vrm) {\n                    updateLoadingStatus('Please loa"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1444 <-> index.html:1444",
+          "similarity": 100,
+          "code1Length": 3411,
+          "code2Length": 3411
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "loadDefaultAnimations",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1580,
+          "length": 3452,
+          "preview": "async function loadDefaultAnimations() {\n                try {\n                    console.log('🎭 Auto-loading default animations...');\n    \n        "
+        },
+        {
+          "file": "index.html",
+          "line": 1580,
+          "length": 3452,
+          "preview": "async function loadDefaultAnimations() {\n                try {\n                    console.log('🎭 Auto-loading default animations...');\n    \n        "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1580 <-> index.html:1580",
+          "similarity": 100,
+          "code1Length": 3452,
+          "code2Length": 3452
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "speakTextWithAzure",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1792,
+          "length": 917,
+          "preview": "async function speakTextWithAzure(text){\n                console.log('🔧 speakTextWithAzure called. Azure config:', {\n                    hasKey: !!az"
+        },
+        {
+          "file": "index.html",
+          "line": 1792,
+          "length": 917,
+          "preview": "async function speakTextWithAzure(text){\n                console.log('🔧 speakTextWithAzure called. Azure config:', {\n                    hasKey: !!az"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1792 <-> index.html:1792",
+          "similarity": 100,
+          "code1Length": 917,
+          "code2Length": 917
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "speakWithAzureREST",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1969,
+          "length": 2822,
+          "preview": "async function speakWithAzureREST(text) {\n                console.log('🎙️ speakWithAzureREST called with text:', text);\n                const ssml = "
+        },
+        {
+          "file": "index.html",
+          "line": 1969,
+          "length": 2822,
+          "preview": "async function speakWithAzureREST(text) {\n                console.log('🎙️ speakWithAzureREST called with text:', text);\n                const ssml = "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1969 <-> index.html:1969",
+          "similarity": 100,
+          "code1Length": 2822,
+          "code2Length": 2822
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "synthesizeWithAzure",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2037,
+          "length": 1847,
+          "preview": "async function synthesizeWithAzure(ssml) {\n                const { signal, cleanup } = createAPITimeoutController();\n\n                const response ="
+        },
+        {
+          "file": "index.html",
+          "line": 2037,
+          "length": 1847,
+          "preview": "async function synthesizeWithAzure(ssml) {\n                const { signal, cleanup } = createAPITimeoutController();\n\n                const response ="
+        },
+        {
+          "file": "script.js",
+          "line": 3723,
+          "length": 1321,
+          "preview": "async function synthesizeWithAzure(ssml) {\n  // Add timeout for Azure TTS API call\n  const { signal, cleanup } = createAPITimeoutController();\n  \n  co"
+        },
+        {
+          "file": "script.js",
+          "line": 3723,
+          "length": 1321,
+          "preview": "async function synthesizeWithAzure(ssml) {\n  // Add timeout for Azure TTS API call\n  const { signal, cleanup } = createAPITimeoutController();\n  \n  co"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2037 <-> index.html:2037",
+          "similarity": 100,
+          "code1Length": 1847,
+          "code2Length": 1847
+        },
+        {
+          "pair": "index.html:2037 <-> script.js:3723",
+          "similarity": 100,
+          "code1Length": 1847,
+          "code2Length": 1321
+        },
+        {
+          "pair": "index.html:2037 <-> script.js:3723",
+          "similarity": 100,
+          "code1Length": 1847,
+          "code2Length": 1321
+        },
+        {
+          "pair": "index.html:2037 <-> script.js:3723",
+          "similarity": 100,
+          "code1Length": 1847,
+          "code2Length": 1321
+        },
+        {
+          "pair": "index.html:2037 <-> script.js:3723",
+          "similarity": 100,
+          "code1Length": 1847,
+          "code2Length": 1321
+        },
+        {
+          "pair": "script.js:3723 <-> script.js:3723",
+          "similarity": 100,
+          "code1Length": 1321,
+          "code2Length": 1321
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "hideSpeechBubble",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2656,
+          "length": 242,
+          "preview": "function hideSpeechBubble() {\n                const speechOverlay = document.getElementById('speechBubbleOverlay');\n                if (speechOverlay)"
+        },
+        {
+          "file": "script.js",
+          "line": 2601,
+          "length": 172,
+          "preview": "function hideSpeechBubble() {\n  const speechOverlay = document.getElementById('speechBubbleOverlay');\n  if (speechOverlay) {\n    speechOverlay.style.d"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2656 <-> script.js:2601",
+          "similarity": 100,
+          "code1Length": 242,
+          "code2Length": 172
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "toggleSettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2714,
+          "length": 606,
+          "preview": "function toggleSettings() {\n                const panel = document.getElementById('settingsPanel');\n                const isShowing = panel.classList."
+        },
+        {
+          "file": "script.js",
+          "line": 4489,
+          "length": 515,
+          "preview": "function toggleSettings() {\n  const panel = document.getElementById('settingsPanel');\n  const isShowing = panel.classList.contains('show');\n  \n  if (i"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2714 <-> script.js:4489",
+          "similarity": 100,
+          "code1Length": 606,
+          "code2Length": 515
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "handleSettingsClickOutside",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2729,
+          "length": 476,
+          "preview": "function handleSettingsClickOutside(e) {\n                const panel = document.getElementById('settingsPanel');\n                const settingsBtn = d"
+        },
+        {
+          "file": "script.js",
+          "line": 4507,
+          "length": 446,
+          "preview": "function handleSettingsClickOutside(e) {\n  const panel = document.getElementById('settingsPanel');\n  const settingsBtn = document.querySelector('.sett"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2729 <-> script.js:4507",
+          "similarity": 100,
+          "code1Length": 476,
+          "code2Length": 446
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "togglePasswordVisibility",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2739,
+          "length": 465,
+          "preview": "function togglePasswordVisibility(inputId, buttonElement) {\n                const input = document.getElementById(inputId);\n                if (!input"
+        },
+        {
+          "file": "script.js",
+          "line": 4519,
+          "length": 317,
+          "preview": "function togglePasswordVisibility(inputId, buttonElement) {\n  const input = document.getElementById(inputId);\n  if (!input) return;\n  \n  if (input.typ"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2739 <-> script.js:4519",
+          "similarity": 100,
+          "code1Length": 465,
+          "code2Length": 317
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "toggleDock",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2772,
+          "length": 232,
+          "preview": "function toggleDock() {\n                const chatOverlay = document.getElementById('twitchChatOverlay');\n                if (chatOverlay) {\n         "
+        },
+        {
+          "file": "script.js",
+          "line": 2571,
+          "length": 162,
+          "preview": "function toggleDock() {\n  const chatOverlay = document.getElementById('twitchChatOverlay');\n  if (chatOverlay) {\n    chatOverlay.classList.toggle('doc"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2772 <-> script.js:2571",
+          "similarity": 100,
+          "code1Length": 232,
+          "code2Length": 162
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "toggleSpeechBubbleDock",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2779,
+          "length": 252,
+          "preview": "function toggleSpeechBubbleDock() {\n                const speechOverlay = document.getElementById('speechBubbleOverlay');\n                if (speechOv"
+        },
+        {
+          "file": "script.js",
+          "line": 2579,
+          "length": 182,
+          "preview": "function toggleSpeechBubbleDock() {\n  const speechOverlay = document.getElementById('speechBubbleOverlay');\n  if (speechOverlay) {\n    speechOverlay.c"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2779 <-> script.js:2579",
+          "similarity": 100,
+          "code1Length": 252,
+          "code2Length": 182
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "createAPITimeoutController",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3224,
+          "length": 378,
+          "preview": "function createAPITimeoutController(timeoutMs = 30000) {\n                const controller = new AbortController();\n                const timeoutId = s"
+        },
+        {
+          "file": "script.js",
+          "line": 32,
+          "length": 264,
+          "preview": "function createAPITimeoutController(timeoutMs = 30000) {\n  const controller = new AbortController();\n  const timeoutId = setTimeout(() => controller.a"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3224 <-> script.js:32",
+          "similarity": 100,
+          "code1Length": 378,
+          "code2Length": 264
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "initializeOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3434,
+          "length": 1024,
+          "preview": "function initializeOllamaModels() {\n                // Only load if Ollama is the current provider and models aren't already loaded\n                if"
+        },
+        {
+          "file": "script.js",
+          "line": 4008,
+          "length": 734,
+          "preview": "function initializeOllamaModels() {\n  // Only load if Ollama is the current provider and models aren't already loaded\n  if (currentProvider === 'ollam"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3434 <-> script.js:4008",
+          "similarity": 100,
+          "code1Length": 1024,
+          "code2Length": 734
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "forceRefreshOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3455,
+          "length": 181,
+          "preview": "function forceRefreshOllamaModels() {\n                console.log('Manual Ollama model refresh requested');\n                refreshOllamaModels(true);"
+        },
+        {
+          "file": "script.js",
+          "line": 4034,
+          "length": 141,
+          "preview": "function forceRefreshOllamaModels() {\n  console.log('Manual Ollama model refresh requested');\n  refreshOllamaModels(true); // Force refresh\n}"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3455 <-> script.js:4034",
+          "similarity": 100,
+          "code1Length": 181,
+          "code2Length": 141
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "debouncedRefreshOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3552,
+          "length": 330,
+          "preview": "function debouncedRefreshOllamaModels() {\n                if (ollamaModelsLoadTimeout) {\n                    clearTimeout(ollamaModelsLoadTimeout);\n  "
+        },
+        {
+          "file": "script.js",
+          "line": 4438,
+          "length": 265,
+          "preview": "function debouncedRefreshOllamaModels() {\n  // Clear existing timeout\n  if (ollamaModelsLoadTimeout) {\n    clearTimeout(ollamaModelsLoadTimeout);\n  }\n"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3552 <-> script.js:4438",
+          "similarity": 100,
+          "code1Length": 330,
+          "code2Length": 265
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "sendChatMessage",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3752,
+          "length": 612,
+          "preview": "async function sendChatMessage() {\n                const chatInput = document.getElementById('chatInput');\n                const message = chatInput?."
+        },
+        {
+          "file": "index.html",
+          "line": 3752,
+          "length": 612,
+          "preview": "async function sendChatMessage() {\n                const chatInput = document.getElementById('chatInput');\n                const message = chatInput?."
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3752 <-> index.html:3752",
+          "similarity": 100,
+          "code1Length": 612,
+          "code2Length": 612
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "playAudioQueue",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3786,
+          "length": 1236,
+          "preview": "async function playAudioQueue() {\n                if (isPlayingAudio || audioQueue.length === 0) return;\n\n                isPlayingAudio = true;\n     "
+        },
+        {
+          "file": "index.html",
+          "line": 3786,
+          "length": 1236,
+          "preview": "async function playAudioQueue() {\n                if (isPlayingAudio || audioQueue.length === 0) return;\n\n                isPlayingAudio = true;\n     "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3786 <-> index.html:3786",
+          "similarity": 100,
+          "code1Length": 1236,
+          "code2Length": 1236
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "synthesizeToAudioQueue",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3819,
+          "length": 3166,
+          "preview": "async function synthesizeToAudioQueue(text) {\n                const SDK = getSpeechSDK();\n                if (!SDK || !azureConfig.key || !azureConfig"
+        },
+        {
+          "file": "index.html",
+          "line": 3819,
+          "length": 3166,
+          "preview": "async function synthesizeToAudioQueue(text) {\n                const SDK = getSpeechSDK();\n                if (!SDK || !azureConfig.key || !azureConfig"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3819 <-> index.html:3819",
+          "similarity": 100,
+          "code1Length": 3166,
+          "code2Length": 3166
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "processTTSQueue",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3882,
+          "length": 1041,
+          "preview": "async function processTTSQueue() {\n                // Don't start a new queue processor if one is already running\n                if (isProcessingTTSQ"
+        },
+        {
+          "file": "index.html",
+          "line": 3882,
+          "length": 1041,
+          "preview": "async function processTTSQueue() {\n                // Don't start a new queue processor if one is already running\n                if (isProcessingTTSQ"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3882 <-> index.html:3882",
+          "similarity": 100,
+          "code1Length": 1041,
+          "code2Length": 1041
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "getOllamaResponseStreaming",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4073,
+          "length": 3658,
+          "preview": "async function getOllamaResponseStreaming(message, onSentence) {\n                if (!ollamaConfig.model) {\n                    throw new Error('No Ol"
+        },
+        {
+          "file": "index.html",
+          "line": 4073,
+          "length": 3658,
+          "preview": "async function getOllamaResponseStreaming(message, onSentence) {\n                if (!ollamaConfig.model) {\n                    throw new Error('No Ol"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4073 <-> index.html:4073",
+          "similarity": 100,
+          "code1Length": 3658,
+          "code2Length": 3658
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "getOpenAIResponseStreaming",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4267,
+          "length": 3265,
+          "preview": "async function getOpenAIResponseStreaming(message, onSentence) {\n                if (!openaiConfig.key) {\n                    throw new Error('No Open"
+        },
+        {
+          "file": "index.html",
+          "line": 4267,
+          "length": 3265,
+          "preview": "async function getOpenAIResponseStreaming(message, onSentence) {\n                if (!openaiConfig.key) {\n                    throw new Error('No Open"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4267 <-> index.html:4267",
+          "similarity": 100,
+          "code1Length": 3265,
+          "code2Length": 3265
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "getGeminiResponseStreaming",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4402,
+          "length": 4149,
+          "preview": "async function getGeminiResponseStreaming(message, onSentence) {\n                if (!geminiConfig.key) {\n                    throw new Error('No Gemi"
+        },
+        {
+          "file": "index.html",
+          "line": 4402,
+          "length": 4149,
+          "preview": "async function getGeminiResponseStreaming(message, onSentence) {\n                if (!geminiConfig.key) {\n                    throw new Error('No Gemi"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4402 <-> index.html:4402",
+          "similarity": 100,
+          "code1Length": 4149,
+          "code2Length": 4149
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "transcribeAudioWithWorker",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4768,
+          "length": 564,
+          "preview": "function transcribeAudioWithWorker(audioData, options = {}) {\n                return new Promise((resolve) => {\n                    const id = transcr"
+        },
+        {
+          "file": "script.js",
+          "line": 2693,
+          "length": 352,
+          "preview": "function transcribeAudioWithWorker(audioData, options = {}) {\n  return new Promise((resolve) => {\n    const id = transcriptionIdCounter++;\n    pending"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4768 <-> script.js:2693",
+          "similarity": 100,
+          "code1Length": 564,
+          "code2Length": 352
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "decodeAndResample",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4785,
+          "length": 347,
+          "preview": "async function decodeAndResample(arrayBuffer) {\n                const targetSampleRate = 16000;\n                const audioContext = new AudioContext("
+        },
+        {
+          "file": "index.html",
+          "line": 4785,
+          "length": 347,
+          "preview": "async function decodeAndResample(arrayBuffer) {\n                const targetSampleRate = 16000;\n                const audioContext = new AudioContext("
+        },
+        {
+          "file": "script.js",
+          "line": 2857,
+          "length": 279,
+          "preview": "async function decodeAndResample(arrayBuffer) {\n  const targetSampleRate = 16000;\n  const audioContext = new AudioContext({ sampleRate: targetSampleRa"
+        },
+        {
+          "file": "script.js",
+          "line": 2857,
+          "length": 279,
+          "preview": "async function decodeAndResample(arrayBuffer) {\n  const targetSampleRate = 16000;\n  const audioContext = new AudioContext({ sampleRate: targetSampleRa"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4785 <-> index.html:4785",
+          "similarity": 100,
+          "code1Length": 347,
+          "code2Length": 347
+        },
+        {
+          "pair": "index.html:4785 <-> script.js:2857",
+          "similarity": 100,
+          "code1Length": 347,
+          "code2Length": 279
+        },
+        {
+          "pair": "index.html:4785 <-> script.js:2857",
+          "similarity": 100,
+          "code1Length": 347,
+          "code2Length": 279
+        },
+        {
+          "pair": "index.html:4785 <-> script.js:2857",
+          "similarity": 100,
+          "code1Length": 347,
+          "code2Length": 279
+        },
+        {
+          "pair": "index.html:4785 <-> script.js:2857",
+          "similarity": 100,
+          "code1Length": 347,
+          "code2Length": 279
+        },
+        {
+          "pair": "script.js:2857 <-> script.js:2857",
+          "similarity": 100,
+          "code1Length": 279,
+          "code2Length": 279
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "processAudio",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4793,
+          "length": 2394,
+          "preview": "async function processAudio() {\n                if (audioChunks.length === 0) {\n                    updateStatus('❌', 'No audio recorded.');\n         "
+        },
+        {
+          "file": "index.html",
+          "line": 4793,
+          "length": 2394,
+          "preview": "async function processAudio() {\n                if (audioChunks.length === 0) {\n                    updateStatus('❌', 'No audio recorded.');\n         "
+        },
+        {
+          "file": "script.js",
+          "line": 2798,
+          "length": 2021,
+          "preview": "async function processAudio() {\n  if (audioChunks.length === 0) {\n    updateStatus('❌', 'No audio recorded.');\n    isListening = false;\n    updateButt"
+        },
+        {
+          "file": "script.js",
+          "line": 2798,
+          "length": 2021,
+          "preview": "async function processAudio() {\n  if (audioChunks.length === 0) {\n    updateStatus('❌', 'No audio recorded.');\n    isListening = false;\n    updateButt"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4793 <-> index.html:4793",
+          "similarity": 100,
+          "code1Length": 2394,
+          "code2Length": 2394
+        },
+        {
+          "pair": "index.html:4793 <-> script.js:2798",
+          "similarity": 100,
+          "code1Length": 2394,
+          "code2Length": 2021
+        },
+        {
+          "pair": "index.html:4793 <-> script.js:2798",
+          "similarity": 100,
+          "code1Length": 2394,
+          "code2Length": 2021
+        },
+        {
+          "pair": "index.html:4793 <-> script.js:2798",
+          "similarity": 100,
+          "code1Length": 2394,
+          "code2Length": 2021
+        },
+        {
+          "pair": "index.html:4793 <-> script.js:2798",
+          "similarity": 100,
+          "code1Length": 2394,
+          "code2Length": 2021
+        },
+        {
+          "pair": "script.js:2798 <-> script.js:2798",
+          "similarity": 100,
+          "code1Length": 2021,
+          "code2Length": 2021
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "stopListening",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4897,
+          "length": 251,
+          "preview": "function stopListening() {\n                if (mediaRecorder && mediaRecorder.state === 'recording') {\n                    mediaRecorder.stop();\n     "
+        },
+        {
+          "file": "script.js",
+          "line": 2790,
+          "length": 179,
+          "preview": "function stopListening() {\n  if (mediaRecorder && mediaRecorder.state === 'recording') {\n    mediaRecorder.stop();\n    updateStatus('⏳', 'Processing a"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4897 <-> script.js:2790",
+          "similarity": 100,
+          "code1Length": 251,
+          "code2Length": 179
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "loadSelectedModel",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5118,
+          "length": 3499,
+          "preview": "async function loadSelectedModel() {\n                const selector = document.getElementById('modelSelector');\n                if (!selector || !sele"
+        },
+        {
+          "file": "index.html",
+          "line": 5118,
+          "length": 3499,
+          "preview": "async function loadSelectedModel() {\n                const selector = document.getElementById('modelSelector');\n                if (!selector || !sele"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5118 <-> index.html:5118",
+          "similarity": 100,
+          "code1Length": 3499,
+          "code2Length": 3499
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "addMessage",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5463,
+          "length": 1516,
+          "preview": "function addMessage(message, role, username) {\n                const chatContent = document.getElementById('twitchChatContent');\n                const"
+        },
+        {
+          "file": "script.js",
+          "line": 3200,
+          "length": 1128,
+          "preview": "function addMessage(message, role, username) {\n  const chatContent = document.getElementById('twitchChatContent');\n  const chatOverlay = document.getE"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5463 <-> script.js:3200",
+          "similarity": 100,
+          "code1Length": 1516,
+          "code2Length": 1128
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "speakAIResponse",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5499,
+          "length": 956,
+          "preview": "async function speakAIResponse(text) {\n                // Check if TTS is enabled\n                if (!document.getElementById('enableTTS').checked) {"
+        },
+        {
+          "file": "index.html",
+          "line": 5499,
+          "length": 956,
+          "preview": "async function speakAIResponse(text) {\n                // Check if TTS is enabled\n                if (!document.getElementById('enableTTS').checked) {"
+        },
+        {
+          "file": "script.js",
+          "line": 3560,
+          "length": 636,
+          "preview": "async function speakAIResponse(text) {\n  // Check if TTS is enabled\n  if (!document.getElementById('enableTTS').checked) {\n    console.log('TTS disabl"
+        },
+        {
+          "file": "script.js",
+          "line": 3560,
+          "length": 636,
+          "preview": "async function speakAIResponse(text) {\n  // Check if TTS is enabled\n  if (!document.getElementById('enableTTS').checked) {\n    console.log('TTS disabl"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5499 <-> index.html:5499",
+          "similarity": 100,
+          "code1Length": 956,
+          "code2Length": 956
+        },
+        {
+          "pair": "index.html:5499 <-> script.js:3560",
+          "similarity": 100,
+          "code1Length": 956,
+          "code2Length": 636
+        },
+        {
+          "pair": "index.html:5499 <-> script.js:3560",
+          "similarity": 100,
+          "code1Length": 956,
+          "code2Length": 636
+        },
+        {
+          "pair": "index.html:5499 <-> script.js:3560",
+          "similarity": 100,
+          "code1Length": 956,
+          "code2Length": 636
+        },
+        {
+          "pair": "index.html:5499 <-> script.js:3560",
+          "similarity": 100,
+          "code1Length": 956,
+          "code2Length": 636
+        },
+        {
+          "pair": "script.js:3560 <-> script.js:3560",
+          "similarity": 100,
+          "code1Length": 636,
+          "code2Length": 636
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "speakWithAzure",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5523,
+          "length": 1856,
+          "preview": "async function speakWithAzure(text) {\n                const ssml = createSSML(\n                    text,\n                    azureConfig.voice,\n      "
+        },
+        {
+          "file": "index.html",
+          "line": 5523,
+          "length": 1856,
+          "preview": "async function speakWithAzure(text) {\n                const ssml = createSSML(\n                    text,\n                    azureConfig.voice,\n      "
+        },
+        {
+          "file": "script.js",
+          "line": 3584,
+          "length": 1208,
+          "preview": "async function speakWithAzure(text) {\n  const ssml = createSSML(\n    text,\n    azureConfig.voice,\n    'default',\n    azureConfig.pitch,\n    azureConfi"
+        },
+        {
+          "file": "script.js",
+          "line": 3584,
+          "length": 1208,
+          "preview": "async function speakWithAzure(text) {\n  const ssml = createSSML(\n    text,\n    azureConfig.voice,\n    'default',\n    azureConfig.pitch,\n    azureConfi"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5523 <-> index.html:5523",
+          "similarity": 100,
+          "code1Length": 1856,
+          "code2Length": 1856
+        },
+        {
+          "pair": "index.html:5523 <-> script.js:3584",
+          "similarity": 100,
+          "code1Length": 1856,
+          "code2Length": 1208
+        },
+        {
+          "pair": "index.html:5523 <-> script.js:3584",
+          "similarity": 100,
+          "code1Length": 1856,
+          "code2Length": 1208
+        },
+        {
+          "pair": "index.html:5523 <-> script.js:3584",
+          "similarity": 100,
+          "code1Length": 1856,
+          "code2Length": 1208
+        },
+        {
+          "pair": "index.html:5523 <-> script.js:3584",
+          "similarity": 100,
+          "code1Length": 1856,
+          "code2Length": 1208
+        },
+        {
+          "pair": "script.js:3584 <-> script.js:3584",
+          "similarity": 100,
+          "code1Length": 1208,
+          "code2Length": 1208
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "createSSML",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5570,
+          "length": 1139,
+          "preview": "function createSSML(text, voice, style, pitch, rate, volume) {\n                const styleTag = style !== 'default' ? ` mstts:express-as style='${styl"
+        },
+        {
+          "file": "script.js",
+          "line": 3702,
+          "length": 839,
+          "preview": "function createSSML(text, voice, style, pitch, rate, volume) {\n  const styleTag = style !== 'default' ? ` mstts:express-as style='${style}'` : '';\n  c"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5570 <-> script.js:3702",
+          "similarity": 100,
+          "code1Length": 1139,
+          "code2Length": 839
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "getSelectedBrowserVoice",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5593,
+          "length": 585,
+          "preview": "function getSelectedBrowserVoice() {\n                const browserVoiceSelect = document.getElementById('browserVoice');\n                const selecte"
+        },
+        {
+          "file": "script.js",
+          "line": 3767,
+          "length": 429,
+          "preview": "function getSelectedBrowserVoice() {\n  const browserVoiceSelect = document.getElementById('browserVoice');\n  const selectedVoiceName = browserVoiceSel"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5593 <-> script.js:3767",
+          "similarity": 100,
+          "code1Length": 585,
+          "code2Length": 429
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "getAutoSelectedFemaleVoice",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5606,
+          "length": 1556,
+          "preview": "function getAutoSelectedFemaleVoice() {\n                const voices = speechSynthesis.getVoices();\n                \n                // Look for femal"
+        },
+        {
+          "file": "script.js",
+          "line": 3780,
+          "length": 1150,
+          "preview": "function getAutoSelectedFemaleVoice() {\n  const voices = speechSynthesis.getVoices();\n  \n  // Look for female voices with various criteria\n  const fem"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5606 <-> script.js:3780",
+          "similarity": 100,
+          "code1Length": 1556,
+          "code2Length": 1150
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "fetchAzureVoices",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5634,
+          "length": 2111,
+          "preview": "async function fetchAzureVoices() {\n                const azureKey = document.getElementById('azureKey').value;\n                const azureRegion = do"
+        },
+        {
+          "file": "index.html",
+          "line": 5634,
+          "length": 2111,
+          "preview": "async function fetchAzureVoices() {\n                const azureKey = document.getElementById('azureKey').value;\n                const azureRegion = do"
+        },
+        {
+          "file": "script.js",
+          "line": 3808,
+          "length": 1441,
+          "preview": "async function fetchAzureVoices() {\n  const azureKey = document.getElementById('azureKey').value;\n  const azureRegion = document.getElementById('azure"
+        },
+        {
+          "file": "script.js",
+          "line": 3808,
+          "length": 1441,
+          "preview": "async function fetchAzureVoices() {\n  const azureKey = document.getElementById('azureKey').value;\n  const azureRegion = document.getElementById('azure"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5634 <-> index.html:5634",
+          "similarity": 100,
+          "code1Length": 2111,
+          "code2Length": 2111
+        },
+        {
+          "pair": "index.html:5634 <-> script.js:3808",
+          "similarity": 100,
+          "code1Length": 2111,
+          "code2Length": 1441
+        },
+        {
+          "pair": "index.html:5634 <-> script.js:3808",
+          "similarity": 100,
+          "code1Length": 2111,
+          "code2Length": 1441
+        },
+        {
+          "pair": "index.html:5634 <-> script.js:3808",
+          "similarity": 100,
+          "code1Length": 2111,
+          "code2Length": 1441
+        },
+        {
+          "pair": "index.html:5634 <-> script.js:3808",
+          "similarity": 100,
+          "code1Length": 2111,
+          "code2Length": 1441
+        },
+        {
+          "pair": "script.js:3808 <-> script.js:3808",
+          "similarity": 100,
+          "code1Length": 1441,
+          "code2Length": 1441
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "populateBrowserVoices",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5679,
+          "length": 2032,
+          "preview": "function populateBrowserVoices() {\n                const browserVoiceSelect = document.getElementById('browserVoice');\n                if (!browserVoi"
+        },
+        {
+          "file": "script.js",
+          "line": 3903,
+          "length": 1472,
+          "preview": "function populateBrowserVoices() {\n  const browserVoiceSelect = document.getElementById('browserVoice');\n  if (!browserVoiceSelect) return;\n  \n  const"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5679 <-> script.js:3903",
+          "similarity": 100,
+          "code1Length": 2032,
+          "code2Length": 1472
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+        "details": "These are essentially identical. The inline script in index.html is what's being used."
+      }
+    },
+    {
+      "functionName": "autoLoadDefaultAnimations",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 429,
+          "length": 1074,
+          "preview": "async function autoLoadDefaultAnimations(){\n  try{\n    // Happy Idle\n    const respIdle = await fetch('./assets/animations/Happy Idle.fbx');\n    if (r"
+        },
+        {
+          "file": "script.js",
+          "line": 429,
+          "length": 1074,
+          "preview": "async function autoLoadDefaultAnimations(){\n  try{\n    // Happy Idle\n    const respIdle = await fetch('./assets/animations/Happy Idle.fbx');\n    if (r"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "script.js:429 <-> script.js:429",
+          "similarity": 100,
+          "code1Length": 1074,
+          "code2Length": 1074
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "loadFBXLegacy",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 1011,
+          "length": 907,
+          "preview": "async function loadFBXLegacy(file){\n  try{\n    if (!currentVrm) { updateStatus('ℹ️', 'Load VRM first'); return; }\n    const url = URL.createObjectURL("
+        },
+        {
+          "file": "script.js",
+          "line": 1011,
+          "length": 907,
+          "preview": "async function loadFBXLegacy(file){\n  try{\n    if (!currentVrm) { updateStatus('ℹ️', 'Load VRM first'); return; }\n    const url = URL.createObjectURL("
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "script.js:1011 <-> script.js:1011",
+          "similarity": 100,
+          "code1Length": 907,
+          "code2Length": 907
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "sendCharacterGenerationRequest",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 2461,
+          "length": 792,
+          "preview": "async function sendCharacterGenerationRequest(prompt) {\n  // Use the comprehensive AI functions for character generation\n  // Temporarily clear conver"
+        },
+        {
+          "file": "script.js",
+          "line": 2461,
+          "length": 792,
+          "preview": "async function sendCharacterGenerationRequest(prompt) {\n  // Use the comprehensive AI functions for character generation\n  // Temporarily clear conver"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "script.js:2461 <-> script.js:2461",
+          "similarity": 100,
+          "code1Length": 792,
+          "code2Length": 792
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "initializeTranscriber",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 2740,
+          "length": 71,
+          "preview": "async function initializeTranscriber() {\n  initializeWhisperWorker();\n}"
+        },
+        {
+          "file": "script.js",
+          "line": 2740,
+          "length": 71,
+          "preview": "async function initializeTranscriber() {\n  initializeWhisperWorker();\n}"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "script.js:2740 <-> script.js:2740",
+          "similarity": 100,
+          "code1Length": 71,
+          "code2Length": 71
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "sendMessageToAIInternal",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 3243,
+          "length": 879,
+          "preview": "async function sendMessageToAIInternal(message) {\n  try {\n    isProcessingTTS = true;\n    updateButtonStates(); // Disable all inputs immediately\n    "
+        },
+        {
+          "file": "script.js",
+          "line": 3243,
+          "length": 879,
+          "preview": "async function sendMessageToAIInternal(message) {\n  try {\n    isProcessingTTS = true;\n    updateButtonStates(); // Disable all inputs immediately\n    "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "script.js:3243 <-> script.js:3243",
+          "similarity": 100,
+          "code1Length": 879,
+          "code2Length": 879
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "refreshAzureVoices",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 3852,
+          "length": 1497,
+          "preview": "async function refreshAzureVoices() {\n  const voices = await fetchAzureVoices();\n  const voiceSelect = document.getElementById('voiceSelect');\n  \n  if"
+        },
+        {
+          "file": "script.js",
+          "line": 3852,
+          "length": 1497,
+          "preview": "async function refreshAzureVoices() {\n  const voices = await fetchAzureVoices();\n  const voiceSelect = document.getElementById('voiceSelect');\n  \n  if"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "script.js:3852 <-> script.js:3852",
+          "similarity": 100,
+          "code1Length": 1497,
+          "code2Length": 1497
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "enhancedSpeakAIResponse",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 4598,
+          "length": 666,
+          "preview": "async function enhancedSpeakAIResponse(text) {\n  // Check if TTS is enabled\n  if (!document.getElementById('enableTTS').checked) {\n    console.log('TT"
+        },
+        {
+          "file": "script.js",
+          "line": 4598,
+          "length": 666,
+          "preview": "async function enhancedSpeakAIResponse(text) {\n  // Check if TTS is enabled\n  if (!document.getElementById('enableTTS').checked) {\n    console.log('TT"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "script.js:4598 <-> script.js:4598",
+          "similarity": 100,
+          "code1Length": 666,
+          "code2Length": 666
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "speakWithRestOrBrowser",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 4623,
+          "length": 460,
+          "preview": "async function speakWithRestOrBrowser(text) {\n  // Fallback to REST if key is present but SDK failed\n  if (azureConfig.key && azureConfig.region) {\n  "
+        },
+        {
+          "file": "script.js",
+          "line": 4623,
+          "length": 460,
+          "preview": "async function speakWithRestOrBrowser(text) {\n  // Fallback to REST if key is present but SDK failed\n  if (azureConfig.key && azureConfig.region) {\n  "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "script.js:4623 <-> script.js:4623",
+          "similarity": 100,
+          "code1Length": 460,
+          "code2Length": 460
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "loadTransformers",
+      "occurrences": [
+        {
+          "file": "whisper-worker.js",
+          "line": 8,
+          "length": 299,
+          "preview": "async function loadTransformers() {\n  try {\n    const module = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1');\n    pipeline "
+        },
+        {
+          "file": "whisper-worker.js",
+          "line": 8,
+          "length": 299,
+          "preview": "async function loadTransformers() {\n  try {\n    const module = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1');\n    pipeline "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "whisper-worker.js:8 <-> whisper-worker.js:8",
+          "similarity": 100,
+          "code1Length": 299,
+          "code2Length": 299
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "initializeWhisperModel",
+      "occurrences": [
+        {
+          "file": "whisper-worker.js",
+          "line": 24,
+          "length": 1116,
+          "preview": "async function initializeWhisperModel() {\n  if (transcriber || isInitializing) return;\n  \n  isInitializing = true;\n  console.log('🔄 [Worker] Initiali"
+        },
+        {
+          "file": "whisper-worker.js",
+          "line": 24,
+          "length": 1116,
+          "preview": "async function initializeWhisperModel() {\n  if (transcriber || isInitializing) return;\n  \n  isInitializing = true;\n  console.log('🔄 [Worker] Initiali"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "whisper-worker.js:24 <-> whisper-worker.js:24",
+          "similarity": 100,
+          "code1Length": 1116,
+          "code2Length": 1116
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    },
+    {
+      "functionName": "processAudioTranscription",
+      "occurrences": [
+        {
+          "file": "whisper-worker.js",
+          "line": 68,
+          "length": 863,
+          "preview": "async function processAudioTranscription(audioData, options = {}) {\n  if (!transcriber) {\n    throw new Error('Whisper model not initialized');\n  }\n  "
+        },
+        {
+          "file": "whisper-worker.js",
+          "line": 68,
+          "length": 863,
+          "preview": "async function processAudioTranscription(audioData, options = {}) {\n  if (!transcriber) {\n    throw new Error('Whisper model not initialized');\n  }\n  "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "whisper-worker.js:68 <-> whisper-worker.js:68",
+          "similarity": 100,
+          "code1Length": 863,
+          "code2Length": 863
+        }
+      ],
+      "avgSimilarity": 100,
+      "recommendation": {
+        "action": "MERGE",
+        "priority": "HIGH",
+        "reason": "100% identical - Consolidate to single implementation",
+        "details": "Nearly identical implementations found in multiple locations"
+      }
+    }
+  ],
+  "functionalDifferences": [
+    {
+      "functionName": "animate",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1116,
+          "length": 1273,
+          "preview": "function animate(){\n                requestAnimationFrame(animate);\n                const dt = Math.min(clock.getDelta(), 1/30); // Cap deltaTime to p"
+        },
+        {
+          "file": "script.js",
+          "line": 633,
+          "length": 3985,
+          "preview": "function animate() {\nrequestAnimationFrame(animate);\n\nconst deltaTime = Math.min(clock.getDelta(), 0.1); // Cap deltaTime to prevent tab-switch chaos\n"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1116 <-> script.js:633",
+          "similarity": 1,
+          "code1Length": 1273,
+          "code2Length": 3985
+        }
+      ],
+      "avgSimilarity": 1,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 1% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "resetVRMPosition",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1237,
+          "length": 1040,
+          "preview": "function resetVRMPosition(){\n                // Reset config to defaults\n                vrmConfig.posX = 0;\n                vrmConfig.posY = 0;\n     "
+        },
+        {
+          "file": "script.js",
+          "line": 1971,
+          "length": 757,
+          "preview": "function resetVRMPosition() {\n  // Reset config to defaults\n  vrmConfig.posX = 0;\n  vrmConfig.posY = 0;\n  vrmConfig.posZ = 0;\n  vrmConfig.scale = 1.0;"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1237 <-> script.js:1971",
+          "similarity": 5,
+          "code1Length": 1040,
+          "code2Length": 757
+        }
+      ],
+      "avgSimilarity": 5,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 5% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateVRMPosition",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1257,
+          "length": 1411,
+          "preview": "function updateVRMPosition() {\n                // Get values from UI\n                vrmConfig.posX = parseFloat(document.getElementById('vrmPosX')?.v"
+        },
+        {
+          "file": "script.js",
+          "line": 1924,
+          "length": 1300,
+          "preview": "function updateVRMPosition() {\n  // Update VRM config from UI\n  vrmConfig.posX = parseFloat(document.getElementById('vrmPosX')?.value || 0);\n  vrmConf"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1257 <-> script.js:1924",
+          "similarity": 39,
+          "code1Length": 1411,
+          "code2Length": 1300
+        }
+      ],
+      "avgSimilarity": 39,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 39% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "applyVRMPosition",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1277,
+          "length": 478,
+          "preview": "function applyVRMPosition() {\n                if (!vrm?.scene) return;\n    \n                // Apply position\n                vrm.scene.position.set(v"
+        },
+        {
+          "file": "script.js",
+          "line": 1956,
+          "length": 471,
+          "preview": "function applyVRMPosition() {\n  if (currentVrm && currentVrm.scene) {\n    // Apply position\n    currentVrm.scene.position.set(vrmConfig.posX, vrmConfi"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1277 <-> script.js:1956",
+          "similarity": 14,
+          "code1Length": 478,
+          "code2Length": 471
+        }
+      ],
+      "avgSimilarity": 14,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 14% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "saveVRMConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1290,
+          "length": 288,
+          "preview": "function saveVRMConfig() {\n                try {\n                    localStorage.setItem('webwaifu-vrm-position', JSON.stringify(vrmConfig));\n       "
+        },
+        {
+          "file": "script.js",
+          "line": 1992,
+          "length": 196,
+          "preview": "function saveVRMConfig() {\n  try {\n    localStorage.setItem('vu-vrm-position', JSON.stringify(vrmConfig));\n  } catch (error) {\n    console.warn('Could"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1290 <-> script.js:1992",
+          "similarity": 30,
+          "code1Length": 288,
+          "code2Length": 196
+        }
+      ],
+      "avgSimilarity": 30,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 30% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "loadVRMConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1298,
+          "length": 1218,
+          "preview": "function loadVRMConfig() {\n                try {\n                    const saved = localStorage.getItem('webwaifu-vrm-position');\n                    "
+        },
+        {
+          "file": "script.js",
+          "line": 2000,
+          "length": 986,
+          "preview": "function loadVRMConfig() {\n  try {\n    const saved = localStorage.getItem('vu-vrm-position');\n    if (saved) {\n      const savedConfig = JSON.parse(sa"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1298 <-> script.js:2000",
+          "similarity": 10,
+          "code1Length": 1218,
+          "code2Length": 986
+        }
+      ],
+      "avgSimilarity": 10,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 10% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "loadRoom",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1368,
+          "length": 1164,
+          "preview": "function loadRoom(ev){ const file=ev.target.files[0]; if(!file) return; const url=URL.createObjectURL(file); const loader=new GLTFLoader(); loader.loa"
+        },
+        {
+          "file": "script.js",
+          "line": 793,
+          "length": 588,
+          "preview": "function loadRoom(evt){\n  const file = evt.target.files && evt.target.files[0];\n  if (!file) return;\n  const url = URL.createObjectURL(file);\n  const "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1368 <-> script.js:793",
+          "similarity": 4,
+          "code1Length": 1164,
+          "code2Length": 588
+        }
+      ],
+      "avgSimilarity": 4,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 4% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "createFloorTexture",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1369,
+          "length": 1570,
+          "preview": "function createFloorTexture(){ if(customFloorTexture) return customFloorTexture; const canvas=document.createElement('canvas'); canvas.width=256; canv"
+        },
+        {
+          "file": "script.js",
+          "line": 742,
+          "length": 743,
+          "preview": "function createFloorTexture() {\n  if (customFloorTexture) return customFloorTexture;\n  const canvas = document.createElement('canvas');\n  canvas.width"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1369 <-> script.js:742",
+          "similarity": 4,
+          "code1Length": 1570,
+          "code2Length": 743
+        }
+      ],
+      "avgSimilarity": 4,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 4% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "loadDemoRoom",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1370,
+          "length": 1394,
+          "preview": "function loadDemoRoom(){ if(room) scene.remove(room); room=new THREE.Group(); isDemoRoomLoaded=true; const floorTex=createFloorTexture(); const floor="
+        },
+        {
+          "file": "script.js",
+          "line": 757,
+          "length": 943,
+          "preview": "function loadDemoRoom() {\n  if (room) scene.remove(room);\n  room = new THREE.Group();\n  isDemoRoomLoaded = true;\n  const floorTexture = createFloorTex"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1370 <-> script.js:757",
+          "similarity": 5,
+          "code1Length": 1394,
+          "code2Length": 943
+        }
+      ],
+      "avgSimilarity": 5,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 5% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "loadFloorTexture",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1371,
+          "length": 681,
+          "preview": "function loadFloorTexture(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=(ev)=>{ const img=new Image"
+        },
+        {
+          "file": "script.js",
+          "line": 771,
+          "length": 504,
+          "preview": "function loadFloorTexture(e){\n  const file = e.target.files && e.target.files[0];\n  if (!file) return;\n  const reader = new FileReader();\n  reader.onl"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1371 <-> script.js:771",
+          "similarity": 9,
+          "code1Length": 681,
+          "code2Length": 504
+        }
+      ],
+      "avgSimilarity": 9,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 9% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "clearFloorTexture",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1372,
+          "length": 299,
+          "preview": "function clearFloorTexture(){ customFloorTexture=null; const el=document.getElementById('floorTextureFile'); if(el) el.value=''; if(room&&isDemoRoomLo"
+        },
+        {
+          "file": "script.js",
+          "line": 786,
+          "length": 191,
+          "preview": "function clearFloorTexture(){\n  customFloorTexture = null;\n  const el = document.getElementById('floorTextureFile');\n  if (el) el.value = '';\n  if (ro"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1372 <-> script.js:786",
+          "similarity": 18,
+          "code1Length": 299,
+          "code2Length": 191
+        }
+      ],
+      "avgSimilarity": 18,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 18% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "resetCamera",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1373,
+          "length": 113,
+          "preview": "function resetCamera(){ camera.position.set(0.0,1.45,-3); controls.target.set(0.0,1.45,0.0); controls.update(); }"
+        },
+        {
+          "file": "script.js",
+          "line": 806,
+          "length": 112,
+          "preview": "function resetCamera(){\n  camera.position.set(0, 1.5, 3);\n  controls.target.set(0, 1, 0);\n  controls.update();\n}"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1373 <-> script.js:806",
+          "similarity": 40,
+          "code1Length": 113,
+          "code2Length": 112
+        }
+      ],
+      "avgSimilarity": 40,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 40% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "startTalkingAnimation",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1671,
+          "length": 831,
+          "preview": "function startTalkingAnimation() {\n                if (!vrm || !talkingAnimation || !currentMixer) return;\n    \n                console.log('🎭 Starti"
+        },
+        {
+          "file": "script.js",
+          "line": 411,
+          "length": 214,
+          "preview": "function startTalkingAnimation() {\n  if (!animationMixer || !talkingAction) return;\n  if (idleAction) idleAction.stop();\n  talkingAction.reset();\n  ta"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1671 <-> script.js:411",
+          "similarity": 10,
+          "code1Length": 831,
+          "code2Length": 214
+        }
+      ],
+      "avgSimilarity": 10,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 10% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "stopTalkingAnimation",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1691,
+          "length": 856,
+          "preview": "function stopTalkingAnimation() {\n                if (!isTalking || !currentMixer) return;\n    \n                console.log('🎭 Stopping talking anima"
+        },
+        {
+          "file": "script.js",
+          "line": 419,
+          "length": 180,
+          "preview": "function stopTalkingAnimation() {\n  if (!animationMixer) return;\n  if (talkingAction) talkingAction.stop();\n  if (idleAction) {\n    idleAction.reset()"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1691 <-> script.js:419",
+          "similarity": 11,
+          "code1Length": 856,
+          "code2Length": 180
+        }
+      ],
+      "avgSimilarity": 11,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 11% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "speakTextWithSDK",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1816,
+          "length": 7870,
+          "preview": "async function speakTextWithSDK(text) {\n                const SDK = getSpeechSDK();\n                if (!SDK) {\n                    throw new Error('A"
+        },
+        {
+          "file": "index.html",
+          "line": 1816,
+          "length": 7870,
+          "preview": "async function speakTextWithSDK(text) {\n                const SDK = getSpeechSDK();\n                if (!SDK) {\n                    throw new Error('A"
+        },
+        {
+          "file": "script.js",
+          "line": 3024,
+          "length": 2556,
+          "preview": "async function speakTextWithSDK(text) {\n  if (!speechSynthesizer) {\n    speechSynthesizer = createSpeechSynthesizer();\n    if (!speechSynthesizer) {\n "
+        },
+        {
+          "file": "script.js",
+          "line": 3024,
+          "length": 2556,
+          "preview": "async function speakTextWithSDK(text) {\n  if (!speechSynthesizer) {\n    speechSynthesizer = createSpeechSynthesizer();\n    if (!speechSynthesizer) {\n "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:1816 <-> index.html:1816",
+          "similarity": 100,
+          "code1Length": 7870,
+          "code2Length": 7870
+        },
+        {
+          "pair": "index.html:1816 <-> script.js:3024",
+          "similarity": 3,
+          "code1Length": 7870,
+          "code2Length": 2556
+        },
+        {
+          "pair": "index.html:1816 <-> script.js:3024",
+          "similarity": 3,
+          "code1Length": 7870,
+          "code2Length": 2556
+        },
+        {
+          "pair": "index.html:1816 <-> script.js:3024",
+          "similarity": 3,
+          "code1Length": 7870,
+          "code2Length": 2556
+        },
+        {
+          "pair": "index.html:1816 <-> script.js:3024",
+          "similarity": 3,
+          "code1Length": 7870,
+          "code2Length": 2556
+        },
+        {
+          "pair": "script.js:3024 <-> script.js:3024",
+          "similarity": 100,
+          "code1Length": 2556,
+          "code2Length": 2556
+        }
+      ],
+      "avgSimilarity": 35.333333333333336,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 35.333333333333336% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "processVisemeQueue",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2131,
+          "length": 2503,
+          "preview": "function processVisemeQueue() {\n                console.log('🔄 processVisemeQueue called, queue length:', currentVisemeQueue.length);\n               "
+        },
+        {
+          "file": "script.js",
+          "line": 3104,
+          "length": 766,
+          "preview": "function processVisemeQueue() {\n  if (currentVisemeQueue.length === 0) return;\n\n  const viseme = currentVisemeQueue.shift();\n  const audioOffsetMs = M"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2131 <-> script.js:3104",
+          "similarity": 4,
+          "code1Length": 2503,
+          "code2Length": 766
+        }
+      ],
+      "avgSimilarity": 4,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 4% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "applyVisemeToVRM",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2177,
+          "length": 6817,
+          "preview": "function applyVisemeToVRM(vrm, visemeId, intensity = 1.0) {\n                console.log('🎭 applyVisemeToVRM called with visemeId:', visemeId, 'intens"
+        },
+        {
+          "file": "script.js",
+          "line": 3128,
+          "length": 2707,
+          "preview": "function applyVisemeToVRM(vrm, visemeId, intensity = 1.0) {\n  if (!vrm || !vrm.blendShapeProxy) return;\n  \n  const blendShapeProxy = vrm.blendShapePro"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2177 <-> script.js:3128",
+          "similarity": 4,
+          "code1Length": 6817,
+          "code2Length": 2707
+        }
+      ],
+      "avgSimilarity": 4,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 4% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateMouthMovement",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2310,
+          "length": 6433,
+          "preview": "function updateMouthMovement() {\n                // Exit if there's no VRM model or if talking is disabled\n                if (!currentVrm || !talktim"
+        },
+        {
+          "file": "script.js",
+          "line": 584,
+          "length": 2987,
+          "preview": "function updateMouthMovement() {\n    // Exit if there's no VRM model or if talking is disabled\n    if (!currentVrm || !talktime) return;\n\n    // Read "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2310 <-> script.js:584",
+          "similarity": 5,
+          "code1Length": 6433,
+          "code2Length": 2987
+        }
+      ],
+      "avgSimilarity": 5,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 5% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateVRMMotionSettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2428,
+          "length": 2099,
+          "preview": "function updateVRMMotionSettings() {\n                // Update mouth threshold (matching room copy.html IDs)\n                const mouthThresholdEl = "
+        },
+        {
+          "file": "script.js",
+          "line": 1417,
+          "length": 2271,
+          "preview": "function updateVRMMotionSettings() {\n    // Initialize values if first time\n    if (initvalues == true && localStorage.localvalues) {\n        initvalu"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2428 <-> script.js:1417",
+          "similarity": 5,
+          "code1Length": 2099,
+          "code2Length": 2271
+        }
+      ],
+      "avgSimilarity": 5,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 5% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "speakWithBrowserTTS",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2499,
+          "length": 1322,
+          "preview": "async function speakWithBrowserTTS(text){\n                console.log('🌐 speakWithBrowserTTS called with text:', text);\n                return new Pr"
+        },
+        {
+          "file": "index.html",
+          "line": 2499,
+          "length": 1322,
+          "preview": "async function speakWithBrowserTTS(text){\n                console.log('🌐 speakWithBrowserTTS called with text:', text);\n                return new Pr"
+        },
+        {
+          "file": "script.js",
+          "line": 3630,
+          "length": 1999,
+          "preview": "async function speakWithBrowserTTS(text) {\n  // Stop any currently playing TTS\n  if (currentTTSAudio) {\n    currentTTSAudio.pause();\n    currentTTSAud"
+        },
+        {
+          "file": "script.js",
+          "line": 3630,
+          "length": 1999,
+          "preview": "async function speakWithBrowserTTS(text) {\n  // Stop any currently playing TTS\n  if (currentTTSAudio) {\n    currentTTSAudio.pause();\n    currentTTSAud"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2499 <-> index.html:2499",
+          "similarity": 100,
+          "code1Length": 1322,
+          "code2Length": 1322
+        },
+        {
+          "pair": "index.html:2499 <-> script.js:3630",
+          "similarity": 6,
+          "code1Length": 1322,
+          "code2Length": 1999
+        },
+        {
+          "pair": "index.html:2499 <-> script.js:3630",
+          "similarity": 6,
+          "code1Length": 1322,
+          "code2Length": 1999
+        },
+        {
+          "pair": "index.html:2499 <-> script.js:3630",
+          "similarity": 6,
+          "code1Length": 1322,
+          "code2Length": 1999
+        },
+        {
+          "pair": "index.html:2499 <-> script.js:3630",
+          "similarity": 6,
+          "code1Length": 1322,
+          "code2Length": 1999
+        },
+        {
+          "pair": "script.js:3630 <-> script.js:3630",
+          "similarity": 100,
+          "code1Length": 1999,
+          "code2Length": 1999
+        }
+      ],
+      "avgSimilarity": 37.333333333333336,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 37.333333333333336% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "setupTTSAudioProcessing",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2528,
+          "length": 668,
+          "preview": "function setupTTSAudioProcessing(audioElement) {\n                if (!ttsAudioContext) {\n                    ttsAudioContext = new (window.AudioContex"
+        },
+        {
+          "file": "script.js",
+          "line": 44,
+          "length": 1813,
+          "preview": "function setupTTSAudioProcessing(audioElement) {\n  if (!ttsAudioContext) {\n    ttsAudioContext = new (window.AudioContext || window.webkitAudioContext"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2528 <-> script.js:44",
+          "similarity": 29,
+          "code1Length": 668,
+          "code2Length": 1813
+        }
+      ],
+      "avgSimilarity": 29,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 29% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "processTTSAudio",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2545,
+          "length": 2741,
+          "preview": "function processTTSAudio() {\n                if (isTTSPlaying) {\n                    let ttsInputVolume = 0;\n\n                    if (ttsAnalyser) {\n "
+        },
+        {
+          "file": "script.js",
+          "line": 59,
+          "length": 406,
+          "preview": "function processTTSAudio() {\n    if (isTTSPlaying) {\n      var array = new Uint8Array(ttsAnalyser.frequencyBinCount);\n      ttsAnalyser.getByteFrequen"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2545 <-> script.js:59",
+          "similarity": 5,
+          "code1Length": 2741,
+          "code2Length": 406
+        }
+      ],
+      "avgSimilarity": 5,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 5% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateButtonStates",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2601,
+          "length": 757,
+          "preview": "function updateButtonStates() {\n                const listenBtn = document.getElementById('listenBtn');\n                const stopBtn = document.getEl"
+        },
+        {
+          "file": "script.js",
+          "line": 4454,
+          "length": 854,
+          "preview": "function updateButtonStates() {\n  const listenBtn = document.getElementById('listenBtn');\n  const stopBtn = document.getElementById('stopBtn');\n  cons"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2601 <-> script.js:4454",
+          "similarity": 57,
+          "code1Length": 757,
+          "code2Length": 854
+        }
+      ],
+      "avgSimilarity": 57,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 57% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateStatus",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2620,
+          "length": 871,
+          "preview": "function updateStatus(icon, text, duration = 4000) {\n                const statusIndicator = document.getElementById('statusIndicator');\n             "
+        },
+        {
+          "file": "script.js",
+          "line": 4550,
+          "length": 484,
+          "preview": "function updateStatus(icon, text, duration = 4000) {\n  const statusIndicator = document.getElementById('statusIndicator');\n  const statusIcon = status"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2620 <-> script.js:4550",
+          "similarity": 25,
+          "code1Length": 871,
+          "code2Length": 484
+        }
+      ],
+      "avgSimilarity": 25,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 25% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "showSpeechBubble",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2641,
+          "length": 638,
+          "preview": "function showSpeechBubble(aiResponse) {\n                // Check if chat bubble is enabled in display options\n                if (!document.getElement"
+        },
+        {
+          "file": "script.js",
+          "line": 2586,
+          "length": 452,
+          "preview": "function showSpeechBubble(aiResponse) {\n  // Check if chat bubble is enabled in display options\n  if (!document.getElementById('showChatBubble').check"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2641 <-> script.js:2586",
+          "similarity": 27,
+          "code1Length": 638,
+          "code2Length": 452
+        }
+      ],
+      "avgSimilarity": 27,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 27% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "toggleChatVisibility",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2752,
+          "length": 993,
+          "preview": "function toggleChatVisibility() {\n                const floatingChat = document.getElementById('floatingChat');\n                const toggleBtn = docu"
+        },
+        {
+          "file": "script.js",
+          "line": 2523,
+          "length": 1056,
+          "preview": "function toggleChatVisibility() {\n  const floatingChat = document.getElementById('floatingChat');\n  const toggleBtn = document.querySelector('.header-"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2752 <-> script.js:2523",
+          "similarity": 73,
+          "code1Length": 993,
+          "code2Length": 1056
+        }
+      ],
+      "avgSimilarity": 73,
+      "recommendation": {
+        "action": "REVIEW",
+        "priority": "MEDIUM",
+        "reason": "73% similar - May have intentional differences",
+        "details": "Review to determine if differences are intentional or can be unified"
+      }
+    },
+    {
+      "functionName": "updateSpeechHotkey",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2809,
+          "length": 381,
+          "preview": "function updateSpeechHotkey() {\n                const hotkeySelect = document.getElementById('speechHotkey');\n                if (hotkeySelect) {\n    "
+        },
+        {
+          "file": "script.js",
+          "line": 4580,
+          "length": 165,
+          "preview": "function updateSpeechHotkey() {\n  const hotkey = document.getElementById('speechHotkey').value;\n  saveUISettings();\n  console.log('Speech hotkey set t"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2809 <-> script.js:4580",
+          "similarity": 20,
+          "code1Length": 381,
+          "code2Length": 165
+        }
+      ],
+      "avgSimilarity": 20,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 20% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "toggleTwitchConnection",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2871,
+          "length": 216,
+          "preview": "function toggleTwitchConnection() {\n                if (isTwitchConnected) {\n                    disconnectFromTwitch();\n                } else {\n    "
+        },
+        {
+          "file": "script.js",
+          "line": 4683,
+          "length": 707,
+          "preview": "function toggleTwitchConnection() {\n  const connectBtn = document.getElementById('twitchConnectBtn');\n  if (twitchClient && twitchClient.readyState() "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2871 <-> script.js:4683",
+          "similarity": 6,
+          "code1Length": 216,
+          "code2Length": 707
+        }
+      ],
+      "avgSimilarity": 6,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 6% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "connectToTwitch",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2879,
+          "length": 1859,
+          "preview": "function connectToTwitch() {\n                twitchChannel = document.getElementById('twitchChannel').value.trim();\n                if (!twitchChannel"
+        },
+        {
+          "file": "script.js",
+          "line": 4702,
+          "length": 802,
+          "preview": "function connectToTwitch(channel) {\n  twitchClient = new tmi.Client({\n    options: { debug: false },\n    channels: [channel]\n  });\n\n  twitchClient.on("
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:2879 <-> script.js:4702",
+          "similarity": 5,
+          "code1Length": 1859,
+          "code2Length": 802
+        }
+      ],
+      "avgSimilarity": 5,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 5% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateAccumulationProgress",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3048,
+          "length": 681,
+          "preview": "function updateAccumulationProgress() {\n                const count = accumulatedMessages.length;\n                const target = messageAccumulationTa"
+        },
+        {
+          "file": "script.js",
+          "line": 4838,
+          "length": 316,
+          "preview": "function updateAccumulationProgress() {\n  const count = messageQueue.length;\n  const target = messageAccumulationTarget;\n  const progress = (count / t"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3048 <-> script.js:4838",
+          "similarity": 14,
+          "code1Length": 681,
+          "code2Length": 316
+        }
+      ],
+      "avgSimilarity": 14,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 14% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "saveTwitchSettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3062,
+          "length": 566,
+          "preview": "function saveTwitchSettings() {\n                const settings = {\n                    channel: document.getElementById('twitchChannel').value,\n      "
+        },
+        {
+          "file": "script.js",
+          "line": 4754,
+          "length": 527,
+          "preview": "function saveTwitchSettings() {\n  const settings = {\n    channel: document.getElementById('twitchChannel').value,\n    messageAccumulation: document.ge"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3062 <-> script.js:4754",
+          "similarity": 82,
+          "code1Length": 566,
+          "code2Length": 527
+        }
+      ],
+      "avgSimilarity": 82,
+      "recommendation": {
+        "action": "REVIEW",
+        "priority": "MEDIUM",
+        "reason": "82% similar - May have intentional differences",
+        "details": "Review to determine if differences are intentional or can be unified"
+      }
+    },
+    {
+      "functionName": "loadTwitchSettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3074,
+          "length": 1214,
+          "preview": "function loadTwitchSettings() {\n                const saved = localStorage.getItem('twitch-settings');\n                if (saved) {\n                  "
+        },
+        {
+          "file": "script.js",
+          "line": 4767,
+          "length": 809,
+          "preview": "function loadTwitchSettings() {\n  const saved = localStorage.getItem('twitch-settings');\n  if (saved) {\n    const settings = JSON.parse(saved);\n    do"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3074 <-> script.js:4767",
+          "similarity": 23,
+          "code1Length": 1214,
+          "code2Length": 809
+        }
+      ],
+      "avgSimilarity": 23,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 23% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "toggleStreamMode",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3098,
+          "length": 500,
+          "preview": "function toggleStreamMode() {\n                const streamModeEnabled = document.getElementById('enableStreamMode').checked;\n                const twi"
+        },
+        {
+          "file": "script.js",
+          "line": 4787,
+          "length": 615,
+          "preview": "function toggleStreamMode() {\n  const streamModeEnabled = document.getElementById('enableStreamMode').checked;\n  const twitchOverlay = document.getEle"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3098 <-> script.js:4787",
+          "similarity": 32,
+          "code1Length": 500,
+          "code2Length": 615
+        }
+      ],
+      "avgSimilarity": 32,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 32% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "loadOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3395,
+          "length": 1608,
+          "preview": "async function loadOllamaModels() {\n                try {\n                    const url = `${ollamaConfig.url}/api/tags`;\n                    console."
+        },
+        {
+          "file": "index.html",
+          "line": 3395,
+          "length": 1608,
+          "preview": "async function loadOllamaModels() {\n                try {\n                    const url = `${ollamaConfig.url}/api/tags`;\n                    console."
+        },
+        {
+          "file": "script.js",
+          "line": 3968,
+          "length": 1117,
+          "preview": "async function loadOllamaModels() {\n  try {\n    const url = `${ollamaConfig.url}/api/tags`;\n    console.log('Fetching Ollama models from:', url);\n    "
+        },
+        {
+          "file": "script.js",
+          "line": 3968,
+          "length": 1117,
+          "preview": "async function loadOllamaModels() {\n  try {\n    const url = `${ollamaConfig.url}/api/tags`;\n    console.log('Fetching Ollama models from:', url);\n    "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3395 <-> index.html:3395",
+          "similarity": 100,
+          "code1Length": 1608,
+          "code2Length": 1608
+        },
+        {
+          "pair": "index.html:3395 <-> script.js:3968",
+          "similarity": 20,
+          "code1Length": 1608,
+          "code2Length": 1117
+        },
+        {
+          "pair": "index.html:3395 <-> script.js:3968",
+          "similarity": 20,
+          "code1Length": 1608,
+          "code2Length": 1117
+        },
+        {
+          "pair": "index.html:3395 <-> script.js:3968",
+          "similarity": 20,
+          "code1Length": 1608,
+          "code2Length": 1117
+        },
+        {
+          "pair": "index.html:3395 <-> script.js:3968",
+          "similarity": 20,
+          "code1Length": 1608,
+          "code2Length": 1117
+        },
+        {
+          "pair": "script.js:3968 <-> script.js:3968",
+          "similarity": 100,
+          "code1Length": 1117,
+          "code2Length": 1117
+        }
+      ],
+      "avgSimilarity": 46.666666666666664,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 46.666666666666664% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "refreshOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3461,
+          "length": 4233,
+          "preview": "async function refreshOllamaModels(force = false) {\n                const currentUrl = ollamaConfig.url || document.getElementById('ollamaUrl')?.value"
+        },
+        {
+          "file": "index.html",
+          "line": 3461,
+          "length": 4233,
+          "preview": "async function refreshOllamaModels(force = false) {\n                const currentUrl = ollamaConfig.url || document.getElementById('ollamaUrl')?.value"
+        },
+        {
+          "file": "script.js",
+          "line": 4340,
+          "length": 3220,
+          "preview": "async function refreshOllamaModels(force = false) {\n  const currentUrl = ollamaConfig.url || document.getElementById('ollamaUrl')?.value || 'http://lo"
+        },
+        {
+          "file": "script.js",
+          "line": 4340,
+          "length": 3220,
+          "preview": "async function refreshOllamaModels(force = false) {\n  const currentUrl = ollamaConfig.url || document.getElementById('ollamaUrl')?.value || 'http://lo"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3461 <-> index.html:3461",
+          "similarity": 100,
+          "code1Length": 4233,
+          "code2Length": 4233
+        },
+        {
+          "pair": "index.html:3461 <-> script.js:4340",
+          "similarity": 34,
+          "code1Length": 4233,
+          "code2Length": 3220
+        },
+        {
+          "pair": "index.html:3461 <-> script.js:4340",
+          "similarity": 34,
+          "code1Length": 4233,
+          "code2Length": 3220
+        },
+        {
+          "pair": "index.html:3461 <-> script.js:4340",
+          "similarity": 34,
+          "code1Length": 4233,
+          "code2Length": 3220
+        },
+        {
+          "pair": "index.html:3461 <-> script.js:4340",
+          "similarity": 34,
+          "code1Length": 4233,
+          "code2Length": 3220
+        },
+        {
+          "pair": "script.js:4340 <-> script.js:4340",
+          "similarity": 100,
+          "code1Length": 3220,
+          "code2Length": 3220
+        }
+      ],
+      "avgSimilarity": 56,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 56% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "saveOllamaModelSelection",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3563,
+          "length": 420,
+          "preview": "function saveOllamaModelSelection() {\n                const modelSelect = document.getElementById('ollamaModel');\n                if (modelSelect && m"
+        },
+        {
+          "file": "script.js",
+          "line": 4956,
+          "length": 276,
+          "preview": "function saveOllamaModelSelection() {\n    const selectedModel = document.getElementById('ollamaModel').value;\n    if (selectedModel) {\n        localSt"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3563 <-> script.js:4956",
+          "similarity": 22,
+          "code1Length": 420,
+          "code2Length": 276
+        }
+      ],
+      "avgSimilarity": 22,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 22% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateOllamaConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3572,
+          "length": 4506,
+          "preview": "function updateOllamaConfig() {\n                // Basic settings\n                if (document.getElementById('ollamaUrl')) ollamaConfig.url = documen"
+        },
+        {
+          "file": "script.js",
+          "line": 4189,
+          "length": 1875,
+          "preview": "function updateOllamaConfig() {\n  // Store old URL for comparison\n  const oldUrl = ollamaConfig.url;\n  \n  // Basic settings\n  ollamaConfig.url = docum"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3572 <-> script.js:4189",
+          "similarity": 3,
+          "code1Length": 4506,
+          "code2Length": 1875
+        }
+      ],
+      "avgSimilarity": 3,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 3% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateOpenAIConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3614,
+          "length": 1203,
+          "preview": "function updateOpenAIConfig() {\n                if (document.getElementById('openaiKey')) openaiConfig.key = document.getElementById('openaiKey').valu"
+        },
+        {
+          "file": "script.js",
+          "line": 4265,
+          "length": 1332,
+          "preview": "function updateOpenAIConfig() {\n  openaiConfig.key = document.getElementById('openaiKey').value;\n  openaiConfig.model = document.getElementById('opena"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3614 <-> script.js:4265",
+          "similarity": 6,
+          "code1Length": 1203,
+          "code2Length": 1332
+        }
+      ],
+      "avgSimilarity": 6,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 6% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateGeminiConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3626,
+          "length": 1010,
+          "preview": "function updateGeminiConfig() {\n                if (document.getElementById('geminiKey')) geminiConfig.key = document.getElementById('geminiKey').valu"
+        },
+        {
+          "file": "script.js",
+          "line": 4286,
+          "length": 1085,
+          "preview": "function updateGeminiConfig() {\n  geminiConfig.key = document.getElementById('geminiKey').value;\n  geminiConfig.model = document.getElementById('gemin"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3626 <-> script.js:4286",
+          "similarity": 6,
+          "code1Length": 1010,
+          "code2Length": 1085
+        }
+      ],
+      "avgSimilarity": 6,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 6% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "sendMessageToAI",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3908,
+          "length": 3757,
+          "preview": "async function sendMessageToAI(message) {\n                if (isProcessingAIRequest) {\n                    console.log('⏳ Already processing request, "
+        },
+        {
+          "file": "index.html",
+          "line": 3908,
+          "length": 3757,
+          "preview": "async function sendMessageToAI(message) {\n                if (isProcessingAIRequest) {\n                    console.log('⏳ Already processing request, "
+        },
+        {
+          "file": "script.js",
+          "line": 3238,
+          "length": 161,
+          "preview": "async function sendMessageToAI(message) {\n  // Use unified stream queue system instead of separate AI queue\n  addToQueue(message, 'local', userName, '"
+        },
+        {
+          "file": "script.js",
+          "line": 3238,
+          "length": 161,
+          "preview": "async function sendMessageToAI(message) {\n  // Use unified stream queue system instead of separate AI queue\n  addToQueue(message, 'local', userName, '"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3908 <-> index.html:3908",
+          "similarity": 100,
+          "code1Length": 3757,
+          "code2Length": 3757
+        },
+        {
+          "pair": "index.html:3908 <-> script.js:3238",
+          "similarity": 2,
+          "code1Length": 3757,
+          "code2Length": 161
+        },
+        {
+          "pair": "index.html:3908 <-> script.js:3238",
+          "similarity": 2,
+          "code1Length": 3757,
+          "code2Length": 161
+        },
+        {
+          "pair": "index.html:3908 <-> script.js:3238",
+          "similarity": 2,
+          "code1Length": 3757,
+          "code2Length": 161
+        },
+        {
+          "pair": "index.html:3908 <-> script.js:3238",
+          "similarity": 2,
+          "code1Length": 3757,
+          "code2Length": 161
+        },
+        {
+          "pair": "script.js:3238 <-> script.js:3238",
+          "similarity": 100,
+          "code1Length": 161,
+          "code2Length": 161
+        }
+      ],
+      "avgSimilarity": 34.666666666666664,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 34.666666666666664% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "loadUISettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3991,
+          "length": 3006,
+          "preview": "function loadUISettings() {\n                // Load LLM settings\n                const saved = localStorage.getItem('webwaifu-llm-settings');\n        "
+        },
+        {
+          "file": "script.js",
+          "line": 4039,
+          "length": 10067,
+          "preview": "function loadUISettings() {\n  const saved = localStorage.getItem('neurolink-vrm-settings');\n  if (saved) {\n    const settings = JSON.parse(saved);\n   "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:3991 <-> script.js:4039",
+          "similarity": 2,
+          "code1Length": 3006,
+          "code2Length": 10067
+        }
+      ],
+      "avgSimilarity": 2,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 2% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "saveUISettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4051,
+          "length": 600,
+          "preview": "function saveUISettings() {\n                const showChatBubble = document.getElementById('showChatBubble')?.checked;\n                const enableTTS"
+        },
+        {
+          "file": "script.js",
+          "line": 4639,
+          "length": 1581,
+          "preview": "function saveUISettings() {\n  const settings = {\n    azureConfig: azureConfig,\n    ollamaConfig: ollamaConfig,\n    openaiConfig: openaiConfig,\n    gem"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4051 <-> script.js:4639",
+          "similarity": 4,
+          "code1Length": 600,
+          "code2Length": 1581
+        }
+      ],
+      "avgSimilarity": 4,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 4% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "getOllamaResponse",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4157,
+          "length": 4775,
+          "preview": "async function getOllamaResponse(message) {\n                if (!ollamaConfig.model) {\n                    throw new Error('No Ollama model selected. "
+        },
+        {
+          "file": "index.html",
+          "line": 4157,
+          "length": 4775,
+          "preview": "async function getOllamaResponse(message) {\n                if (!ollamaConfig.model) {\n                    throw new Error('No Ollama model selected. "
+        },
+        {
+          "file": "script.js",
+          "line": 3274,
+          "length": 2562,
+          "preview": "async function getOllamaResponse(message) {\n  if (!ollamaConfig.model) {\n    throw new Error('No Ollama model selected. Please select one in Settings "
+        },
+        {
+          "file": "script.js",
+          "line": 3274,
+          "length": 2562,
+          "preview": "async function getOllamaResponse(message) {\n  if (!ollamaConfig.model) {\n    throw new Error('No Ollama model selected. Please select one in Settings "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4157 <-> index.html:4157",
+          "similarity": 100,
+          "code1Length": 4775,
+          "code2Length": 4775
+        },
+        {
+          "pair": "index.html:4157 <-> script.js:3274",
+          "similarity": 12,
+          "code1Length": 4775,
+          "code2Length": 2562
+        },
+        {
+          "pair": "index.html:4157 <-> script.js:3274",
+          "similarity": 12,
+          "code1Length": 4775,
+          "code2Length": 2562
+        },
+        {
+          "pair": "index.html:4157 <-> script.js:3274",
+          "similarity": 12,
+          "code1Length": 4775,
+          "code2Length": 2562
+        },
+        {
+          "pair": "index.html:4157 <-> script.js:3274",
+          "similarity": 12,
+          "code1Length": 4775,
+          "code2Length": 2562
+        },
+        {
+          "pair": "script.js:3274 <-> script.js:3274",
+          "similarity": 100,
+          "code1Length": 2562,
+          "code2Length": 2562
+        }
+      ],
+      "avgSimilarity": 41.333333333333336,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 41.333333333333336% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "getOpenAIResponse",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4342,
+          "length": 2426,
+          "preview": "async function getOpenAIResponse(message) {\n                if (!openaiConfig.key) {\n                    throw new Error('No OpenAI API key provided')"
+        },
+        {
+          "file": "index.html",
+          "line": 4342,
+          "length": 2426,
+          "preview": "async function getOpenAIResponse(message) {\n                if (!openaiConfig.key) {\n                    throw new Error('No OpenAI API key provided')"
+        },
+        {
+          "file": "script.js",
+          "line": 3364,
+          "length": 1729,
+          "preview": "async function getOpenAIResponse(message) {\n  if (!openaiConfig.key) {\n    throw new Error('No OpenAI API key provided');\n  }\n\n  const systemMessage ="
+        },
+        {
+          "file": "script.js",
+          "line": 3364,
+          "length": 1729,
+          "preview": "async function getOpenAIResponse(message) {\n  if (!openaiConfig.key) {\n    throw new Error('No OpenAI API key provided');\n  }\n\n  const systemMessage ="
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4342 <-> index.html:4342",
+          "similarity": 100,
+          "code1Length": 2426,
+          "code2Length": 2426
+        },
+        {
+          "pair": "index.html:4342 <-> script.js:3364",
+          "similarity": 17,
+          "code1Length": 2426,
+          "code2Length": 1729
+        },
+        {
+          "pair": "index.html:4342 <-> script.js:3364",
+          "similarity": 17,
+          "code1Length": 2426,
+          "code2Length": 1729
+        },
+        {
+          "pair": "index.html:4342 <-> script.js:3364",
+          "similarity": 17,
+          "code1Length": 2426,
+          "code2Length": 1729
+        },
+        {
+          "pair": "index.html:4342 <-> script.js:3364",
+          "similarity": 17,
+          "code1Length": 2426,
+          "code2Length": 1729
+        },
+        {
+          "pair": "script.js:3364 <-> script.js:3364",
+          "similarity": 100,
+          "code1Length": 1729,
+          "code2Length": 1729
+        }
+      ],
+      "avgSimilarity": 44.666666666666664,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 44.666666666666664% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "getGeminiResponse",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4502,
+          "length": 7154,
+          "preview": "async function getGeminiResponse(message) {\n                if (!geminiConfig.key) {\n                    throw new Error('No Gemini API key provided')"
+        },
+        {
+          "file": "index.html",
+          "line": 4502,
+          "length": 7154,
+          "preview": "async function getGeminiResponse(message) {\n                if (!geminiConfig.key) {\n                    throw new Error('No Gemini API key provided')"
+        },
+        {
+          "file": "script.js",
+          "line": 3423,
+          "length": 4587,
+          "preview": "async function getGeminiResponse(message) {\n  if (!geminiConfig.key) {\n    throw new Error('No Gemini API key provided');\n  }\n\n  const systemInstructi"
+        },
+        {
+          "file": "script.js",
+          "line": 3423,
+          "length": 4587,
+          "preview": "async function getGeminiResponse(message) {\n  if (!geminiConfig.key) {\n    throw new Error('No Gemini API key provided');\n  }\n\n  const systemInstructi"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4502 <-> index.html:4502",
+          "similarity": 100,
+          "code1Length": 7154,
+          "code2Length": 7154
+        },
+        {
+          "pair": "index.html:4502 <-> script.js:3423",
+          "similarity": 8,
+          "code1Length": 7154,
+          "code2Length": 4587
+        },
+        {
+          "pair": "index.html:4502 <-> script.js:3423",
+          "similarity": 8,
+          "code1Length": 7154,
+          "code2Length": 4587
+        },
+        {
+          "pair": "index.html:4502 <-> script.js:3423",
+          "similarity": 8,
+          "code1Length": 7154,
+          "code2Length": 4587
+        },
+        {
+          "pair": "index.html:4502 <-> script.js:3423",
+          "similarity": 8,
+          "code1Length": 7154,
+          "code2Length": 4587
+        },
+        {
+          "pair": "script.js:3423 <-> script.js:3423",
+          "similarity": 100,
+          "code1Length": 4587,
+          "code2Length": 4587
+        }
+      ],
+      "avgSimilarity": 38.666666666666664,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 38.666666666666664% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "clearTwitchChat",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4651,
+          "length": 754,
+          "preview": "function clearTwitchChat() {\n                const chatContent = document.getElementById('twitchChatContent');\n                const chatOverlay = doc"
+        },
+        {
+          "file": "script.js",
+          "line": 4747,
+          "length": 237,
+          "preview": "function clearTwitchChat() {\n  const chatContent = document.getElementById('twitchChatContent');\n  chatContent.innerHTML = '<div class=\"chat-placehold"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4651 <-> script.js:4747",
+          "similarity": 18,
+          "code1Length": 754,
+          "code2Length": 237
+        }
+      ],
+      "avgSimilarity": 18,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 18% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateUserName",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4669,
+          "length": 368,
+          "preview": "function updateUserName() {\n                const userNameInput = document.getElementById('userName');\n                if (userNameInput) {\n          "
+        },
+        {
+          "file": "script.js",
+          "line": 2312,
+          "length": 360,
+          "preview": "function updateUserName() {\n  const userNameInput = document.getElementById('userName');\n  if (userNameInput) {\n    userName = userNameInput.value || "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4669 <-> script.js:2312",
+          "similarity": 41,
+          "code1Length": 368,
+          "code2Length": 360
+        }
+      ],
+      "avgSimilarity": 41,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 41% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateCharacterName",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4678,
+          "length": 408,
+          "preview": "function updateCharacterName() {\n                const characterNameInput = document.getElementById('characterName');\n                if (characterNam"
+        },
+        {
+          "file": "script.js",
+          "line": 2323,
+          "length": 414,
+          "preview": "function updateCharacterName() {\n  const characterNameInput = document.getElementById('characterName');\n  if (characterNameInput) {\n    characterName "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4678 <-> script.js:2323",
+          "similarity": 51,
+          "code1Length": 408,
+          "code2Length": 414
+        }
+      ],
+      "avgSimilarity": 51,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 51% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateCharacterDescription",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4687,
+          "length": 414,
+          "preview": "function updateCharacterDescription() {\n                const characterDescInput = document.getElementById('characterDescription');\n                if"
+        },
+        {
+          "file": "script.js",
+          "line": 2334,
+          "length": 415,
+          "preview": "function updateCharacterDescription() {\n  const characterDescInput = document.getElementById('characterDescription');\n  if (characterDescInput) {\n    "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4687 <-> script.js:2334",
+          "similarity": 49,
+          "code1Length": 414,
+          "code2Length": 415
+        }
+      ],
+      "avgSimilarity": 49,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 49% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "generateCharacter",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4696,
+          "length": 101,
+          "preview": "function generateCharacter() {\n                console.log('generateCharacter called');\n            }"
+        },
+        {
+          "file": "script.js",
+          "line": 2390,
+          "length": 2724,
+          "preview": "async function generateCharacter() {\n  const promptInput = document.getElementById('characterPrompt');\n  const characterDescTextarea = document.getEle"
+        },
+        {
+          "file": "script.js",
+          "line": 2390,
+          "length": 2724,
+          "preview": "async function generateCharacter() {\n  const promptInput = document.getElementById('characterPrompt');\n  const characterDescTextarea = document.getEle"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4696 <-> script.js:2390",
+          "similarity": 0,
+          "code1Length": 101,
+          "code2Length": 2724
+        },
+        {
+          "pair": "index.html:4696 <-> script.js:2390",
+          "similarity": 0,
+          "code1Length": 101,
+          "code2Length": 2724
+        },
+        {
+          "pair": "script.js:2390 <-> script.js:2390",
+          "similarity": 100,
+          "code1Length": 2724,
+          "code2Length": 2724
+        }
+      ],
+      "avgSimilarity": 33.333333333333336,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 33.333333333333336% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "applyCharacterToChat",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4700,
+          "length": 107,
+          "preview": "function applyCharacterToChat() {\n                console.log('applyCharacterToChat called');\n            }"
+        },
+        {
+          "file": "script.js",
+          "line": 2344,
+          "length": 1646,
+          "preview": "function applyCharacterToChat() {\n  const personality = document.getElementById('characterDescription').value;\n  const name = document.getElementById("
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4700 <-> script.js:2344",
+          "similarity": 3,
+          "code1Length": 107,
+          "code2Length": 1646
+        }
+      ],
+      "avgSimilarity": 3,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 3% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "initializeWhisperWorker",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4712,
+          "length": 2484,
+          "preview": "function initializeWhisperWorker() {\n                if (whisperWorker) return;\n\n                try {\n                    whisperWorker = new Worker("
+        },
+        {
+          "file": "script.js",
+          "line": 2630,
+          "length": 1845,
+          "preview": "function initializeWhisperWorker() {\n  if (whisperWorker) return;\n  \n  try {\n    whisperWorker = new Worker('whisper-worker.js');\n    \n    // Handle w"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4712 <-> script.js:2630",
+          "similarity": 72,
+          "code1Length": 2484,
+          "code2Length": 1845
+        }
+      ],
+      "avgSimilarity": 72,
+      "recommendation": {
+        "action": "REVIEW",
+        "priority": "MEDIUM",
+        "reason": "72% similar - May have intentional differences",
+        "details": "Review to determine if differences are intentional or can be unified"
+      }
+    },
+    {
+      "functionName": "startListening",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4847,
+          "length": 1908,
+          "preview": "async function startListening() {\n                if (isTTSPlaying) {\n                    updateStatus('🔊', 'Please wait for AI to finish speaking');"
+        },
+        {
+          "file": "index.html",
+          "line": 4847,
+          "length": 1908,
+          "preview": "async function startListening() {\n                if (isTTSPlaying) {\n                    updateStatus('🔊', 'Please wait for AI to finish speaking');"
+        },
+        {
+          "file": "script.js",
+          "line": 2745,
+          "length": 1222,
+          "preview": "async function startListening() {\n  if (isTTSPlaying) {\n    updateStatus('🔊', 'Please wait for AI to finish speaking');\n    return;\n  }\n  if (isProce"
+        },
+        {
+          "file": "script.js",
+          "line": 2745,
+          "length": 1222,
+          "preview": "async function startListening() {\n  if (isTTSPlaying) {\n    updateStatus('🔊', 'Please wait for AI to finish speaking');\n    return;\n  }\n  if (isProce"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4847 <-> index.html:4847",
+          "similarity": 100,
+          "code1Length": 1908,
+          "code2Length": 1908
+        },
+        {
+          "pair": "index.html:4847 <-> script.js:2745",
+          "similarity": 32,
+          "code1Length": 1908,
+          "code2Length": 1222
+        },
+        {
+          "pair": "index.html:4847 <-> script.js:2745",
+          "similarity": 32,
+          "code1Length": 1908,
+          "code2Length": 1222
+        },
+        {
+          "pair": "index.html:4847 <-> script.js:2745",
+          "similarity": 32,
+          "code1Length": 1908,
+          "code2Length": 1222
+        },
+        {
+          "pair": "index.html:4847 <-> script.js:2745",
+          "similarity": 32,
+          "code1Length": 1908,
+          "code2Length": 1222
+        },
+        {
+          "pair": "script.js:2745 <-> script.js:2745",
+          "similarity": 100,
+          "code1Length": 1222,
+          "code2Length": 1222
+        }
+      ],
+      "avgSimilarity": 54.666666666666664,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 54.666666666666664% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "enumerateMicrophones",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4905,
+          "length": 1240,
+          "preview": "async function enumerateMicrophones() {\n                try {\n                    const devices = await navigator.mediaDevices.enumerateDevices();\n   "
+        },
+        {
+          "file": "index.html",
+          "line": 4905,
+          "length": 1240,
+          "preview": "async function enumerateMicrophones() {\n                try {\n                    const devices = await navigator.mediaDevices.enumerateDevices();\n   "
+        },
+        {
+          "file": "script.js",
+          "line": 2156,
+          "length": 932,
+          "preview": "async function enumerateMicrophones() {\n  try {\n    const devices = await navigator.mediaDevices.enumerateDevices();\n    const audioInputs = devices.f"
+        },
+        {
+          "file": "script.js",
+          "line": 2156,
+          "length": 932,
+          "preview": "async function enumerateMicrophones() {\n  try {\n    const devices = await navigator.mediaDevices.enumerateDevices();\n    const audioInputs = devices.f"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4905 <-> index.html:4905",
+          "similarity": 100,
+          "code1Length": 1240,
+          "code2Length": 1240
+        },
+        {
+          "pair": "index.html:4905 <-> script.js:2156",
+          "similarity": 33,
+          "code1Length": 1240,
+          "code2Length": 932
+        },
+        {
+          "pair": "index.html:4905 <-> script.js:2156",
+          "similarity": 33,
+          "code1Length": 1240,
+          "code2Length": 932
+        },
+        {
+          "pair": "index.html:4905 <-> script.js:2156",
+          "similarity": 33,
+          "code1Length": 1240,
+          "code2Length": 932
+        },
+        {
+          "pair": "index.html:4905 <-> script.js:2156",
+          "similarity": 33,
+          "code1Length": 1240,
+          "code2Length": 932
+        },
+        {
+          "pair": "script.js:2156 <-> script.js:2156",
+          "similarity": 100,
+          "code1Length": 932,
+          "code2Length": 932
+        }
+      ],
+      "avgSimilarity": 55.333333333333336,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 55.333333333333336% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "changeMicrophone",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4932,
+          "length": 552,
+          "preview": "function changeMicrophone() {\n                const micSelect = document.getElementById('microphoneSelect');\n                if (!micSelect) return;\n\n"
+        },
+        {
+          "file": "script.js",
+          "line": 2182,
+          "length": 542,
+          "preview": "function changeMicrophone() {\n  const micSelect = document.getElementById('microphoneSelect');\n  selectedMicrophoneId = micSelect.value;\n  \n  // Save "
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:4932 <-> script.js:2182",
+          "similarity": 25,
+          "code1Length": 552,
+          "code2Length": 542
+        }
+      ],
+      "avgSimilarity": 25,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 25% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "clearConversationHistory",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5025,
+          "length": 115,
+          "preview": "function clearConversationHistory() {\n                console.log('clearConversationHistory called');\n            }"
+        },
+        {
+          "file": "script.js",
+          "line": 1464,
+          "length": 1071,
+          "preview": "function clearConversationHistory() {\n  // Confirm with user first\n  if (confirm('Are you sure you want to clear the conversation history? This cannot"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5025 <-> script.js:1464",
+          "similarity": 6,
+          "code1Length": 115,
+          "code2Length": 1071
+        }
+      ],
+      "avgSimilarity": 6,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 6% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "toggleTransparentBackground",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5044,
+          "length": 906,
+          "preview": "function toggleTransparentBackground(enabled) {\n                if (enabled) {\n                    // Enable transparency\n                    scene.ba"
+        },
+        {
+          "file": "script.js",
+          "line": 850,
+          "length": 517,
+          "preview": "function toggleTransparentBackground(enabled){\n  if (!renderer) return;\n  if (enabled){\n    renderer.setClearColor(0x000000, 0);\n    const cc = docume"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5044 <-> script.js:850",
+          "similarity": 13,
+          "code1Length": 906,
+          "code2Length": 517
+        }
+      ],
+      "avgSimilarity": 13,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 13% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateEyeTracking",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5209,
+          "length": 372,
+          "preview": "function updateEyeTracking() {\n                if (!currentVrm || !currentVrm.lookAt || !lookAtTarget) return;\n\n                // lookAtTarget is a c"
+        },
+        {
+          "file": "script.js",
+          "line": 1370,
+          "length": 273,
+          "preview": "function updateEyeTracking() {\n  if (!currentVrm || !currentVrm.lookAt) return;\n  \n  // Simple camera following - like the original\n  lookAtTarget.pos"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5209 <-> script.js:1370",
+          "similarity": 33,
+          "code1Length": 372,
+          "code2Length": 273
+        }
+      ],
+      "avgSimilarity": 33,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 33% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "blink",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5247,
+          "length": 973,
+          "preview": "function blink() {\n                if (!currentVrm || !currentVrm.userData?.vrm?.expressionManager) return; // Safety check\n    \n                var b"
+        },
+        {
+          "file": "script.js",
+          "line": 1326,
+          "length": 716,
+          "preview": "function blink() {\n  if (!currentVrm) return; // Safety check\n  \n  var blinktimeout = Math.floor(Math.random() * 150) + 100; // Faster, more natural b"
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5247 <-> script.js:1326",
+          "similarity": 9,
+          "code1Length": 973,
+          "code2Length": 716
+        }
+      ],
+      "avgSimilarity": 9,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 9% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    },
+    {
+      "functionName": "updateBrowserVoice",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5718,
+          "length": 485,
+          "preview": "function updateBrowserVoice() {\n                const browserVoiceSelect = document.getElementById('browserVoice');\n                const selectedVoic"
+        },
+        {
+          "file": "script.js",
+          "line": 3942,
+          "length": 387,
+          "preview": "function updateBrowserVoice() {\n  const browserVoiceSelect = document.getElementById('browserVoice');\n  const selectedVoiceName = browserVoiceSelect?."
+        }
+      ],
+      "comparisons": [
+        {
+          "pair": "index.html:5718 <-> script.js:3942",
+          "similarity": 48,
+          "code1Length": 485,
+          "code2Length": 387
+        }
+      ],
+      "avgSimilarity": 48,
+      "recommendation": {
+        "action": "KEEP_SEPARATE",
+        "priority": "LOW",
+        "reason": "Only 48% similar - Different implementations",
+        "details": "These appear to be different implementations, possibly for different contexts"
+      }
+    }
+  ],
+  "recommendations": [
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 1% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 5% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 39% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 14% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 30% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 10% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 4% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 4% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 5% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 9% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 18% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 40% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 10% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 11% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 35.333333333333336% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 4% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 4% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 5% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 5% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 37.333333333333336% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 29% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 5% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 57% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 25% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 27% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "REVIEW",
+      "priority": "MEDIUM",
+      "reason": "73% similar - May have intentional differences",
+      "details": "Review to determine if differences are intentional or can be unified"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 20% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 6% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 5% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 14% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "REVIEW",
+      "priority": "MEDIUM",
+      "reason": "82% similar - May have intentional differences",
+      "details": "Review to determine if differences are intentional or can be unified"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 23% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 32% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 46.666666666666664% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 56% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 22% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 3% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 6% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 6% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 34.666666666666664% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 2% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 4% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 41.333333333333336% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 44.666666666666664% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 38.666666666666664% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 18% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 41% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 51% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 49% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 33.333333333333336% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 3% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "REVIEW",
+      "priority": "MEDIUM",
+      "reason": "72% similar - May have intentional differences",
+      "details": "Review to determine if differences are intentional or can be unified"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 54.666666666666664% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 55.333333333333336% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 25% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 6% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 13% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 33% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 9% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Remove from script.js, keep in index.html inline script",
+      "details": "These are essentially identical. The inline script in index.html is what's being used."
+    },
+    {
+      "action": "KEEP_SEPARATE",
+      "priority": "LOW",
+      "reason": "Only 48% similar - Different implementations",
+      "details": "These appear to be different implementations, possibly for different contexts"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    },
+    {
+      "action": "MERGE",
+      "priority": "HIGH",
+      "reason": "100% identical - Consolidate to single implementation",
+      "details": "Nearly identical implementations found in multiple locations"
+    }
+  ],
+  "stats": {
+    "totalDuplicates": 109,
+    "trueDuplicates": 49,
+    "functionallyDifferent": 60,
+    "canMerge": 49,
+    "mustKeepSeparate": 57
+  }
+}

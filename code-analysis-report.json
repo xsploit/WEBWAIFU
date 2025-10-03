@@ -1,0 +1,7134 @@
+{
+  "duplicateFunctions": [
+    {
+      "name": "animate",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1116,
+          "bodyLength": 1122
+        },
+        {
+          "file": "script.js",
+          "line": 633,
+          "bodyLength": 282
+        }
+      ]
+    },
+    {
+      "name": "loadDefaultVRM",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1209,
+          "bodyLength": 416
+        },
+        {
+          "file": "index.html",
+          "line": 1209,
+          "bodyLength": 416
+        }
+      ]
+    },
+    {
+      "name": "resetVRMPosition",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1237,
+          "bodyLength": 981
+        },
+        {
+          "file": "script.js",
+          "line": 1971,
+          "bodyLength": 723
+        }
+      ]
+    },
+    {
+      "name": "updateVRMPosition",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1257,
+          "bodyLength": 1350
+        },
+        {
+          "file": "script.js",
+          "line": 1924,
+          "bodyLength": 595
+        }
+      ]
+    },
+    {
+      "name": "applyVRMPosition",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1277,
+          "bodyLength": 418
+        },
+        {
+          "file": "script.js",
+          "line": 1956,
+          "bodyLength": 433
+        }
+      ]
+    },
+    {
+      "name": "saveVRMConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1290,
+          "bodyLength": 99
+        },
+        {
+          "file": "script.js",
+          "line": 1992,
+          "bodyLength": 77
+        }
+      ]
+    },
+    {
+      "name": "loadVRMConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1298,
+          "bodyLength": 1007
+        },
+        {
+          "file": "script.js",
+          "line": 2000,
+          "bodyLength": 861
+        }
+      ]
+    },
+    {
+      "name": "loadVRMFromFile",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1334,
+          "bodyLength": 377
+        },
+        {
+          "file": "index.html",
+          "line": 1334,
+          "bodyLength": 377
+        }
+      ]
+    },
+    {
+      "name": "loadRoom",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1368,
+          "bodyLength": 333
+        },
+        {
+          "file": "script.js",
+          "line": 793,
+          "bodyLength": 429
+        }
+      ]
+    },
+    {
+      "name": "createFloorTexture",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1369,
+          "bodyLength": 357
+        },
+        {
+          "file": "script.js",
+          "line": 742,
+          "bodyLength": 385
+        }
+      ]
+    },
+    {
+      "name": "loadDemoRoom",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1370,
+          "bodyLength": 233
+        },
+        {
+          "file": "script.js",
+          "line": 757,
+          "bodyLength": 259
+        }
+      ]
+    },
+    {
+      "name": "loadFloorTexture",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1371,
+          "bodyLength": 403
+        },
+        {
+          "file": "script.js",
+          "line": 771,
+          "bodyLength": 435
+        }
+      ]
+    },
+    {
+      "name": "clearFloorTexture",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1372,
+          "bodyLength": 141
+        },
+        {
+          "file": "script.js",
+          "line": 786,
+          "bodyLength": 157
+        }
+      ]
+    },
+    {
+      "name": "resetCamera",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1373,
+          "bodyLength": 87
+        },
+        {
+          "file": "script.js",
+          "line": 806,
+          "bodyLength": 84
+        }
+      ]
+    },
+    {
+      "name": "loadVRMA",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1384,
+          "bodyLength": 154
+        },
+        {
+          "file": "index.html",
+          "line": 1384,
+          "bodyLength": 154
+        }
+      ]
+    },
+    {
+      "name": "loadFBX",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1444,
+          "bodyLength": 154
+        },
+        {
+          "file": "index.html",
+          "line": 1444,
+          "bodyLength": 154
+        }
+      ]
+    },
+    {
+      "name": "loadDefaultAnimations",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1580,
+          "bodyLength": 492
+        },
+        {
+          "file": "index.html",
+          "line": 1580,
+          "bodyLength": 492
+        }
+      ]
+    },
+    {
+      "name": "startTalkingAnimation",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1671,
+          "bodyLength": 353
+        },
+        {
+          "file": "script.js",
+          "line": 411,
+          "bodyLength": 175
+        }
+      ]
+    },
+    {
+      "name": "stopTalkingAnimation",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1691,
+          "bodyLength": 344
+        },
+        {
+          "file": "script.js",
+          "line": 419,
+          "bodyLength": 138
+        }
+      ]
+    },
+    {
+      "name": "speakTextWithAzure",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1792,
+          "bodyLength": 220
+        },
+        {
+          "file": "index.html",
+          "line": 1792,
+          "bodyLength": 220
+        }
+      ]
+    },
+    {
+      "name": "speakTextWithSDK",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1816,
+          "bodyLength": 123
+        },
+        {
+          "file": "index.html",
+          "line": 1816,
+          "bodyLength": 123
+        },
+        {
+          "file": "script.js",
+          "line": 3024,
+          "bodyLength": 199
+        },
+        {
+          "file": "script.js",
+          "line": 3024,
+          "bodyLength": 199
+        }
+      ]
+    },
+    {
+      "name": "speakWithAzureREST",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 1969,
+          "bodyLength": 510
+        },
+        {
+          "file": "index.html",
+          "line": 1969,
+          "bodyLength": 510
+        }
+      ]
+    },
+    {
+      "name": "synthesizeWithAzure",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2037,
+          "bodyLength": 23
+        },
+        {
+          "file": "index.html",
+          "line": 2037,
+          "bodyLength": 23
+        },
+        {
+          "file": "script.js",
+          "line": 3723,
+          "bodyLength": 63
+        },
+        {
+          "file": "script.js",
+          "line": 3723,
+          "bodyLength": 63
+        }
+      ]
+    },
+    {
+      "name": "processVisemeQueue",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2131,
+          "bodyLength": 226
+        },
+        {
+          "file": "script.js",
+          "line": 3104,
+          "bodyLength": 552
+        }
+      ]
+    },
+    {
+      "name": "applyVisemeToVRM",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2177,
+          "bodyLength": 359
+        },
+        {
+          "file": "script.js",
+          "line": 3128,
+          "bodyLength": 2639
+        }
+      ]
+    },
+    {
+      "name": "updateMouthMovement",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2310,
+          "bodyLength": 1435
+        },
+        {
+          "file": "script.js",
+          "line": 584,
+          "bodyLength": 793
+        }
+      ]
+    },
+    {
+      "name": "updateVRMMotionSettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2428,
+          "bodyLength": 481
+        },
+        {
+          "file": "script.js",
+          "line": 1417,
+          "bodyLength": 536
+        }
+      ]
+    },
+    {
+      "name": "speakWithBrowserTTS",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2499,
+          "bodyLength": 667
+        },
+        {
+          "file": "index.html",
+          "line": 2499,
+          "bodyLength": 667
+        },
+        {
+          "file": "script.js",
+          "line": 3630,
+          "bodyLength": 124
+        },
+        {
+          "file": "script.js",
+          "line": 3630,
+          "bodyLength": 124
+        }
+      ]
+    },
+    {
+      "name": "setupTTSAudioProcessing",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2528,
+          "bodyLength": 119
+        },
+        {
+          "file": "script.js",
+          "line": 44,
+          "bodyLength": 103
+        }
+      ]
+    },
+    {
+      "name": "processTTSAudio",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2545,
+          "bodyLength": 465
+        },
+        {
+          "file": "script.js",
+          "line": 59,
+          "bodyLength": 262
+        }
+      ]
+    },
+    {
+      "name": "updateButtonStates",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2601,
+          "bodyLength": 474
+        },
+        {
+          "file": "script.js",
+          "line": 4454,
+          "bodyLength": 360
+        }
+      ]
+    },
+    {
+      "name": "updateStatus",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2620,
+          "bodyLength": 191
+        },
+        {
+          "file": "script.js",
+          "line": 4550,
+          "bodyLength": 411
+        }
+      ]
+    },
+    {
+      "name": "showSpeechBubble",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2641,
+          "bodyLength": 156
+        },
+        {
+          "file": "script.js",
+          "line": 2586,
+          "bodyLength": 125
+        }
+      ]
+    },
+    {
+      "name": "hideSpeechBubble",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2656,
+          "bodyLength": 164
+        },
+        {
+          "file": "script.js",
+          "line": 2601,
+          "bodyLength": 134
+        }
+      ]
+    },
+    {
+      "name": "toggleSettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2714,
+          "bodyLength": 300
+        },
+        {
+          "file": "script.js",
+          "line": 4489,
+          "bodyLength": 275
+        }
+      ]
+    },
+    {
+      "name": "handleSettingsClickOutside",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2729,
+          "bodyLength": 387
+        },
+        {
+          "file": "script.js",
+          "line": 4507,
+          "bodyLength": 397
+        }
+      ]
+    },
+    {
+      "name": "togglePasswordVisibility",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2739,
+          "bodyLength": 232
+        },
+        {
+          "file": "script.js",
+          "line": 4519,
+          "bodyLength": 170
+        }
+      ]
+    },
+    {
+      "name": "toggleChatVisibility",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2752,
+          "bodyLength": 730
+        },
+        {
+          "file": "script.js",
+          "line": 2523,
+          "bodyLength": 787
+        }
+      ]
+    },
+    {
+      "name": "toggleDock",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2772,
+          "bodyLength": 160
+        },
+        {
+          "file": "script.js",
+          "line": 2571,
+          "bodyLength": 130
+        }
+      ]
+    },
+    {
+      "name": "toggleSpeechBubbleDock",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2779,
+          "bodyLength": 168
+        },
+        {
+          "file": "script.js",
+          "line": 2579,
+          "bodyLength": 138
+        }
+      ]
+    },
+    {
+      "name": "updateSpeechHotkey",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2809,
+          "bodyLength": 301
+        },
+        {
+          "file": "script.js",
+          "line": 4580,
+          "bodyLength": 129
+        }
+      ]
+    },
+    {
+      "name": "toggleTwitchConnection",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2871,
+          "bodyLength": 68
+        },
+        {
+          "file": "script.js",
+          "line": 4683,
+          "bodyLength": 330
+        }
+      ]
+    },
+    {
+      "name": "connectToTwitch",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 2879,
+          "bodyLength": 201
+        },
+        {
+          "file": "script.js",
+          "line": 4702,
+          "bodyLength": 59
+        }
+      ]
+    },
+    {
+      "name": "updateAccumulationProgress",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3048,
+          "bodyLength": 607
+        },
+        {
+          "file": "script.js",
+          "line": 4838,
+          "bodyLength": 268
+        }
+      ]
+    },
+    {
+      "name": "saveTwitchSettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3062,
+          "bodyLength": 271
+        },
+        {
+          "file": "script.js",
+          "line": 4754,
+          "bodyLength": 223
+        }
+      ]
+    },
+    {
+      "name": "loadTwitchSettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3074,
+          "bodyLength": 1112
+        },
+        {
+          "file": "script.js",
+          "line": 4767,
+          "bodyLength": 763
+        }
+      ]
+    },
+    {
+      "name": "toggleStreamMode",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3098,
+          "bodyLength": 282
+        },
+        {
+          "file": "script.js",
+          "line": 4787,
+          "bodyLength": 374
+        }
+      ]
+    },
+    {
+      "name": "createAPITimeoutController",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3224,
+          "bodyLength": 272
+        },
+        {
+          "file": "script.js",
+          "line": 32,
+          "bodyLength": 198
+        }
+      ]
+    },
+    {
+      "name": "loadOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3395,
+          "bodyLength": 57
+        },
+        {
+          "file": "index.html",
+          "line": 3395,
+          "bodyLength": 57
+        },
+        {
+          "file": "script.js",
+          "line": 3968,
+          "bodyLength": 41
+        },
+        {
+          "file": "script.js",
+          "line": 3968,
+          "bodyLength": 41
+        }
+      ]
+    },
+    {
+      "name": "initializeOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3434,
+          "bodyLength": 634
+        },
+        {
+          "file": "script.js",
+          "line": 4008,
+          "bodyLength": 482
+        }
+      ]
+    },
+    {
+      "name": "forceRefreshOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3455,
+          "bodyLength": 113
+        },
+        {
+          "file": "script.js",
+          "line": 4034,
+          "bodyLength": 99
+        }
+      ]
+    },
+    {
+      "name": "refreshOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3461,
+          "bodyLength": 349
+        },
+        {
+          "file": "index.html",
+          "line": 3461,
+          "bodyLength": 349
+        },
+        {
+          "file": "script.js",
+          "line": 4340,
+          "bodyLength": 275
+        },
+        {
+          "file": "script.js",
+          "line": 4340,
+          "bodyLength": 275
+        }
+      ]
+    },
+    {
+      "name": "debouncedRefreshOllamaModels",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3552,
+          "bodyLength": 89
+        },
+        {
+          "file": "script.js",
+          "line": 4438,
+          "bodyLength": 101
+        }
+      ]
+    },
+    {
+      "name": "saveOllamaModelSelection",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3563,
+          "bodyLength": 334
+        },
+        {
+          "file": "script.js",
+          "line": 4956,
+          "bodyLength": 226
+        }
+      ]
+    },
+    {
+      "name": "updateOllamaConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3572,
+          "bodyLength": 4444
+        },
+        {
+          "file": "script.js",
+          "line": 4189,
+          "bodyLength": 1835
+        }
+      ]
+    },
+    {
+      "name": "updateOpenAIConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3614,
+          "bodyLength": 1141
+        },
+        {
+          "file": "script.js",
+          "line": 4265,
+          "bodyLength": 1296
+        }
+      ]
+    },
+    {
+      "name": "updateGeminiConfig",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3626,
+          "bodyLength": 948
+        },
+        {
+          "file": "script.js",
+          "line": 4286,
+          "bodyLength": 1049
+        }
+      ]
+    },
+    {
+      "name": "sendChatMessage",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3752,
+          "bodyLength": 427
+        },
+        {
+          "file": "index.html",
+          "line": 3752,
+          "bodyLength": 427
+        }
+      ]
+    },
+    {
+      "name": "playAudioQueue",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3786,
+          "bodyLength": 425
+        },
+        {
+          "file": "index.html",
+          "line": 3786,
+          "bodyLength": 425
+        }
+      ]
+    },
+    {
+      "name": "synthesizeToAudioQueue",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3819,
+          "bodyLength": 163
+        },
+        {
+          "file": "index.html",
+          "line": 3819,
+          "bodyLength": 163
+        }
+      ]
+    },
+    {
+      "name": "processTTSQueue",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3882,
+          "bodyLength": 218
+        },
+        {
+          "file": "index.html",
+          "line": 3882,
+          "bodyLength": 218
+        }
+      ]
+    },
+    {
+      "name": "sendMessageToAI",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3908,
+          "bodyLength": 137
+        },
+        {
+          "file": "index.html",
+          "line": 3908,
+          "bodyLength": 137
+        },
+        {
+          "file": "script.js",
+          "line": 3238,
+          "bodyLength": 115
+        },
+        {
+          "file": "script.js",
+          "line": 3238,
+          "bodyLength": 115
+        }
+      ]
+    },
+    {
+      "name": "loadUISettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 3991,
+          "bodyLength": 917
+        },
+        {
+          "file": "script.js",
+          "line": 4039,
+          "bodyLength": 1144
+        }
+      ]
+    },
+    {
+      "name": "saveUISettings",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4051,
+          "bodyLength": 355
+        },
+        {
+          "file": "script.js",
+          "line": 4639,
+          "bodyLength": 379
+        }
+      ]
+    },
+    {
+      "name": "getOllamaResponseStreaming",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4073,
+          "bodyLength": 142
+        },
+        {
+          "file": "index.html",
+          "line": 4073,
+          "bodyLength": 142
+        }
+      ]
+    },
+    {
+      "name": "getOllamaResponse",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4157,
+          "bodyLength": 142
+        },
+        {
+          "file": "index.html",
+          "line": 4157,
+          "bodyLength": 142
+        },
+        {
+          "file": "script.js",
+          "line": 3274,
+          "bodyLength": 126
+        },
+        {
+          "file": "script.js",
+          "line": 3274,
+          "bodyLength": 126
+        }
+      ]
+    },
+    {
+      "name": "getOpenAIResponseStreaming",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4267,
+          "bodyLength": 91
+        },
+        {
+          "file": "index.html",
+          "line": 4267,
+          "bodyLength": 91
+        }
+      ]
+    },
+    {
+      "name": "getOpenAIResponse",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4342,
+          "bodyLength": 91
+        },
+        {
+          "file": "index.html",
+          "line": 4342,
+          "bodyLength": 91
+        },
+        {
+          "file": "script.js",
+          "line": 3364,
+          "bodyLength": 75
+        },
+        {
+          "file": "script.js",
+          "line": 3364,
+          "bodyLength": 75
+        }
+      ]
+    },
+    {
+      "name": "getGeminiResponseStreaming",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4402,
+          "bodyLength": 91
+        },
+        {
+          "file": "index.html",
+          "line": 4402,
+          "bodyLength": 91
+        }
+      ]
+    },
+    {
+      "name": "getGeminiResponse",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4502,
+          "bodyLength": 91
+        },
+        {
+          "file": "index.html",
+          "line": 4502,
+          "bodyLength": 91
+        },
+        {
+          "file": "script.js",
+          "line": 3423,
+          "bodyLength": 75
+        },
+        {
+          "file": "script.js",
+          "line": 3423,
+          "bodyLength": 75
+        }
+      ]
+    },
+    {
+      "name": "clearTwitchChat",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4651,
+          "bodyLength": 337
+        },
+        {
+          "file": "script.js",
+          "line": 4747,
+          "bodyLength": 204
+        }
+      ]
+    },
+    {
+      "name": "updateUserName",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4669,
+          "bodyLength": 292
+        },
+        {
+          "file": "script.js",
+          "line": 2312,
+          "bodyLength": 324
+        }
+      ]
+    },
+    {
+      "name": "updateCharacterName",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4678,
+          "bodyLength": 327
+        },
+        {
+          "file": "script.js",
+          "line": 2323,
+          "bodyLength": 373
+        }
+      ]
+    },
+    {
+      "name": "updateCharacterDescription",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4687,
+          "bodyLength": 326
+        },
+        {
+          "file": "script.js",
+          "line": 2334,
+          "bodyLength": 367
+        }
+      ]
+    },
+    {
+      "name": "generateCharacter",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4696,
+          "bodyLength": 40
+        },
+        {
+          "file": "script.js",
+          "line": 2390,
+          "bodyLength": 436
+        },
+        {
+          "file": "script.js",
+          "line": 2390,
+          "bodyLength": 436
+        }
+      ]
+    },
+    {
+      "name": "applyCharacterToChat",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4700,
+          "bodyLength": 43
+        },
+        {
+          "file": "script.js",
+          "line": 2344,
+          "bodyLength": 291
+        }
+      ]
+    },
+    {
+      "name": "initializeWhisperWorker",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4712,
+          "bodyLength": 242
+        },
+        {
+          "file": "script.js",
+          "line": 2630,
+          "bodyLength": 214
+        }
+      ]
+    },
+    {
+      "name": "transcribeAudioWithWorker",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4768,
+          "bodyLength": 402
+        },
+        {
+          "file": "script.js",
+          "line": 2693,
+          "bodyLength": 264
+        }
+      ]
+    },
+    {
+      "name": "decodeAndResample",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4785,
+          "bodyLength": 116
+        },
+        {
+          "file": "index.html",
+          "line": 4785,
+          "bodyLength": 116
+        },
+        {
+          "file": "script.js",
+          "line": 2857,
+          "bodyLength": 102
+        },
+        {
+          "file": "script.js",
+          "line": 2857,
+          "bodyLength": 102
+        }
+      ]
+    },
+    {
+      "name": "processAudio",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4793,
+          "bodyLength": 203
+        },
+        {
+          "file": "index.html",
+          "line": 4793,
+          "bodyLength": 203
+        },
+        {
+          "file": "script.js",
+          "line": 2798,
+          "bodyLength": 139
+        },
+        {
+          "file": "script.js",
+          "line": 2798,
+          "bodyLength": 139
+        }
+      ]
+    },
+    {
+      "name": "startListening",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4847,
+          "bodyLength": 128
+        },
+        {
+          "file": "index.html",
+          "line": 4847,
+          "bodyLength": 128
+        },
+        {
+          "file": "script.js",
+          "line": 2745,
+          "bodyLength": 96
+        },
+        {
+          "file": "script.js",
+          "line": 2745,
+          "bodyLength": 96
+        }
+      ]
+    },
+    {
+      "name": "stopListening",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4897,
+          "bodyLength": 176
+        },
+        {
+          "file": "script.js",
+          "line": 2790,
+          "bodyLength": 144
+        }
+      ]
+    },
+    {
+      "name": "enumerateMicrophones",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4905,
+          "bodyLength": 696
+        },
+        {
+          "file": "index.html",
+          "line": 4905,
+          "bodyLength": 696
+        },
+        {
+          "file": "script.js",
+          "line": 2156,
+          "bodyLength": 525
+        },
+        {
+          "file": "script.js",
+          "line": 2156,
+          "bodyLength": 525
+        }
+      ]
+    },
+    {
+      "name": "changeMicrophone",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 4932,
+          "bodyLength": 297
+        },
+        {
+          "file": "script.js",
+          "line": 2182,
+          "bodyLength": 240
+        }
+      ]
+    },
+    {
+      "name": "clearConversationHistory",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5025,
+          "bodyLength": 47
+        },
+        {
+          "file": "script.js",
+          "line": 1464,
+          "bodyLength": 430
+        }
+      ]
+    },
+    {
+      "name": "toggleTransparentBackground",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5044,
+          "bodyLength": 401
+        },
+        {
+          "file": "script.js",
+          "line": 850,
+          "bodyLength": 240
+        }
+      ]
+    },
+    {
+      "name": "loadSelectedModel",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5118,
+          "bodyLength": 450
+        },
+        {
+          "file": "index.html",
+          "line": 5118,
+          "bodyLength": 450
+        }
+      ]
+    },
+    {
+      "name": "updateEyeTracking",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5209,
+          "bodyLength": 311
+        },
+        {
+          "file": "script.js",
+          "line": 1370,
+          "bodyLength": 238
+        }
+      ]
+    },
+    {
+      "name": "blink",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5247,
+          "bodyLength": 868
+        },
+        {
+          "file": "script.js",
+          "line": 1326,
+          "bodyLength": 667
+        }
+      ]
+    },
+    {
+      "name": "addMessage",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5463,
+          "bodyLength": 357
+        },
+        {
+          "file": "script.js",
+          "line": 3200,
+          "bodyLength": 285
+        }
+      ]
+    },
+    {
+      "name": "speakAIResponse",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5499,
+          "bodyLength": 335
+        },
+        {
+          "file": "index.html",
+          "line": 5499,
+          "bodyLength": 335
+        },
+        {
+          "file": "script.js",
+          "line": 3560,
+          "bodyLength": 241
+        },
+        {
+          "file": "script.js",
+          "line": 3560,
+          "bodyLength": 241
+        }
+      ]
+    },
+    {
+      "name": "speakWithAzure",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5523,
+          "bodyLength": 538
+        },
+        {
+          "file": "index.html",
+          "line": 5523,
+          "bodyLength": 538
+        },
+        {
+          "file": "script.js",
+          "line": 3584,
+          "bodyLength": 356
+        },
+        {
+          "file": "script.js",
+          "line": 3584,
+          "bodyLength": 356
+        }
+      ]
+    },
+    {
+      "name": "createSSML",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5570,
+          "bodyLength": 72
+        },
+        {
+          "file": "script.js",
+          "line": 3702,
+          "bodyLength": 72
+        }
+      ]
+    },
+    {
+      "name": "getSelectedBrowserVoice",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5593,
+          "bodyLength": 312
+        },
+        {
+          "file": "script.js",
+          "line": 3767,
+          "bodyLength": 238
+        }
+      ]
+    },
+    {
+      "name": "getAutoSelectedFemaleVoice",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5606,
+          "bodyLength": 1486
+        },
+        {
+          "file": "script.js",
+          "line": 3780,
+          "bodyLength": 1106
+        }
+      ]
+    },
+    {
+      "name": "fetchAzureVoices",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5634,
+          "bodyLength": 321
+        },
+        {
+          "file": "index.html",
+          "line": 5634,
+          "bodyLength": 321
+        },
+        {
+          "file": "script.js",
+          "line": 3808,
+          "bodyLength": 247
+        },
+        {
+          "file": "script.js",
+          "line": 3808,
+          "bodyLength": 247
+        }
+      ]
+    },
+    {
+      "name": "populateBrowserVoices",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5679,
+          "bodyLength": 865
+        },
+        {
+          "file": "script.js",
+          "line": 3903,
+          "bodyLength": 631
+        }
+      ]
+    },
+    {
+      "name": "updateBrowserVoice",
+      "occurrences": [
+        {
+          "file": "index.html",
+          "line": 5718,
+          "bodyLength": 423
+        },
+        {
+          "file": "script.js",
+          "line": 3942,
+          "bodyLength": 267
+        }
+      ]
+    },
+    {
+      "name": "autoLoadDefaultAnimations",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 429,
+          "bodyLength": 271
+        },
+        {
+          "file": "script.js",
+          "line": 429,
+          "bodyLength": 271
+        }
+      ]
+    },
+    {
+      "name": "loadFBXLegacy",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 1011,
+          "bodyLength": 73
+        },
+        {
+          "file": "script.js",
+          "line": 1011,
+          "bodyLength": 73
+        }
+      ]
+    },
+    {
+      "name": "sendCharacterGenerationRequest",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 2461,
+          "bodyLength": 599
+        },
+        {
+          "file": "script.js",
+          "line": 2461,
+          "bodyLength": 599
+        }
+      ]
+    },
+    {
+      "name": "initializeTranscriber",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 2740,
+          "bodyLength": 26
+        },
+        {
+          "file": "script.js",
+          "line": 2740,
+          "bodyLength": 26
+        }
+      ]
+    },
+    {
+      "name": "sendMessageToAIInternal",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 3243,
+          "bodyLength": 528
+        },
+        {
+          "file": "script.js",
+          "line": 3243,
+          "bodyLength": 528
+        }
+      ]
+    },
+    {
+      "name": "refreshAzureVoices",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 3852,
+          "bodyLength": 191
+        },
+        {
+          "file": "script.js",
+          "line": 3852,
+          "bodyLength": 191
+        }
+      ]
+    },
+    {
+      "name": "enhancedSpeakAIResponse",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 4598,
+          "bodyLength": 198
+        },
+        {
+          "file": "script.js",
+          "line": 4598,
+          "bodyLength": 198
+        }
+      ]
+    },
+    {
+      "name": "speakWithRestOrBrowser",
+      "occurrences": [
+        {
+          "file": "script.js",
+          "line": 4623,
+          "bodyLength": 170
+        },
+        {
+          "file": "script.js",
+          "line": 4623,
+          "bodyLength": 170
+        }
+      ]
+    },
+    {
+      "name": "loadTransformers",
+      "occurrences": [
+        {
+          "file": "whisper-worker.js",
+          "line": 8,
+          "bodyLength": 147
+        },
+        {
+          "file": "whisper-worker.js",
+          "line": 8,
+          "bodyLength": 147
+        }
+      ]
+    },
+    {
+      "name": "initializeWhisperModel",
+      "occurrences": [
+        {
+          "file": "whisper-worker.js",
+          "line": 24,
+          "bodyLength": 392
+        },
+        {
+          "file": "whisper-worker.js",
+          "line": 24,
+          "bodyLength": 392
+        }
+      ]
+    },
+    {
+      "name": "processAudioTranscription",
+      "occurrences": [
+        {
+          "file": "whisper-worker.js",
+          "line": 68,
+          "bodyLength": 73
+        },
+        {
+          "file": "whisper-worker.js",
+          "line": 68,
+          "bodyLength": 73
+        }
+      ]
+    }
+  ],
+  "emptyFunctions": [
+    {
+      "name": "generateCharacter",
+      "file": "index.html",
+      "line": 4696,
+      "type": "stub",
+      "content": "console.log('generateCharacter called');"
+    },
+    {
+      "name": "applyCharacterToChat",
+      "file": "index.html",
+      "line": 4700,
+      "type": "stub",
+      "content": "console.log('applyCharacterToChat called');"
+    },
+    {
+      "name": "clearConversationHistory",
+      "file": "index.html",
+      "line": 5025,
+      "type": "stub",
+      "content": "console.log('clearConversationHistory called');"
+    },
+    {
+      "name": "forceRefreshOllamaModelsFromHTML",
+      "file": "index.html",
+      "line": 5030,
+      "type": "stub",
+      "content": "console.log('forceRefreshOllamaModelsFromHTML called');"
+    }
+  ],
+  "duplicateStrings": [
+    {
+      "content": ">\n            <div class=",
+      "count": 8,
+      "locations": [
+        "index.html:31",
+        "index.html:54",
+        "index.html:74",
+        "index.html:102",
+        "index.html:131",
+        "index.html:877",
+        "index.html:883",
+        "index.html:891"
+      ]
+    },
+    {
+      "content": ">\n                    <div class=",
+      "count": 11,
+      "locations": [
+        "index.html:33",
+        "index.html:139",
+        "index.html:171",
+        "index.html:213",
+        "index.html:243",
+        "index.html:322",
+        "index.html:676",
+        "index.html:714",
+        "index.html:764",
+        "index.html:815",
+        "index.html:847"
+      ]
+    },
+    {
+      "content": ">\n                    <button class=",
+      "count": 5,
+      "locations": [
+        "index.html:41",
+        "index.html:62",
+        "index.html:76",
+        "index.html:104",
+        "index.html:111"
+      ]
+    },
+    {
+      "content": ">\n                        <svg width=",
+      "count": 4,
+      "locations": [
+        "index.html:42",
+        "index.html:77",
+        "index.html:83",
+        "index.html:91"
+      ]
+    },
+    {
+      "content": ">\n                <div class=",
+      "count": 6,
+      "locations": [
+        "index.html:55",
+        "index.html:66",
+        "index.html:75",
+        "index.html:103",
+        "index.html:120",
+        "index.html:884"
+      ]
+    },
+    {
+      "content": ">\n                    <span class=",
+      "count": 2,
+      "locations": [
+        "index.html:58",
+        "index.html:107"
+      ]
+    },
+    {
+      "content": ">\n                            <path d=",
+      "count": 2,
+      "locations": [
+        "index.html:78",
+        "index.html:84"
+      ]
+    },
+    {
+      "content": ">\n                        <div class=",
+      "count": 10,
+      "locations": [
+        "index.html:123",
+        "index.html:144",
+        "index.html:176",
+        "index.html:218",
+        "index.html:248",
+        "index.html:681",
+        "index.html:719",
+        "index.html:769",
+        "index.html:820",
+        "index.html:852"
+      ]
+    },
+    {
+      "content": "toggleAccordionFromHTML(",
+      "count": 10,
+      "locations": [
+        "index.html:140",
+        "index.html:172",
+        "index.html:214",
+        "index.html:244",
+        "index.html:323",
+        "index.html:677",
+        "index.html:715",
+        "index.html:765",
+        "index.html:816",
+        "index.html:848"
+      ]
+    },
+    {
+      "content": ">▼</span>\n                    </div>\n                    <div class=",
+      "count": 8,
+      "locations": [
+        "index.html:142",
+        "index.html:174",
+        "index.html:216",
+        "index.html:246",
+        "index.html:325",
+        "index.html:679",
+        "index.html:717",
+        "index.html:767"
+      ]
+    },
+    {
+      "content": ">\n                            <span class=",
+      "count": 11,
+      "locations": [
+        "index.html:147",
+        "index.html:164",
+        "index.html:179",
+        "index.html:184",
+        "index.html:189",
+        "index.html:194",
+        "index.html:199",
+        "index.html:282",
+        "index.html:287",
+        "index.html:292",
+        "index.html:778"
+      ]
+    },
+    {
+      "content": ">0</span>\n                        </div>\n                        <div class=",
+      "count": 4,
+      "locations": [
+        "index.html:148",
+        "index.html:180",
+        "index.html:185",
+        "index.html:190"
+      ]
+    },
+    {
+      "content": "updateVRMControlsSetting()",
+      "count": 3,
+      "locations": [
+        "index.html:152",
+        "index.html:156",
+        "index.html:160"
+      ]
+    },
+    {
+      "content": ">\n                                <option value=",
+      "count": 2,
+      "locations": [
+        "index.html:221",
+        "index.html:772"
+      ]
+    },
+    {
+      "content": ">\n                            <input type=",
+      "count": 3,
+      "locations": [
+        "index.html:226",
+        "index.html:853",
+        "index.html:858"
+      ]
+    },
+    {
+      "content": ">\n                            <button class=",
+      "count": 4,
+      "locations": [
+        "index.html:227",
+        "index.html:792",
+        "index.html:803",
+        "index.html:868"
+      ]
+    },
+    {
+      "content": "document.getElementById(",
+      "count": 3,
+      "locations": [
+        "index.html:228",
+        "index.html:855",
+        "index.html:860"
+      ]
+    },
+    {
+      "content": ">\n                            <label>\n                                <input type=",
+      "count": 6,
+      "locations": [
+        "index.html:249",
+        "index.html:340",
+        "index.html:682",
+        "index.html:747",
+        "index.html:753",
+        "index.html:863"
+      ]
+    },
+    {
+      "content": ">\n                                <input type=",
+      "count": 2,
+      "locations": [
+        "index.html:257",
+        "index.html:732"
+      ]
+    },
+    {
+      "content": "togglePasswordVisibility(",
+      "count": 3,
+      "locations": [
+        "index.html:259",
+        "index.html:377",
+        "index.html:628"
+      ]
+    },
+    {
+      "content": ">1.0x</span>\n                        </div>\n                        <div class=",
+      "count": 2,
+      "locations": [
+        "index.html:293",
+        "index.html:779"
+      ]
+    },
+    {
+      "content": ">\n                            <div class=",
+      "count": 3,
+      "locations": [
+        "index.html:368",
+        "index.html:431",
+        "index.html:619"
+      ]
+    },
+    {
+      "content": ">\n                                <label>API Key</label>\n                                <div class=",
+      "count": 2,
+      "locations": [
+        "index.html:373",
+        "index.html:624"
+      ]
+    },
+    {
+      "content": ">\n                                    <input type=",
+      "count": 2,
+      "locations": [
+        "index.html:375",
+        "index.html:626"
+      ]
+    },
+    {
+      "content": "updateGeminiConfig()",
+      "count": 6,
+      "locations": [
+        "index.html:376",
+        "index.html:382",
+        "index.html:410",
+        "index.html:415",
+        "index.html:420",
+        "index.html:425"
+      ]
+    },
+    {
+      "content": ">👁️</button>\n                                </div>\n                            </div>\n            ",
+      "count": 2,
+      "locations": [
+        "index.html:377",
+        "index.html:628"
+      ]
+    },
+    {
+      "content": ">\n                                <label>Model</label>\n                                <select id=",
+      "count": 2,
+      "locations": [
+        "index.html:380",
+        "index.html:631"
+      ]
+    },
+    {
+      "content": ">\n                                        <option value=",
+      "count": 3,
+      "locations": [
+        "index.html:390",
+        "index.html:396",
+        "index.html:401"
+      ]
+    },
+    {
+      "content": ">\n                                <label>Temperature</label>\n                                <input ",
+      "count": 2,
+      "locations": [
+        "index.html:408",
+        "index.html:645"
+      ]
+    },
+    {
+      "content": ">\n                                <label>Top P</label>\n                                <input type=",
+      "count": 2,
+      "locations": [
+        "index.html:418",
+        "index.html:655"
+      ]
+    },
+    {
+      "content": "http://localhost:11434",
+      "count": 3,
+      "locations": [
+        "index.html:439",
+        "index.html:3462",
+        "script.js:4341"
+      ]
+    },
+    {
+      "content": "updateOllamaConfig()",
+      "count": 26,
+      "locations": [
+        "index.html:439",
+        "index.html:454",
+        "index.html:459",
+        "index.html:464",
+        "index.html:469",
+        "index.html:474",
+        "index.html:479",
+        "index.html:486",
+        "index.html:490",
+        "index.html:498",
+        "index.html:503",
+        "index.html:510",
+        "index.html:515",
+        "index.html:520",
+        "index.html:529",
+        "index.html:533",
+        "index.html:537",
+        "index.html:541",
+        "index.html:545",
+        "index.html:549",
+        "index.html:558",
+        "index.html:563",
+        "index.html:570",
+        "index.html:575",
+        "index.html:582",
+        "index.html:596"
+      ]
+    },
+    {
+      "content": ">\n                                <label>Max Tokens</label>\n                                <input t",
+      "count": 2,
+      "locations": [
+        "index.html:477",
+        "index.html:650"
+      ]
+    },
+    {
+      "content": ">\n                                        <input type=",
+      "count": 6,
+      "locations": [
+        "index.html:528",
+        "index.html:532",
+        "index.html:536",
+        "index.html:540",
+        "index.html:544",
+        "index.html:548"
+      ]
+    },
+    {
+      "content": "updateOpenAIConfig()",
+      "count": 7,
+      "locations": [
+        "index.html:627",
+        "index.html:633",
+        "index.html:647",
+        "index.html:652",
+        "index.html:657",
+        "index.html:662",
+        "index.html:667"
+      ]
+    },
+    {
+      "content": "saveTwitchSettings()",
+      "count": 2,
+      "locations": [
+        "index.html:690",
+        "index.html:694"
+      ]
+    },
+    {
+      "content": ">\n                            <p class=",
+      "count": 2,
+      "locations": [
+        "index.html:722",
+        "index.html:836"
+      ]
+    },
+    {
+      "content": "applyCharacterToChat()",
+      "count": 2,
+      "locations": [
+        "index.html:742",
+        "script.js:2375"
+      ]
+    },
+    {
+      "content": ">_</span>\n                    </div>\n                    <div class=",
+      "count": 2,
+      "locations": [
+        "index.html:818",
+        "index.html:850"
+      ]
+    },
+    {
+      "content": "display:flex; gap:8px;",
+      "count": 2,
+      "locations": [
+        "index.html:826",
+        "index.html:832"
+      ]
+    },
+    {
+      "content": "flex:1; background: linear-gradient(45deg, #4ecdc4, #44a6b5);",
+      "count": 2,
+      "locations": [
+        "index.html:827",
+        "index.html:833"
+      ]
+    },
+    {
+      "content": "flex:1; background: linear-gradient(45deg, #ff6b6b, #ee5a52);",
+      "count": 2,
+      "locations": [
+        "index.html:828",
+        "index.html:834"
+      ]
+    },
+    {
+      "content": "); if (roomFile) roomFile.addEventListener(",
+      "count": 2,
+      "locations": [
+        "index.html:1149",
+        "script.js:814"
+      ]
+    },
+    {
+      "content": "); if (demoBtn) demoBtn.addEventListener(",
+      "count": 2,
+      "locations": [
+        "index.html:1150",
+        "script.js:815"
+      ]
+    },
+    {
+      "content": "); if (floorTex) floorTex.addEventListener(",
+      "count": 2,
+      "locations": [
+        "index.html:1151",
+        "script.js:816"
+      ]
+    },
+    {
+      "content": ")) document.getElementById(",
+      "count": 153,
+      "locations": [
+        "index.html:1246",
+        "index.html:1247",
+        "index.html:1248",
+        "index.html:1249",
+        "index.html:1250",
+        "index.html:1266",
+        "index.html:1267",
+        "index.html:1268",
+        "index.html:1269",
+        "index.html:1270",
+        "index.html:1306",
+        "index.html:1307",
+        "index.html:1308",
+        "index.html:1309",
+        "index.html:1310",
+        "index.html:3324",
+        "index.html:3325",
+        "index.html:3326",
+        "index.html:3327",
+        "index.html:3328",
+        "index.html:3329",
+        "index.html:3330",
+        "index.html:3331",
+        "index.html:3332",
+        "index.html:3333",
+        "index.html:3334",
+        "index.html:3335",
+        "index.html:3336",
+        "index.html:3337",
+        "index.html:3338",
+        "index.html:3341",
+        "index.html:3342",
+        "index.html:3343",
+        "index.html:3344",
+        "index.html:3345",
+        "index.html:3346",
+        "index.html:3349",
+        "index.html:3350",
+        "index.html:3353",
+        "index.html:3354",
+        "index.html:3357",
+        "index.html:3358",
+        "index.html:3361",
+        "index.html:3362",
+        "index.html:3363",
+        "index.html:3364",
+        "index.html:3365",
+        "index.html:3366",
+        "index.html:3367",
+        "index.html:3370",
+        "index.html:3371",
+        "index.html:3372",
+        "index.html:3373",
+        "index.html:3374",
+        "index.html:3375",
+        "index.html:3378",
+        "index.html:3379",
+        "index.html:3380",
+        "index.html:3381",
+        "index.html:3382",
+        "index.html:3383",
+        "script.js:1870",
+        "script.js:1871",
+        "script.js:1872",
+        "script.js:1873",
+        "script.js:1874",
+        "script.js:1875",
+        "script.js:1876",
+        "script.js:1877",
+        "script.js:1878",
+        "script.js:1980",
+        "script.js:1981",
+        "script.js:1982",
+        "script.js:1983",
+        "script.js:1984",
+        "script.js:2008",
+        "script.js:2009",
+        "script.js:2010",
+        "script.js:2011",
+        "script.js:2012",
+        "script.js:2104",
+        "script.js:2105",
+        "script.js:2106",
+        "script.js:2107",
+        "script.js:2108",
+        "script.js:2109",
+        "script.js:2133",
+        "script.js:2134",
+        "script.js:2135",
+        "script.js:2136",
+        "script.js:2137",
+        "script.js:2138",
+        "script.js:4062",
+        "script.js:4082",
+        "script.js:4098",
+        "script.js:4099",
+        "script.js:4100",
+        "script.js:4101",
+        "script.js:4102",
+        "script.js:4103",
+        "script.js:4108",
+        "script.js:4109",
+        "script.js:4110",
+        "script.js:4111",
+        "script.js:4112",
+        "script.js:4113",
+        "script.js:4116",
+        "script.js:4119",
+        "script.js:4120",
+        "script.js:4121",
+        "script.js:4122",
+        "script.js:4123",
+        "script.js:4124",
+        "script.js:4125",
+        "script.js:4128",
+        "script.js:4129",
+        "script.js:4130",
+        "script.js:4131",
+        "script.js:4132",
+        "script.js:4133",
+        "script.js:4147",
+        "script.js:4148",
+        "script.js:4149",
+        "script.js:4150",
+        "script.js:4151",
+        "script.js:4152",
+        "script.js:4153",
+        "script.js:4154",
+        "script.js:4155",
+        "script.js:4156",
+        "script.js:4157",
+        "script.js:4158",
+        "script.js:4159",
+        "script.js:4160",
+        "script.js:4163",
+        "script.js:4164",
+        "script.js:4165",
+        "script.js:4166",
+        "script.js:4167",
+        "script.js:4168",
+        "script.js:4171",
+        "script.js:4172",
+        "script.js:4173",
+        "script.js:4231",
+        "script.js:4232",
+        "script.js:4233",
+        "script.js:4234",
+        "script.js:4235",
+        "script.js:4236",
+        "script.js:4237",
+        "script.js:4238",
+        "script.js:4242",
+        "script.js:4243"
+      ]
+    },
+    {
+      "content": ").textContent = vrmConfig.rotY + ",
+      "count": 2,
+      "locations": [
+        "index.html:1270",
+        "script.js:1946"
+      ]
+    },
+    {
+      "content": ");\n                    return;\n                }\n                try {\n                    updateLoa",
+      "count": 2,
+      "locations": [
+        "index.html:1388",
+        "index.html:1448"
+      ]
+    },
+    {
+      "content": ");\n                    } else {\n                        updateLoadingStatus(",
+      "count": 2,
+      "locations": [
+        "index.html:1431",
+        "index.html:1495"
+      ]
+    },
+    {
+      "content": ", error);\n                    updateLoadingStatus(",
+      "count": 3,
+      "locations": [
+        "index.html:1438",
+        "index.html:1501",
+        "index.html:5193"
+      ]
+    },
+    {
+      "content": ", 0);\n                                vrm.userData.vrm.expressionManager.setValue(",
+      "count": 4,
+      "locations": [
+        "index.html:1481",
+        "index.html:1482",
+        "index.html:1483",
+        "index.html:1484"
+      ]
+    },
+    {
+      "content": "application/octet-stream",
+      "count": 2,
+      "locations": [
+        "index.html:1588",
+        "index.html:1599"
+      ]
+    },
+    {
+      "content": "http://www.w3.org/2001/10/synthesis",
+      "count": 6,
+      "locations": [
+        "index.html:1785",
+        "index.html:1862",
+        "index.html:3836",
+        "index.html:5581",
+        "script.js:3041",
+        "script.js:3713"
+      ]
+    },
+    {
+      "content": "http://www.w3.org/2001/mstts",
+      "count": 3,
+      "locations": [
+        "index.html:1785",
+        "index.html:5581",
+        "script.js:3713"
+      ]
+    },
+    {
+      "content": "]/g, (char) => {\n                    const entities = { ",
+      "count": 3,
+      "locations": [
+        "index.html:1852",
+        "index.html:3831",
+        "index.html:5572"
+      ]
+    },
+    {
+      "content": "https://www.w3.org/2001/mstts",
+      "count": 3,
+      "locations": [
+        "index.html:1862",
+        "index.html:3836",
+        "script.js:3041"
+      ]
+    },
+    {
+      "content": ">\n                        <mstts:viseme type=",
+      "count": 2,
+      "locations": [
+        "index.html:1863",
+        "index.html:3837"
+      ]
+    },
+    {
+      "content": "/>\n                        <prosody rate=",
+      "count": 2,
+      "locations": [
+        "index.html:1864",
+        "index.html:3838"
+      ]
+    },
+    {
+      "content": ");\n                    console.log(",
+      "count": 2,
+      "locations": [
+        "index.html:1984",
+        "index.html:2191"
+      ]
+    },
+    {
+      "content": ", {\n                    method: ",
+      "count": 7,
+      "locations": [
+        "index.html:2040",
+        "index.html:4096",
+        "index.html:4228",
+        "index.html:4279",
+        "index.html:4358",
+        "index.html:4446",
+        "index.html:4552"
+      ]
+    },
+    {
+      "content": ",\n                    headers: {\n                        ",
+      "count": 6,
+      "locations": [
+        "index.html:2041",
+        "index.html:4229",
+        "index.html:4280",
+        "index.html:4359",
+        "index.html:4447",
+        "index.html:4553"
+      ]
+    },
+    {
+      "content": "application/ssml+xml",
+      "count": 2,
+      "locations": [
+        "index.html:2044",
+        "script.js:3731"
+      ]
+    },
+    {
+      "content": "X-Microsoft-OutputFormat",
+      "count": 2,
+      "locations": [
+        "index.html:2045",
+        "script.js:3732"
+      ]
+    },
+    {
+      "content": "audio-24khz-48kbitrate-mono-mp3",
+      "count": 2,
+      "locations": [
+        "index.html:2045",
+        "script.js:3732"
+      ]
+    },
+    {
+      "content": "X-Microsoft-OutputFormat-Detailed",
+      "count": 2,
+      "locations": [
+        "index.html:2046",
+        "script.js:3733"
+      ]
+    },
+    {
+      "content": ", expressionManager.getValue(",
+      "count": 5,
+      "locations": [
+        "index.html:2399",
+        "index.html:2400",
+        "index.html:2401",
+        "index.html:2402",
+        "index.html:2403"
+      ]
+    },
+    {
+      "content": ") * 0.7);\n                        expressionManager.setValue(",
+      "count": 4,
+      "locations": [
+        "index.html:2399",
+        "index.html:2400",
+        "index.html:2401",
+        "index.html:2402"
+      ]
+    },
+    {
+      "content": ");\n                    return;\n                }\n\n                console.log(",
+      "count": 2,
+      "locations": [
+        "index.html:2666",
+        "index.html:5127"
+      ]
+    },
+    {
+      "content": ");\n                    document.removeEventListener(",
+      "count": 2,
+      "locations": [
+        "index.html:2719",
+        "index.html:2734"
+      ]
+    },
+    {
+      "content": ";\n                    buttonElement.textContent = ",
+      "count": 2,
+      "locations": [
+        "index.html:2744",
+        "index.html:2747"
+      ]
+    },
+    {
+      "content": ");\n                    document.getElementById(",
+      "count": 2,
+      "locations": [
+        "index.html:2902",
+        "index.html:2914"
+      ]
+    },
+    {
+      "content": ",\n                    ",
+      "count": 3,
+      "locations": [
+        "index.html:2941",
+        "index.html:2942",
+        "index.html:2943"
+      ]
+    },
+    {
+      "content": ");\n                const chatOverlay = document.getElementById(",
+      "count": 3,
+      "locations": [
+        "index.html:2988",
+        "index.html:4652",
+        "index.html:5464"
+      ]
+    },
+    {
+      "content": ") {\n                    return;\n                }\n\n                const placeholder = chatContent.q",
+      "count": 2,
+      "locations": [
+        "index.html:2991",
+        "index.html:5468"
+      ]
+    },
+    {
+      "content": ");\n                messageEl.className = ",
+      "count": 2,
+      "locations": [
+        "index.html:2998",
+        "index.html:5477"
+      ]
+    },
+    {
+      "content": ">${timestamp}</div>\n                    <div class=",
+      "count": 2,
+      "locations": [
+        "index.html:3003",
+        "index.html:5485"
+      ]
+    },
+    {
+      "content": ">${message}</div>\n                ",
+      "count": 2,
+      "locations": [
+        "index.html:3005",
+        "index.html:5487"
+      ]
+    },
+    {
+      "content": ");\n                if (chatMessageCount) {\n                    chatMessageCount.textContent = ",
+      "count": 2,
+      "locations": [
+        "index.html:3016",
+        "index.html:4663"
+      ]
+    },
+    {
+      "content": ",\n                model: ",
+      "count": 3,
+      "locations": [
+        "index.html:3113",
+        "index.html:3154",
+        "index.html:3165"
+      ]
+    },
+    {
+      "content": ";\n                    console.log(",
+      "count": 4,
+      "locations": [
+        "index.html:3397",
+        "index.html:4822",
+        "index.html:5050",
+        "index.html:5057"
+      ]
+    },
+    {
+      "content": ",\n                        headers: {\n                            ",
+      "count": 2,
+      "locations": [
+        "index.html:3401",
+        "index.html:5647"
+      ]
+    },
+    {
+      "content": " && error.message.includes(",
+      "count": 2,
+      "locations": [
+        "index.html:3425",
+        "script.js:3999"
+      ]
+    },
+    {
+      "content": "Ollama models already loading, skipping...",
+      "count": 2,
+      "locations": [
+        "index.html:3466",
+        "script.js:4345"
+      ]
+    },
+    {
+      "content": "Loading Ollama models...",
+      "count": 2,
+      "locations": [
+        "index.html:3503",
+        "script.js:4384"
+      ]
+    },
+    {
+      "content": ">Select model...</option>",
+      "count": 2,
+      "locations": [
+        "index.html:3506",
+        "script.js:4387"
+      ]
+    },
+    {
+      "content": "Loaded ${models.length} models",
+      "count": 2,
+      "locations": [
+        "index.html:3528",
+        "script.js:4414"
+      ]
+    },
+    {
+      "content": "Successfully loaded ${models.length} Ollama models",
+      "count": 2,
+      "locations": [
+        "index.html:3529",
+        "script.js:4415"
+      ]
+    },
+    {
+      "content": ">No models found</option>",
+      "count": 2,
+      "locations": [
+        "index.html:3531",
+        "script.js:4417"
+      ]
+    },
+    {
+      "content": ">Error loading models</option>",
+      "count": 2,
+      "locations": [
+        "index.html:3538",
+        "script.js:4424"
+      ]
+    },
+    {
+      "content": "Error loading models - Check Ollama connection",
+      "count": 2,
+      "locations": [
+        "index.html:3539",
+        "script.js:4425"
+      ]
+    },
+    {
+      "content": ").value;\n                if (document.getElementById(",
+      "count": 9,
+      "locations": [
+        "index.html:3574",
+        "index.html:3575",
+        "index.html:3615",
+        "index.html:3616",
+        "index.html:3627",
+        "index.html:3628",
+        "index.html:3741",
+        "index.html:3742",
+        "index.html:3743"
+      ]
+    },
+    {
+      "content": ").value) || 0.7;\n                if (document.getElementById(",
+      "count": 3,
+      "locations": [
+        "index.html:3576",
+        "index.html:3617",
+        "index.html:3629"
+      ]
+    },
+    {
+      "content": ").value) || 0.9;\n                if (document.getElementById(",
+      "count": 2,
+      "locations": [
+        "index.html:3577",
+        "index.html:3744"
+      ]
+    },
+    {
+      "content": ").value) || 512;\n                if (document.getElementById(",
+      "count": 2,
+      "locations": [
+        "index.html:3581",
+        "index.html:3618"
+      ]
+    },
+    {
+      "content": ").value) || 0;\n                if (document.getElementById(",
+      "count": 5,
+      "locations": [
+        "index.html:3582",
+        "index.html:3583",
+        "index.html:3586",
+        "index.html:3620",
+        "index.html:3745"
+      ]
+    },
+    {
+      "content": ").checked;\n                if (document.getElementById(",
+      "count": 5,
+      "locations": [
+        "index.html:3591",
+        "index.html:3592",
+        "index.html:3593",
+        "index.html:3594",
+        "index.html:3595"
+      ]
+    },
+    {
+      "content": ")) {\n                            document.getElementById(",
+      "count": 4,
+      "locations": [
+        "index.html:3677",
+        "index.html:3681",
+        "index.html:3685",
+        "index.html:3690"
+      ]
+    },
+    {
+      "content": ";\n                    } else if (currentProvider === ",
+      "count": 2,
+      "locations": [
+        "index.html:3720",
+        "index.html:3722"
+      ]
+    },
+    {
+      "content": ", sentence);\n                                    ttsQueue.push(sentence);\n                          ",
+      "count": 2,
+      "locations": [
+        "index.html:3928",
+        "index.html:3935"
+      ]
+    },
+    {
+      "content": ");\n                }\n\n                const systemMessage = ollamaConfig.system_message || document.",
+      "count": 2,
+      "locations": [
+        "index.html:4075",
+        "index.html:4159"
+      ]
+    },
+    {
+      "content": "You are a helpful AI assistant.",
+      "count": 9,
+      "locations": [
+        "index.html:4078",
+        "index.html:4162",
+        "index.html:4272",
+        "index.html:4347",
+        "index.html:4407",
+        "index.html:4507",
+        "script.js:3279",
+        "script.js:3369",
+        "script.js:3428"
+      ]
+    },
+    {
+      "content": ", content: systemMessage },\n                    ...conversationHistory,\n                    { role: ",
+      "count": 4,
+      "locations": [
+        "index.html:4081",
+        "index.html:4165",
+        "index.html:4274",
+        "index.html:4350"
+      ]
+    },
+    {
+      "content": ");\n                }\n\n                const reader = response.body.getReader();\n                cons",
+      "count": 2,
+      "locations": [
+        "index.html:4108",
+        "index.html:4455"
+      ]
+    },
+    {
+      "content": ";\n                let fullResponse = ",
+      "count": 3,
+      "locations": [
+        "index.html:4113",
+        "index.html:4300",
+        "index.html:4460"
+      ]
+    },
+    {
+      "content": ";\n\n                while (true) {\n                    const {done, value} = await reader.read();\n   ",
+      "count": 3,
+      "locations": [
+        "index.html:4114",
+        "index.html:4301",
+        "index.html:4461"
+      ]
+    },
+    {
+      "content": ", content: message });\n                conversationHistory.push({ role: ",
+      "count": 3,
+      "locations": [
+        "index.html:4252",
+        "index.html:4387",
+        "index.html:4637"
+      ]
+    },
+    {
+      "content": ");\n                }\n\n                const systemMessage = openaiConfig.system_message || document.",
+      "count": 2,
+      "locations": [
+        "index.html:4269",
+        "index.html:4344"
+      ]
+    },
+    {
+      "content": ",\n                        ",
+      "count": 3,
+      "locations": [
+        "index.html:4282",
+        "index.html:4361",
+        "index.html:4555"
+      ]
+    },
+    {
+      "content": "Bearer ${openaiConfig.key}",
+      "count": 3,
+      "locations": [
+        "index.html:4283",
+        "index.html:4362",
+        "script.js:3384"
+      ]
+    },
+    {
+      "content": ");\n                    buffer = lines.pop();\n\n                    for (const line of lines) {\n      ",
+      "count": 2,
+      "locations": [
+        "index.html:4308",
+        "index.html:4468"
+      ]
+    },
+    {
+      "content": "OpenAI API error: ${response.status} - ${errorText}",
+      "count": 2,
+      "locations": [
+        "index.html:4380",
+        "script.js:3402"
+      ]
+    },
+    {
+      "content": ");\n                }\n\n                const systemInstruction = geminiConfig.system_instruction || d",
+      "count": 2,
+      "locations": [
+        "index.html:4404",
+        "index.html:4504"
+      ]
+    },
+    {
+      "content": ",\n                        parts: [{ text: systemInstruction }]\n                    });\n             ",
+      "count": 2,
+      "locations": [
+        "index.html:4415",
+        "index.html:4515"
+      ]
+    },
+    {
+      "content": ",\n                        parts: [{ text: ",
+      "count": 2,
+      "locations": [
+        "index.html:4419",
+        "index.html:4519"
+      ]
+    },
+    {
+      "content": ", data);\n                    throw new Error(",
+      "count": 2,
+      "locations": [
+        "index.html:4574",
+        "index.html:4584"
+      ]
+    },
+    {
+      "content": ");\n                }\n\n                console.log(",
+      "count": 2,
+      "locations": [
+        "index.html:4591",
+        "index.html:4941"
+      ]
+    },
+    {
+      "content": ") {\n                        aiResponse = ",
+      "count": 2,
+      "locations": [
+        "index.html:4619",
+        "index.html:4626"
+      ]
+    },
+    {
+      "content": ";\n                    localStorage.setItem(",
+      "count": 3,
+      "locations": [
+        "index.html:4672",
+        "index.html:4681",
+        "index.html:4690"
+      ]
+    },
+    {
+      "content": ", newName);\n                    console.log(",
+      "count": 2,
+      "locations": [
+        "index.html:4673",
+        "index.html:4682"
+      ]
+    },
+    {
+      "content": "Model loaded. Ready to record.",
+      "count": 2,
+      "locations": [
+        "index.html:4726",
+        "script.js:2645"
+      ]
+    },
+    {
+      "content": "Error loading model: ${error}",
+      "count": 2,
+      "locations": [
+        "index.html:4732",
+        "script.js:2651"
+      ]
+    },
+    {
+      "content": "Worker error occurred",
+      "count": 2,
+      "locations": [
+        "index.html:4755",
+        "script.js:2679"
+      ]
+    },
+    {
+      "content": "Failed to initialize speech recognition",
+      "count": 2,
+      "locations": [
+        "index.html:4763",
+        "script.js:2688"
+      ]
+    },
+    {
+      "content": ");\n\n                    console.log(",
+      "count": 2,
+      "locations": [
+        "index.html:4806",
+        "index.html:4810"
+      ]
+    },
+    {
+      "content": "Could not transcribe audio.",
+      "count": 2,
+      "locations": [
+        "index.html:4834",
+        "script.js:2843"
+      ]
+    },
+    {
+      "content": "Transcription failed: ${error.message}",
+      "count": 2,
+      "locations": [
+        "index.html:4837",
+        "script.js:2846"
+      ]
+    },
+    {
+      "content": "Transcription error:",
+      "count": 2,
+      "locations": [
+        "index.html:4838",
+        "script.js:2847"
+      ]
+    },
+    {
+      "content": "Please wait for AI to finish speaking",
+      "count": 2,
+      "locations": [
+        "index.html:4849",
+        "script.js:2747"
+      ]
+    },
+    {
+      "content": "AI is processing your request",
+      "count": 2,
+      "locations": [
+        "index.html:4853",
+        "script.js:2751"
+      ]
+    },
+    {
+      "content": "❌ Cannot start listening - Whisper not loaded",
+      "count": 2,
+      "locations": [
+        "index.html:4861",
+        "script.js:2759"
+      ]
+    },
+    {
+      "content": "Whisper not loaded yet",
+      "count": 2,
+      "locations": [
+        "index.html:4862",
+        "script.js:2761"
+      ]
+    },
+    {
+      "content": "🎤 Starting speech recognition with Whisper",
+      "count": 2,
+      "locations": [
+        "index.html:4866",
+        "script.js:2765"
+      ]
+    },
+    {
+      "content": "✅ Recording started - using Whisper for transcription",
+      "count": 2,
+      "locations": [
+        "index.html:4887",
+        "script.js:2780"
+      ]
+    },
+    {
+      "content": "Error accessing microphone: ${error.message}",
+      "count": 2,
+      "locations": [
+        "index.html:4891",
+        "script.js:2784"
+      ]
+    },
+    {
+      "content": "Microphone access error:",
+      "count": 2,
+      "locations": [
+        "index.html:4892",
+        "script.js:2785"
+      ]
+    },
+    {
+      "content": "Processing audio... Please wait.",
+      "count": 2,
+      "locations": [
+        "index.html:4900",
+        "script.js:2793"
+      ]
+    },
+    {
+      "content": ">Select microphone...</option>",
+      "count": 2,
+      "locations": [
+        "index.html:4913",
+        "script.js:2162"
+      ]
+    },
+    {
+      "content": ";\n                    element.style.top = ",
+      "count": 2,
+      "locations": [
+        "index.html:4955",
+        "index.html:4985"
+      ]
+    },
+    {
+      "content": "),\n                        ",
+      "count": 2,
+      "locations": [
+        "index.html:5012",
+        "index.html:5019"
+      ]
+    },
+    {
+      "content": ";\n                    document.body.style.background = ",
+      "count": 2,
+      "locations": [
+        "index.html:5049",
+        "index.html:5056"
+      ]
+    },
+    {
+      "content": ");\n                        updateLoadingStatus(",
+      "count": 2,
+      "locations": [
+        "index.html:5180",
+        "index.html:5183"
+      ]
+    },
+    {
+      "content": "input, textarea, select",
+      "count": 2,
+      "locations": [
+        "index.html:5297",
+        "index.html:5340"
+      ]
+    },
+    {
+      "content": ");\n                    }\n                }\n                if (key === ",
+      "count": 2,
+      "locations": [
+        "index.html:5319",
+        "index.html:5326"
+      ]
+    },
+    {
+      "content": " mstts:express-as style=",
+      "count": 2,
+      "locations": [
+        "index.html:5571",
+        "script.js:3703"
+      ]
+    },
+    {
+      "content": "}${pitch.toFixed(1)}st",
+      "count": 2,
+      "locations": [
+        "index.html:5583",
+        "script.js:3715"
+      ]
+    },
+    {
+      "content": ") ||\n                        voice.name.toLowerCase().includes(",
+      "count": 21,
+      "locations": [
+        "index.html:5612",
+        "index.html:5613",
+        "index.html:5614",
+        "index.html:5615",
+        "index.html:5616",
+        "index.html:5617",
+        "index.html:5618",
+        "index.html:5619",
+        "index.html:5620",
+        "index.html:5621",
+        "index.html:5622",
+        "index.html:5623",
+        "index.html:5699",
+        "index.html:5700",
+        "index.html:5701",
+        "index.html:5702",
+        "index.html:5703",
+        "index.html:5704",
+        "index.html:5705",
+        "index.html:5706",
+        "index.html:5707"
+      ]
+    },
+    {
+      "content": ") && voice.name.toLowerCase().includes(",
+      "count": 2,
+      "locations": [
+        "index.html:5627",
+        "script.js:3801"
+      ]
+    },
+    {
+      "content": ") && !voice.name.toLowerCase().includes(",
+      "count": 2,
+      "locations": [
+        "index.html:5627",
+        "script.js:3801"
+      ]
+    },
+    {
+      "content": "Fetching Azure voices...",
+      "count": 2,
+      "locations": [
+        "index.html:5644",
+        "script.js:3818"
+      ]
+    },
+    {
+      "content": "https://${azureRegion}.tts.speech.microsoft.com/cognitiveservices/voices/list",
+      "count": 2,
+      "locations": [
+        "index.html:5646",
+        "script.js:3820"
+      ]
+    },
+    {
+      "content": "Failed to fetch voices: ${response.status}",
+      "count": 2,
+      "locations": [
+        "index.html:5655",
+        "script.js:3829"
+      ]
+    },
+    {
+      "content": "✅ Found ${voices.length} Azure voices",
+      "count": 2,
+      "locations": [
+        "index.html:5660",
+        "script.js:3834"
+      ]
+    },
+    {
+      "content": "Found ${neuralVoices.length} Azure neural voices",
+      "count": 2,
+      "locations": [
+        "index.html:5668",
+        "script.js:3842"
+      ]
+    },
+    {
+      "content": "❌ Error fetching voices:",
+      "count": 2,
+      "locations": [
+        "index.html:5672",
+        "script.js:3846"
+      ]
+    },
+    {
+      "content": "Error fetching Azure voices",
+      "count": 2,
+      "locations": [
+        "index.html:5673",
+        "script.js:3847"
+      ]
+    },
+    {
+      "content": ">Auto-select female voice</option>",
+      "count": 2,
+      "locations": [
+        "index.html:5686",
+        "script.js:3910"
+      ]
+    },
+    {
+      "content": ", selectedVoiceName || ",
+      "count": 2,
+      "locations": [
+        "index.html:5726",
+        "script.js:3951"
+      ]
+    },
+    {
+      "content": ");\n    if (cc) cc.style.background = ",
+      "count": 2,
+      "locations": [
+        "script.js:854",
+        "script.js:859"
+      ]
+    },
+    {
+      "content": ";\n    document.body.style.background = ",
+      "count": 2,
+      "locations": [
+        "script.js:855",
+        "script.js:860"
+      ]
+    },
+    {
+      "content": "Load an animation first",
+      "count": 2,
+      "locations": [
+        "script.js:1050",
+        "script.js:1051"
+      ]
+    },
+    {
+      "content": ");\n  if (y) y.style.display = ",
+      "count": 2,
+      "locations": [
+        "script.js:1496",
+        "script.js:1503"
+      ]
+    },
+    {
+      "content": ", () => {\n      console.warn(",
+      "count": 2,
+      "locations": [
+        "script.js:1722",
+        "script.js:1726"
+      ]
+    },
+    {
+      "content": ");\n    });\n    \n    video.addEventListener(",
+      "count": 2,
+      "locations": [
+        "script.js:1723",
+        "script.js:1727"
+      ]
+    },
+    {
+      "content": ", error);\n    updateStatus(",
+      "count": 4,
+      "locations": [
+        "script.js:1789",
+        "script.js:2687",
+        "script.js:3017",
+        "script.js:3267"
+      ]
+    },
+    {
+      "content": ";\n  document.getElementById(",
+      "count": 3,
+      "locations": [
+        "script.js:1811",
+        "script.js:4317",
+        "script.js:4318"
+      ]
+    },
+    {
+      "content": ")) {\n    document.getElementById(",
+      "count": 13,
+      "locations": [
+        "script.js:1815",
+        "script.js:1818",
+        "script.js:1933",
+        "script.js:1936",
+        "script.js:1939",
+        "script.js:1942",
+        "script.js:1945",
+        "script.js:2035",
+        "script.js:2038",
+        "script.js:2041",
+        "script.js:2044",
+        "script.js:2047",
+        "script.js:2050"
+      ]
+    },
+    {
+      "content": ").value = 0;\n  if (document.getElementById(",
+      "count": 7,
+      "locations": [
+        "script.js:1980",
+        "script.js:1981",
+        "script.js:1982",
+        "script.js:2104",
+        "script.js:2105",
+        "script.js:2106",
+        "script.js:2107"
+      ]
+    },
+    {
+      "content": ");\n  }\n  \n  console.log(",
+      "count": 3,
+      "locations": [
+        "script.js:2190",
+        "script.js:3512",
+        "whisper-worker.js:70"
+      ]
+    },
+    {
+      "content": ";\n    localStorage.setItem(",
+      "count": 3,
+      "locations": [
+        "script.js:2315",
+        "script.js:2326",
+        "script.js:2337"
+      ]
+    },
+    {
+      "content": ");\n    }\n    \n  } catch (error) {\n    console.error(",
+      "count": 2,
+      "locations": [
+        "script.js:2438",
+        "script.js:4419"
+      ]
+    },
+    {
+      "content": ");\n  const toggleBtn = document.querySelector(",
+      "count": 2,
+      "locations": [
+        "script.js:2524",
+        "script.js:2553"
+      ]
+    },
+    {
+      "content": ";\n    const isHiddenByStreamMode = floatingChat.classList.contains(",
+      "count": 2,
+      "locations": [
+        "script.js:2529",
+        "script.js:2557"
+      ]
+    },
+    {
+      "content": ";\n        toggleBtn.title = ",
+      "count": 2,
+      "locations": [
+        "script.js:2538",
+        "script.js:2545"
+      ]
+    },
+    {
+      "content": ";\n      toggleBtn.title = ",
+      "count": 2,
+      "locations": [
+        "script.js:2562",
+        "script.js:2565"
+      ]
+    },
+    {
+      "content": "opacity: 0.7; color: #ccc",
+      "count": 2,
+      "locations": [
+        "script.js:2931",
+        "script.js:2981"
+      ]
+    },
+    {
+      "content": "}\n        <span style=",
+      "count": 2,
+      "locations": [
+        "script.js:2932",
+        "script.js:2982"
+      ]
+    },
+    {
+      "content": "\n    <speak version=",
+      "count": 2,
+      "locations": [
+        "script.js:3040",
+        "script.js:3712"
+      ]
+    },
+    {
+      "content": ">\n      <voice name=",
+      "count": 2,
+      "locations": [
+        "script.js:3041",
+        "script.js:3713"
+      ]
+    },
+    {
+      "content": ");\n  messageEl.className = ",
+      "count": 2,
+      "locations": [
+        "script.js:3214",
+        "script.js:4732"
+      ]
+    },
+    {
+      "content": ", content: systemMessage },\n    ...conversationHistory,\n    { role: ",
+      "count": 2,
+      "locations": [
+        "script.js:3282",
+        "script.js:3372"
+      ]
+    },
+    {
+      "content": ",\n    headers: {\n      ",
+      "count": 4,
+      "locations": [
+        "script.js:3327",
+        "script.js:3381",
+        "script.js:3474",
+        "script.js:3728"
+      ]
+    },
+    {
+      "content": ", content: message });\n  conversationHistory.push({ role: ",
+      "count": 3,
+      "locations": [
+        "script.js:3350",
+        "script.js:3409",
+        "script.js:3545"
+      ]
+    },
+    {
+      "content": ", data);\n    throw new Error(",
+      "count": 2,
+      "locations": [
+        "script.js:3495",
+        "script.js:3505"
+      ]
+    },
+    {
+      "content": ").checked) {\n    console.log(",
+      "count": 2,
+      "locations": [
+        "script.js:3562",
+        "script.js:4600"
+      ]
+    },
+    {
+      "content": ") ||\n      voice.name.toLowerCase().includes(",
+      "count": 12,
+      "locations": [
+        "script.js:3786",
+        "script.js:3787",
+        "script.js:3788",
+        "script.js:3789",
+        "script.js:3790",
+        "script.js:3791",
+        "script.js:3792",
+        "script.js:3793",
+        "script.js:3794",
+        "script.js:3795",
+        "script.js:3796",
+        "script.js:3797"
+      ]
+    },
+    {
+      "content": ",\n      headers: {\n        ",
+      "count": 2,
+      "locations": [
+        "script.js:3821",
+        "script.js:3975"
+      ]
+    },
+    {
+      "content": ") ||\n        voice.name.toLowerCase().includes(",
+      "count": 9,
+      "locations": [
+        "script.js:3923",
+        "script.js:3924",
+        "script.js:3925",
+        "script.js:3926",
+        "script.js:3927",
+        "script.js:3928",
+        "script.js:3929",
+        "script.js:3930",
+        "script.js:3931"
+      ]
+    },
+    {
+      "content": ") {\n    const modelSelect = document.getElementById(",
+      "count": 2,
+      "locations": [
+        "script.js:4010",
+        "script.js:4326"
+      ]
+    },
+    {
+      "content": ");\n    const hasModels = modelSelect && modelSelect.children.length > 1;\n    \n    if (!hasModels) {\n",
+      "count": 2,
+      "locations": [
+        "script.js:4011",
+        "script.js:4327"
+      ]
+    },
+    {
+      "content": ")) {\n          document.getElementById(",
+      "count": 2,
+      "locations": [
+        "script.js:4069",
+        "script.js:4075"
+      ]
+    },
+    {
+      "content": ";\n    if (document.getElementById(",
+      "count": 9,
+      "locations": [
+        "script.js:4108",
+        "script.js:4109",
+        "script.js:4110",
+        "script.js:4119",
+        "script.js:4120",
+        "script.js:4128",
+        "script.js:4129",
+        "script.js:4147",
+        "script.js:4148"
+      ]
+    },
+    {
+      "content": ") {\n            document.getElementById(",
+      "count": 3,
+      "locations": [
+        "script.js:4137",
+        "script.js:4139",
+        "script.js:4141"
+      ]
+    },
+    {
+      "content": ";\n        } else if (currentProvider === ",
+      "count": 2,
+      "locations": [
+        "script.js:4138",
+        "script.js:4140"
+      ]
+    },
+    {
+      "content": ").value;\n  \n  // Update range value displays\n  document.getElementById(",
+      "count": 2,
+      "locations": [
+        "script.js:4273",
+        "script.js:4293"
+      ]
+    },
+    {
+      "content": ").style.display = currentProvider === ",
+      "count": 3,
+      "locations": [
+        "script.js:4317",
+        "script.js:4318",
+        "script.js:4319"
+      ]
+    },
+    {
+      "content": ";\n    if (stopBtn) stopBtn.textContent = ",
+      "count": 2,
+      "locations": [
+        "script.js:4476",
+        "script.js:4479"
+      ]
+    },
+    {
+      "content": ";\n    buttonElement.textContent = ",
+      "count": 2,
+      "locations": [
+        "script.js:4524",
+        "script.js:4527"
+      ]
+    },
+    {
+      "content": ";\n    icon.textContent = ",
+      "count": 2,
+      "locations": [
+        "script.js:4539",
+        "script.js:4543"
+      ]
+    },
+    {
+      "content": ";\n    document.getElementById(",
+      "count": 3,
+      "locations": [
+        "script.js:4688",
+        "script.js:4697",
+        "script.js:4771"
+      ]
+    },
+    {
+      "content": "Connected to ${channel}",
+      "count": 2,
+      "locations": [
+        "script.js:4715",
+        "script.js:4716"
+      ]
+    },
+    {
+      "content": "), document.querySelector(",
+      "count": 2,
+      "locations": [
+        "script.js:4891",
+        "script.js:4892"
+      ]
+    },
+    {
+      "content": ", (e) => {\n  const hotkey = document.getElementById(",
+      "count": 2,
+      "locations": [
+        "script.js:4896",
+        "script.js:4903"
+      ]
+    },
+    {
+      "content": ").value;\n    localStorage.setItem(",
+      "count": 2,
+      "locations": [
+        "script.js:4912",
+        "script.js:4918"
+      ]
+    },
+    {
+      "content": ")).observe(document.getElementById(",
+      "count": 2,
+      "locations": [
+        "script.js:5002",
+        "script.js:5005"
+      ]
+    },
+    {
+      "content": "), { attributes: true, attributeFilter: [",
+      "count": 2,
+      "locations": [
+        "script.js:5002",
+        "script.js:5005"
+      ]
+    }
+  ],
+  "duplicateCodeBlocks": [
+    {
+      "content": "<div class=\"twitch-message-text\">${message}</div>\n                `;\n\n                chatContent.ap",
+      "count": 2,
+      "locations": [
+        "index.html:3005",
+        "index.html:5487"
+      ]
+    },
+    {
+      "content": "window.addEventListener( 'resize', onWindowResize, false );\n\nfunction onWindowResize(){",
+      "count": 2,
+      "locations": [
+        "script.js:1400",
+        "script.js:1401"
+      ]
+    },
+    {
+      "content": "// Handle viseme events\n  speechSynthesizer.visemeReceived = function (s, e) {\n    currentVisemeQueu",
+      "count": 2,
+      "locations": [
+        "script.js:3057",
+        "script.js:3058"
+      ]
+    },
+    {
+      "content": "// Only load Ollama models when switching TO Ollama (and not already loaded)\n  if (currentProvider =",
+      "count": 2,
+      "locations": [
+        "script.js:4324",
+        "script.js:4325"
+      ]
+    },
+    {
+      "content": "if (!ollamaConfig.model) {\n                    throw new Error('No Ollama model selected. Please sel",
+      "count": 2,
+      "locations": [
+        "index.html:4074",
+        "index.html:4158"
+      ]
+    },
+    {
+      "content": "// Filter for neural voices and sort by locale\n    const neuralVoices = voices\n      .filter(voice =",
+      "count": 2,
+      "locations": [
+        "script.js:3835",
+        "script.js:3836"
+      ]
+    },
+    {
+      "content": "if (!response.ok) {\n                    const errorText = await response.text();\n                   ",
+      "count": 2,
+      "locations": [
+        "index.html:2053",
+        "index.html:2054"
+      ]
+    },
+    {
+      "content": "const voweldamp = 53;\n    const vowelmin = 12;\n\n    let currentVolume = ttsInputVolume; // Default t",
+      "count": 2,
+      "locations": [
+        "script.js:591",
+        "script.js:592"
+      ]
+    },
+    {
+      "content": "const {done, value} = await reader.read();\n                    if (done) break;\n\n                   ",
+      "count": 3,
+      "locations": [
+        "index.html:4117",
+        "index.html:4304",
+        "index.html:4464"
+      ]
+    },
+    {
+      "content": "ollamaModelsLoadTimeout = setTimeout(() => {\n                    refreshOllamaModels(false);\n       ",
+      "count": 2,
+      "locations": [
+        "index.html:3556",
+        "index.html:3557"
+      ]
+    },
+    {
+      "content": "// AI Message Queue System\nfunction addToQueue(message, source, username, priority = 'normal') {\n  m",
+      "count": 2,
+      "locations": [
+        "script.js:4804",
+        "script.js:4805"
+      ]
+    },
+    {
+      "content": "onSentence(fullResponse.trim());\n                }\n\n                return fullResponse;\n           ",
+      "count": 3,
+      "locations": [
+        "index.html:4150",
+        "index.html:4335",
+        "index.html:4495"
+      ]
+    },
+    {
+      "content": "const sentence = sentenceMatch[0].trim();\n                                        if (sentence.lengt",
+      "count": 2,
+      "locations": [
+        "index.html:4320",
+        "index.html:4480"
+      ]
+    },
+    {
+      "content": "function scheduleFallbackSubtitles(text, speechRate = 1.0) {\n  if (!text || text.trim().length === 0",
+      "count": 2,
+      "locations": [
+        "script.js:2950",
+        "script.js:2951"
+      ]
+    },
+    {
+      "content": "if (!response.ok) {\n    const errorText = await response.text();\n    throw new Error(`Gemini API err",
+      "count": 2,
+      "locations": [
+        "script.js:3484",
+        "script.js:3485"
+      ]
+    },
+    {
+      "content": "loader.crossOrigin = 'anonymous';\nloader.load(\n\nurl,",
+      "count": 2,
+      "locations": [
+        "script.js:458",
+        "script.js:459"
+      ]
+    },
+    {
+      "content": "}\n\n                const systemMessage = ollamaConfig.system_message || document.getElementById('glo",
+      "count": 2,
+      "locations": [
+        "index.html:4076",
+        "index.html:4160"
+      ]
+    },
+    {
+      "content": "}\n                        }\n                    }\n                }",
+      "count": 3,
+      "locations": [
+        "index.html:4143",
+        "index.html:4329",
+        "index.html:4489"
+      ]
+    },
+    {
+      "content": "if (!vrm) {\n                    updateLoadingStatus('Please load a VRM avatar first');\n             ",
+      "count": 2,
+      "locations": [
+        "index.html:1386",
+        "index.html:1446"
+      ]
+    },
+    {
+      "content": "if (!Array.isArray(data.candidates) || data.candidates.length === 0) {\n                    console.e",
+      "count": 2,
+      "locations": [
+        "index.html:4577",
+        "index.html:4578"
+      ]
+    },
+    {
+      "content": "while (true) {\n                    const {done, value} = await reader.read();\n                    if",
+      "count": 3,
+      "locations": [
+        "index.html:4116",
+        "index.html:4303",
+        "index.html:4463"
+      ]
+    },
+    {
+      "content": "// Filter for English voices and sort them\n  const englishVoices = voices\n    .filter(voice => voice",
+      "count": 2,
+      "locations": [
+        "script.js:3911",
+        "script.js:3912"
+      ]
+    },
+    {
+      "content": "// Trigger springbone reaction like a \"poke\"\n    triggerVRMPoke(intersection.point, event.button);\n ",
+      "count": 2,
+      "locations": [
+        "script.js:232",
+        "script.js:233"
+      ]
+    },
+    {
+      "content": "const expressionEl = document.getElementById('expression');\n                if (expressionEl) {\n    ",
+      "count": 2,
+      "locations": [
+        "index.html:2490",
+        "index.html:2491"
+      ]
+    },
+    {
+      "content": "const messages = [\n                    { role: 'developer', content: systemMessage },\n              ",
+      "count": 2,
+      "locations": [
+        "index.html:4273",
+        "index.html:4349"
+      ]
+    },
+    {
+      "content": "// Setup audio processing for volume-based mouth movement\n                setupTTSAudioProcessing(cu",
+      "count": 2,
+      "locations": [
+        "index.html:2008",
+        "index.html:2009"
+      ]
+    },
+    {
+      "content": "// Add to conversation history\n                conversationHistory.push({ role: 'user', content: mes",
+      "count": 3,
+      "locations": [
+        "index.html:4251",
+        "index.html:4386",
+        "index.html:4636"
+      ]
+    },
+    {
+      "content": "console.log('Character generated successfully');\n    } else {\n      throw new Error('Empty response ",
+      "count": 2,
+      "locations": [
+        "script.js:2435",
+        "script.js:2436"
+      ]
+    },
+    {
+      "content": "// Update AI provider visibility\n    updateAIProvider();\n  }\n}",
+      "count": 2,
+      "locations": [
+        "script.js:4183",
+        "script.js:4184"
+      ]
+    },
+    {
+      "content": "try {\n                    console.log('🤖 Sending message to AI (streaming):', message);\n\n          ",
+      "count": 2,
+      "locations": [
+        "index.html:3917",
+        "index.html:3918"
+      ]
+    },
+    {
+      "content": "// Track mouse movement for springbone reactivity\nrenderer.domElement.addEventListener('mousemove', ",
+      "count": 2,
+      "locations": [
+        "script.js:258",
+        "script.js:259"
+      ]
+    },
+    {
+      "content": "if (!message) return;\n\n                console.log('💬 Sending message:', message);\n                ",
+      "count": 2,
+      "locations": [
+        "index.html:3755",
+        "index.html:3756"
+      ]
+    },
+    {
+      "content": "// Update localStorage to remove conversation history\n    const settings = JSON.parse(localStorage.g",
+      "count": 2,
+      "locations": [
+        "script.js:1470",
+        "script.js:1471"
+      ]
+    },
+    {
+      "content": "statusIcon.textContent = icon;\n  statusText.textContent = text;\n  \n  statusIndicator.classList.add('",
+      "count": 2,
+      "locations": [
+        "script.js:4554",
+        "script.js:4555"
+      ]
+    },
+    {
+      "content": "}\n\n                return fullResponse;\n            }",
+      "count": 3,
+      "locations": [
+        "index.html:4151",
+        "index.html:4336",
+        "index.html:4496"
+      ]
+    },
+    {
+      "content": "twitchSocket = new WebSocket('wss://irc-ws.chat.twitch.tv:443');\n\n                twitchSocket.onope",
+      "count": 2,
+      "locations": [
+        "index.html:2891",
+        "index.html:2892"
+      ]
+    },
+    {
+      "content": "// Reset geometry to original flat state\n  if (!geometry.userData.originalPositions) {\n    geometry.",
+      "count": 2,
+      "locations": [
+        "script.js:1626",
+        "script.js:1627"
+      ]
+    },
+    {
+      "content": "const idleAction = currentMixer.clipAction(idleAnimation);\n                    idleAction.setLoop(TH",
+      "count": 2,
+      "locations": [
+        "index.html:1662",
+        "index.html:1704"
+      ]
+    },
+    {
+      "content": ".refresh-btn:hover {\n                background: #00cccc;\n                transform: rotate(180deg);",
+      "count": 2,
+      "locations": [
+        "index.html:5953",
+        "index.html:5954"
+      ]
+    },
+    {
+      "content": "// Update accumulation target\n  messageAccumulationTarget = parseInt(settings.messageAccumulation);\n",
+      "count": 2,
+      "locations": [
+        "script.js:4761",
+        "script.js:4762"
+      ]
+    },
+    {
+      "content": "let buffer = '';\n                let fullResponse = '';\n\n                while (true) {\n            ",
+      "count": 3,
+      "locations": [
+        "index.html:4113",
+        "index.html:4300",
+        "index.html:4460"
+      ]
+    },
+    {
+      "content": "if (!file) return;\n  \n  // Check if file is video\n  const isVideo = file.type.startsWith('video/');",
+      "count": 2,
+      "locations": [
+        "script.js:1525",
+        "script.js:1526"
+      ]
+    },
+    {
+      "content": "// Create audio element and play\n                currentTTSAudio = new Audio();\n                curr",
+      "count": 2,
+      "locations": [
+        "index.html:1998",
+        "index.html:1999"
+      ]
+    },
+    {
+      "content": "function onWindowResize(){\n\n  camera.aspect = window.innerWidth / window.innerHeight;\n  camera.updat",
+      "count": 2,
+      "locations": [
+        "script.js:1403",
+        "script.js:1404"
+      ]
+    },
+    {
+      "content": "if (isVideo) {\n    // For videos, use object URL for better performance\n    const videoUrl = URL.cre",
+      "count": 2,
+      "locations": [
+        "script.js:1536",
+        "script.js:1537"
+      ]
+    },
+    {
+      "content": "// Add to conversation history\n  conversationHistory.push({ role: 'user', content: message });\n  con",
+      "count": 3,
+      "locations": [
+        "script.js:3348",
+        "script.js:3407",
+        "script.js:3543"
+      ]
+    },
+    {
+      "content": "function loadUISettings() {\n  const saved = localStorage.getItem('neurolink-vrm-settings');\n  if (sa",
+      "count": 2,
+      "locations": [
+        "script.js:4038",
+        "script.js:4039"
+      ]
+    },
+    {
+      "content": "if (!geminiConfig.key) {\n                    throw new Error('No Gemini API key provided');\n        ",
+      "count": 2,
+      "locations": [
+        "index.html:4403",
+        "index.html:4503"
+      ]
+    },
+    {
+      "content": "const placeholder = chatContent.querySelector('.chat-placeholder');\n  if (placeholder) {\n    placeho",
+      "count": 2,
+      "locations": [
+        "script.js:3208",
+        "script.js:3209"
+      ]
+    },
+    {
+      "content": "const mouthSmoothingEl = document.getElementById('mouthSmoothing');\n                if (mouthSmoothi",
+      "count": 2,
+      "locations": [
+        "index.html:2480",
+        "index.html:2481"
+      ]
+    },
+    {
+      "content": "console.log('Browser voice updated:', selectedVoiceName || 'Auto-select');\n            }\n    \n      ",
+      "count": 2,
+      "locations": [
+        "index.html:5725",
+        "index.html:5726"
+      ]
+    },
+    {
+      "content": "idleAction.play();\n                    currentAnimationAction = idleAction;\n                }\n      ",
+      "count": 2,
+      "locations": [
+        "index.html:1666",
+        "index.html:1708"
+      ]
+    },
+    {
+      "content": "// Azure Voice Management Functions\nasync function fetchAzureVoices() {\n  const azureKey = document.",
+      "count": 2,
+      "locations": [
+        "script.js:3806",
+        "script.js:3807"
+      ]
+    },
+    {
+      "content": "chatContent.appendChild(messageEl);\n                chatContent.scrollTop = chatContent.scrollHeight",
+      "count": 2,
+      "locations": [
+        "index.html:3008",
+        "index.html:5490"
+      ]
+    },
+    {
+      "content": "twitchClient.on('connected', (address, port) => {\n    updateStatus('✅', `Connected to ${channel}`);\n",
+      "count": 2,
+      "locations": [
+        "script.js:4713",
+        "script.js:4714"
+      ]
+    },
+    {
+      "content": "const voices = speechSynthesis.getVoices();\n                \n                // Clear existing optio",
+      "count": 2,
+      "locations": [
+        "index.html:5682",
+        "index.html:5683"
+      ]
+    },
+    {
+      "content": "headers: {\n                        'Content-Type': 'application/json',\n                        'Auth",
+      "count": 2,
+      "locations": [
+        "index.html:4281",
+        "index.html:4360"
+      ]
+    },
+    {
+      "content": "const micSelect = document.getElementById('microphoneSelect');\n                    if (!micSelect) r",
+      "count": 2,
+      "locations": [
+        "index.html:4909",
+        "index.html:4910"
+      ]
+    },
+    {
+      "content": "if (!vrmAnimations || vrmAnimations.length === 0) {\n                        updateLoadingStatus('No ",
+      "count": 2,
+      "locations": [
+        "index.html:1406",
+        "index.html:1407"
+      ]
+    },
+    {
+      "content": "// Browser voice selection functions\n            function getSelectedBrowserVoice() {\n              ",
+      "count": 2,
+      "locations": [
+        "index.html:5591",
+        "index.html:5592"
+      ]
+    },
+    {
+      "content": "// Setup audio processing for VRM mouth movement\n                setupTTSAudioProcessing(currentTTSA",
+      "count": 2,
+      "locations": [
+        "index.html:5554",
+        "index.html:5555"
+      ]
+    },
+    {
+      "content": "Important: You must roleplay as this character consistently. Respond in character, matching the pers",
+      "count": 2,
+      "locations": [
+        "script.js:2362",
+        "script.js:2363"
+      ]
+    },
+    {
+      "content": "if (!azureKey || !azureRegion) {\n    console.log('❌ Azure key and region required for voice list');\n",
+      "count": 2,
+      "locations": [
+        "script.js:3811",
+        "script.js:3812"
+      ]
+    },
+    {
+      "content": "if (!response.ok) {\n                    const errorText = await response.text();\n                   ",
+      "count": 2,
+      "locations": [
+        "index.html:4563",
+        "index.html:4564"
+      ]
+    },
+    {
+      "content": "async function getOpenAIResponse(message) {\n  if (!openaiConfig.key) {\n    throw new Error('No OpenA",
+      "count": 2,
+      "locations": [
+        "script.js:3363",
+        "script.js:3364"
+      ]
+    },
+    {
+      "content": "if (!data.candidates[0]) {\n                    console.error('No first candidate in Gemini API respo",
+      "count": 2,
+      "locations": [
+        "index.html:4582",
+        "index.html:4583"
+      ]
+    },
+    {
+      "content": "updateStatus('🔄', 'Loading Ollama models...');\n                    \n                    const model",
+      "count": 2,
+      "locations": [
+        "index.html:3502",
+        "index.html:3503"
+      ]
+    },
+    {
+      "content": "function forceRefreshOllamaModelsFromHTML() {\n                console.log('forceRefreshOllamaModelsF",
+      "count": 2,
+      "locations": [
+        "index.html:5028",
+        "index.html:5029"
+      ]
+    },
+    {
+      "content": "if ( currentVrm ) {\n\n scene.remove( currentVrm.scene );\n currentVrm.dispose();",
+      "count": 2,
+      "locations": [
+        "script.js:470",
+        "script.js:471"
+      ]
+    },
+    {
+      "content": "// mic based / endless animations (do stuff)\n\n      if (currentVrm != undefined){ //best to be sure",
+      "count": 3,
+      "locations": [
+        "script.js:1157",
+        "script.js:1158",
+        "script.js:1159"
+      ]
+    },
+    {
+      "content": "if (statusIcon) statusIcon.textContent = icon;\n                if (statusText) statusText.textConten",
+      "count": 2,
+      "locations": [
+        "index.html:2629",
+        "index.html:2630"
+      ]
+    },
+    {
+      "content": "// Process TTS audio in main loop instead of separate RAF\n                if (isTTSPlaying) {\n      ",
+      "count": 2,
+      "locations": [
+        "index.html:1138",
+        "index.html:1139"
+      ]
+    },
+    {
+      "content": "if (voices.length === 0) {\n    console.log('Using default voice list');\n    return;\n  }",
+      "count": 2,
+      "locations": [
+        "script.js:3855",
+        "script.js:3856"
+      ]
+    },
+    {
+      "content": "if (currentTTSAudio) {\n                    currentTTSAudio.pause();\n                    currentTTSAu",
+      "count": 2,
+      "locations": [
+        "index.html:1992",
+        "index.html:5541"
+      ]
+    },
+    {
+      "content": "const isHiddenByDisplay = floatingChat.style.display === 'none';\n    const isHiddenByStreamMode = fl",
+      "count": 2,
+      "locations": [
+        "script.js:2529",
+        "script.js:2557"
+      ]
+    },
+    {
+      "content": "function scheduleLiveSubtitles(wordBoundaries, fullText) {\n  if (!wordBoundaries || wordBoundaries.l",
+      "count": 2,
+      "locations": [
+        "script.js:2902",
+        "script.js:2903"
+      ]
+    },
+    {
+      "content": "console.log('✅ Using expressionManager for VRM 1.0+ viseme', visemeId, 'intensity:', intensity);\n\n  ",
+      "count": 2,
+      "locations": [
+        "index.html:2201",
+        "index.html:2202"
+      ]
+    },
+    {
+      "content": "const mouthGainEl = document.getElementById('mouthGain');\n                if (mouthGainEl) {\n       ",
+      "count": 2,
+      "locations": [
+        "index.html:2475",
+        "index.html:2476"
+      ]
+    },
+    {
+      "content": "// Save conversation history\n  saveUISettings();\n\n  return aiResponse;",
+      "count": 3,
+      "locations": [
+        "script.js:3357",
+        "script.js:3416",
+        "script.js:3552"
+      ]
+    },
+    {
+      "content": "// Start speaking\n    speechSynthesis.speak(utterance);\n  });\n}",
+      "count": 2,
+      "locations": [
+        "script.js:3696",
+        "script.js:3697"
+      ]
+    },
+    {
+      "content": "// Chat toggle functions\nfunction toggleChatVisibility() {\n  const floatingChat = document.getElemen",
+      "count": 2,
+      "locations": [
+        "script.js:2521",
+        "script.js:2522"
+      ]
+    },
+    {
+      "content": "renderer.domElement.addEventListener('mouseup', (event) => {\n  if (event.button === 0) isLeftMouseDo",
+      "count": 2,
+      "locations": [
+        "script.js:208",
+        "script.js:209"
+      ]
+    },
+    {
+      "content": "function updateAccumulationProgress() {\n  const count = messageQueue.length;\n  const target = messag",
+      "count": 2,
+      "locations": [
+        "script.js:4837",
+        "script.js:4838"
+      ]
+    },
+    {
+      "content": "const systemMessage = ollamaConfig.system_message || document.getElementById('globalSystemMessage')?",
+      "count": 2,
+      "locations": [
+        "index.html:4077",
+        "index.html:4161"
+      ]
+    },
+    {
+      "content": "// Auto-load default animations\n            async function loadDefaultAnimations() {\n               ",
+      "count": 2,
+      "locations": [
+        "index.html:1578",
+        "index.html:1579"
+      ]
+    },
+    {
+      "content": "saveUISettings();\n\n                return aiResponse;\n            }",
+      "count": 3,
+      "locations": [
+        "index.html:4261",
+        "index.html:4396",
+        "index.html:4646"
+      ]
+    },
+    {
+      "content": "// Initialize microphone on page load (disabled by default)\nif (MIC_FEATURES_ENABLED) {\n  initialize",
+      "count": 2,
+      "locations": [
+        "script.js:1317",
+        "script.js:1318"
+      ]
+    },
+    {
+      "content": "throw new Error('No Gemini API key provided');\n                }\n\n                const systemInstru",
+      "count": 2,
+      "locations": [
+        "index.html:4404",
+        "index.html:4504"
+      ]
+    },
+    {
+      "content": "if (!response.ok) {\n                    throw new Error(`Ollama API error: ${response.status}`);\n   ",
+      "count": 2,
+      "locations": [
+        "index.html:4106",
+        "index.html:4243"
+      ]
+    },
+    {
+      "content": "console.log('🎤 Starting speech recognition with Whisper');\n\n                try {\n                 ",
+      "count": 2,
+      "locations": [
+        "index.html:4865",
+        "index.html:4866"
+      ]
+    },
+    {
+      "content": "isTTSPlaying = false;\n                        isBrowserTTSActive = false;\n                        st",
+      "count": 2,
+      "locations": [
+        "index.html:2512",
+        "index.html:2518"
+      ]
+    },
+    {
+      "content": "function applyVisemeToVRM(vrm, visemeId, intensity = 1.0) {\n  if (!vrm || !vrm.blendShapeProxy) retu",
+      "count": 2,
+      "locations": [
+        "script.js:3127",
+        "script.js:3128"
+      ]
+    },
+    {
+      "content": "const systemMessage = ollamaConfig.system_message || document.getElementById('globalSystemMessage')?",
+      "count": 2,
+      "locations": [
+        "index.html:4078",
+        "index.html:4162"
+      ]
+    },
+    {
+      "content": "async function getGeminiResponse(message) {\n  if (!geminiConfig.key) {\n    throw new Error('No Gemin",
+      "count": 2,
+      "locations": [
+        "script.js:3422",
+        "script.js:3423"
+      ]
+    },
+    {
+      "content": "// Add seed if not random\n                if (ollamaConfig.seed !== 0) {\n                    options",
+      "count": 2,
+      "locations": [
+        "index.html:4201",
+        "index.html:4202"
+      ]
+    },
+    {
+      "content": "// Add grouped options\n  Object.keys(grouped).sort().forEach(groupKey => {\n    const optgroup = docu",
+      "count": 2,
+      "locations": [
+        "script.js:3878",
+        "script.js:3879"
+      ]
+    },
+    {
+      "content": "if (!mesh || !mesh.geometry) {\n    console.warn('applyCurveEffect: Invalid mesh or geometry - cannot",
+      "count": 2,
+      "locations": [
+        "script.js:1605",
+        "script.js:1606"
+      ]
+    },
+    {
+      "content": "function parseTwitchChatMessage(rawMessage) {\n                try {\n                    const parts ",
+      "count": 2,
+      "locations": [
+        "index.html:2966",
+        "index.html:2967"
+      ]
+    },
+    {
+      "content": "if (fullResponse.trim() && onSentence) {\n                    onSentence(fullResponse.trim());\n      ",
+      "count": 2,
+      "locations": [
+        "index.html:4333",
+        "index.html:4493"
+      ]
+    },
+    {
+      "content": "parts: [{ text: message }]\n                });\n\n                const requestBody = {\n              ",
+      "count": 2,
+      "locations": [
+        "index.html:4435",
+        "index.html:4536"
+      ]
+    },
+    {
+      "content": "ttsInputVolume = values / length;\n      requestAnimationFrame(processTTSAudio);\n    }\n  }",
+      "count": 2,
+      "locations": [
+        "script.js:69",
+        "script.js:70"
+      ]
+    },
+    {
+      "content": "// Add to conversation history\n                conversationHistory.push({ role: 'user', content: mes",
+      "count": 3,
+      "locations": [
+        "index.html:4250",
+        "index.html:4385",
+        "index.html:4635"
+      ]
+    },
+    {
+      "content": "position.setZ(i, z);\n    }\n    \n    position.needsUpdate = true;",
+      "count": 2,
+      "locations": [
+        "script.js:1657",
+        "script.js:1658"
+      ]
+    },
+    {
+      "content": "top_p: ollamaConfig.top_p,\n                    top_k: ollamaConfig.top_k,\n                    repeat",
+      "count": 2,
+      "locations": [
+        "index.html:4088",
+        "index.html:4173"
+      ]
+    },
+    {
+      "content": "role: 'user',\n                    parts: [{ text: message }]\n                });\n\n                co",
+      "count": 2,
+      "locations": [
+        "index.html:4434",
+        "index.html:4535"
+      ]
+    },
+    {
+      "content": "// Fade out idle animation instead of stopping abruptly\n                if (currentAnimationAction &",
+      "count": 2,
+      "locations": [
+        "index.html:1676",
+        "index.html:1677"
+      ]
+    },
+    {
+      "content": "console.log('Sending accumulated messages to AI:', accumulatedMessages.length, 'messages');\n\n       ",
+      "count": 2,
+      "locations": [
+        "index.html:3039",
+        "index.html:3040"
+      ]
+    },
+    {
+      "content": "// Volume-based mouth movement function (from reference script.js)\n            function updateMouthM",
+      "count": 2,
+      "locations": [
+        "index.html:2308",
+        "index.html:2309"
+      ]
+    },
+    {
+      "content": "// Save positions when dragging ends\ndocument.addEventListener('DOMContentLoaded', () => {\n    const",
+      "count": 2,
+      "locations": [
+        "script.js:4995",
+        "script.js:4996"
+      ]
+    },
+    {
+      "content": "conversationHistory.push({ role: 'user', content: message });\n                conversationHistory.pu",
+      "count": 3,
+      "locations": [
+        "index.html:4252",
+        "index.html:4387",
+        "index.html:4637"
+      ]
+    },
+    {
+      "content": "// Don't add messages if chat doesn't exist or is hidden\n  if (!chatContent || !chatOverlay || chatO",
+      "count": 2,
+      "locations": [
+        "script.js:3203",
+        "script.js:3204"
+      ]
+    },
+    {
+      "content": "// Use selected microphone if available\n  if (selectedMicrophoneId) {\n    audioConstraints.audio = {",
+      "count": 2,
+      "locations": [
+        "script.js:1112",
+        "script.js:1113"
+      ]
+    },
+    {
+      "content": "const systemInstruction = geminiConfig.system_instruction || document.getElementById('globalSystemMe",
+      "count": 2,
+      "locations": [
+        "index.html:4506",
+        "index.html:4507"
+      ]
+    },
+    {
+      "content": "// light\nconst light = new THREE.DirectionalLight(0xffffff);\nlight.position.set(1.0, 1.0, 1.0).norma",
+      "count": 2,
+      "locations": [
+        "script.js:320",
+        "script.js:321"
+      ]
+    },
+    {
+      "content": "renderer.domElement.addEventListener('mouseup', (event) => {\n                    if (event.button ==",
+      "count": 2,
+      "locations": [
+        "index.html:5453",
+        "index.html:5454"
+      ]
+    },
+    {
+      "content": "function updateMicGain() {\n  const gainSlider = document.getElementById('micGain');\n  const gainValu",
+      "count": 2,
+      "locations": [
+        "script.js:2201",
+        "script.js:2202"
+      ]
+    },
+    {
+      "content": "if (currentMixer) {\n                            cleanupMixer(currentMixer);\n                        ",
+      "count": 2,
+      "locations": [
+        "index.html:1466",
+        "index.html:1611"
+      ]
+    },
+    {
+      "content": "const response = await fetch('https://api.openai.com/v1/chat/completions', {\n                    met",
+      "count": 2,
+      "locations": [
+        "index.html:4279",
+        "index.html:4358"
+      ]
+    },
+    {
+      "content": "// Simple camera following - like the original\n  lookAtTarget.position.x = camera.position.x;\n  look",
+      "count": 2,
+      "locations": [
+        "script.js:1372",
+        "script.js:1373"
+      ]
+    },
+    {
+      "content": "twitchClient.on('disconnected', (reason) => {\n    updateStatus('🔌', `Disconnected: ${reason}`);\n   ",
+      "count": 2,
+      "locations": [
+        "script.js:4718",
+        "script.js:4719"
+      ]
+    },
+    {
+      "content": "if (done) break;\n\n                    buffer += decoder.decode(value, {stream: true});\n             ",
+      "count": 2,
+      "locations": [
+        "index.html:4305",
+        "index.html:4465"
+      ]
+    },
+    {
+      "content": "const systemInstruction = geminiConfig.system_instruction || document.getElementById('globalSystemMe",
+      "count": 2,
+      "locations": [
+        "script.js:3427",
+        "script.js:3428"
+      ]
+    },
+    {
+      "content": "if (countEl) countEl.textContent = count;\n                if (targetEl) targetEl.textContent = targe",
+      "count": 2,
+      "locations": [
+        "index.html:3056",
+        "index.html:3057"
+      ]
+    },
+    {
+      "content": "function addMessageToTwitchChat(username, message, color) {\n  const chatContent = document.getElemen",
+      "count": 2,
+      "locations": [
+        "script.js:4726",
+        "script.js:4727"
+      ]
+    },
+    {
+      "content": "`;\n\n                chatContent.appendChild(messageEl);\n                chatContent.scrollTop = chat",
+      "count": 2,
+      "locations": [
+        "index.html:3006",
+        "index.html:5488"
+      ]
+    },
+    {
+      "content": "// Track mouse button states and VRM clicks\nrenderer.domElement.addEventListener('mousedown', (event",
+      "count": 2,
+      "locations": [
+        "script.js:199",
+        "script.js:200"
+      ]
+    },
+    {
+      "content": "// Fade out talking animation instead of stopping abruptly\n                if (currentAnimationActio",
+      "count": 2,
+      "locations": [
+        "index.html:1696",
+        "index.html:1697"
+      ]
+    },
+    {
+      "content": "while (chatContent.children.length > 50) {\n    chatContent.removeChild(chatContent.firstChild);\n  }\n",
+      "count": 2,
+      "locations": [
+        "script.js:3229",
+        "script.js:3230"
+      ]
+    },
+    {
+      "content": "// Loading Screen\nfunction showLoadingScreen(text = 'Loading...') {\n  const loadingScreen = document",
+      "count": 2,
+      "locations": [
+        "script.js:4565",
+        "script.js:4566"
+      ]
+    },
+    {
+      "content": "}\n\n                if (fullResponse.trim() && onSentence) {\n                    onSentence(fullRespo",
+      "count": 2,
+      "locations": [
+        "index.html:4332",
+        "index.html:4492"
+      ]
+    },
+    {
+      "content": "function load( url ) {\n\nloader.crossOrigin = 'anonymous';\nloader.load(",
+      "count": 2,
+      "locations": [
+        "script.js:456",
+        "script.js:457"
+      ]
+    },
+    {
+      "content": "conversationHistory = conversationHistory.slice(-20);\n  }\n  \n  // Save conversation history\n  saveUI",
+      "count": 3,
+      "locations": [
+        "script.js:3355",
+        "script.js:3414",
+        "script.js:3550"
+      ]
+    },
+    {
+      "content": ".settings-content::-webkit-scrollbar-track {\n                background: rgba(0, 0, 0, 0.1);\n       ",
+      "count": 2,
+      "locations": [
+        "index.html:5875",
+        "index.html:5876"
+      ]
+    },
+    {
+      "content": "// Hide speech bubble when browser TTS ends\n      hideSpeechBubble();\n      // Return to idle animat",
+      "count": 2,
+      "locations": [
+        "script.js:3678",
+        "script.js:3679"
+      ]
+    },
+    {
+      "content": "}\n                }\n\n                if (fullResponse.trim() && onSentence) {\n                    on",
+      "count": 2,
+      "locations": [
+        "index.html:4331",
+        "index.html:4491"
+      ]
+    },
+    {
+      "content": "const placeholder = chatContent.querySelector('.chat-placeholder');\n                if (placeholder)",
+      "count": 2,
+      "locations": [
+        "index.html:5471",
+        "index.html:5472"
+      ]
+    },
+    {
+      "content": "// Handle clicks outside settings panel\nfunction handleSettingsClickOutside(e) {\n  const panel = doc",
+      "count": 2,
+      "locations": [
+        "script.js:4505",
+        "script.js:4506"
+      ]
+    },
+    {
+      "content": "// Start blink - close eyes\n                expressionManager.setValue('blinkLeft', 1);\n            ",
+      "count": 2,
+      "locations": [
+        "index.html:5253",
+        "index.html:5254"
+      ]
+    },
+    {
+      "content": "idleAction.fadeIn(0.3);\n                    idleAction.play();\n                    currentAnimationA",
+      "count": 2,
+      "locations": [
+        "index.html:1665",
+        "index.html:1707"
+      ]
+    },
+    {
+      "content": "microphone.connect(gainNode);\n    gainNode.connect(analyser);\n    analyser.connect(javascriptNode);\n",
+      "count": 2,
+      "locations": [
+        "script.js:1130",
+        "script.js:1131"
+      ]
+    },
+    {
+      "content": "});\n\n                cleanup();\n\n                if (!response.ok) {",
+      "count": 4,
+      "locations": [
+        "index.html:2050",
+        "index.html:4240",
+        "index.html:4374",
+        "index.html:4560"
+      ]
+    },
+    {
+      "content": "isTwitchConnected = true;\n                    updateTwitchStatus('Connected', 'connected');\n        ",
+      "count": 2,
+      "locations": [
+        "index.html:2900",
+        "index.html:2901"
+      ]
+    },
+    {
+      "content": "scene.add(new THREE.AmbientLight(0x404040, 0.4));\n                const dir = new THREE.DirectionalL",
+      "count": 2,
+      "locations": [
+        "index.html:1090",
+        "index.html:1091"
+      ]
+    },
+    {
+      "content": "// Calculate movement intensity from camera changes\n  const positionChange = deltaPos.length();\n  co",
+      "count": 2,
+      "locations": [
+        "script.js:168",
+        "script.js:169"
+      ]
+    },
+    {
+      "content": "// Apply to VRM\n                applyVRMPosition();\n                saveVRMConfig();\n            }",
+      "count": 2,
+      "locations": [
+        "index.html:1271",
+        "index.html:1272"
+      ]
+    },
+    {
+      "content": "currentMixer = new THREE.AnimationMixer(vrm.scene);\n    \n                    // Create VRM animation",
+      "count": 2,
+      "locations": [
+        "index.html:1421",
+        "index.html:1422"
+      ]
+    },
+    {
+      "content": "if (currentAnimationAction) {\n                            cleanupAnimationAction(currentAnimationAct",
+      "count": 2,
+      "locations": [
+        "index.html:1462",
+        "index.html:1607"
+      ]
+    },
+    {
+      "content": "function stopTalkingAnimationForTTS() {\n                console.log('🤐 TTS ended - returning to idl",
+      "count": 2,
+      "locations": [
+        "index.html:1736",
+        "index.html:1737"
+      ]
+    },
+    {
+      "content": "video.addEventListener('canplay', () => {\n      console.log('Video can start playing');\n      video.",
+      "count": 2,
+      "locations": [
+        "script.js:1729",
+        "script.js:1730"
+      ]
+    },
+    {
+      "content": ".title-logo:hover {\n                filter: drop-shadow(0 0 15px rgba(255, 20, 147, 0.8));\n         ",
+      "count": 2,
+      "locations": [
+        "index.html:6040",
+        "index.html:6041"
+      ]
+    },
+    {
+      "content": "</div>\n                </div>\n            </div>\n        </div>",
+      "count": 2,
+      "locations": [
+        "index.html:125",
+        "index.html:871"
+      ]
+    },
+    {
+      "content": "const voices = speechSynthesis.getVoices();\n  \n  // Clear existing options except the first one\n  br",
+      "count": 2,
+      "locations": [
+        "script.js:3906",
+        "script.js:3907"
+      ]
+    },
+    {
+      "content": "if (!Array.isArray(data.candidates) || data.candidates.length === 0) {\n    console.error('Candidates",
+      "count": 2,
+      "locations": [
+        "script.js:3498",
+        "script.js:3499"
+      ]
+    },
+    {
+      "content": "// Check if it's a network error\n                    if (error.name === 'TypeError' && error.message",
+      "count": 2,
+      "locations": [
+        "index.html:3423",
+        "index.html:3424"
+      ]
+    },
+    {
+      "content": "camera.aspect = window.innerWidth / window.innerHeight;\n  camera.updateProjectionMatrix();\n\n  render",
+      "count": 2,
+      "locations": [
+        "script.js:1405",
+        "script.js:1406"
+      ]
+    },
+    {
+      "content": "const bodyMotionEl = document.getElementById('bodymotion');\n                if (bodyMotionEl) {\n    ",
+      "count": 2,
+      "locations": [
+        "index.html:2485",
+        "index.html:2486"
+      ]
+    },
+    {
+      "content": "throw new Error('No Ollama model selected. Please select one in Settings > AI Configuration.');\n    ",
+      "count": 2,
+      "locations": [
+        "index.html:4075",
+        "index.html:4159"
+      ]
+    },
+    {
+      "content": "});\n                });\n\n                // Add current message\n                contents.push({",
+      "count": 2,
+      "locations": [
+        "index.html:4429",
+        "index.html:4530"
+      ]
+    },
+    {
+      "content": "background: rgba(255, 20, 147, 0.5);\n                border-radius: 4px;\n                border: 1px",
+      "count": 2,
+      "locations": [
+        "index.html:5794",
+        "index.html:5882"
+      ]
+    },
+    {
+      "content": "conversationHistory.push({ role: 'assistant', content: aiResponse });\n\n                // Keep conve",
+      "count": 3,
+      "locations": [
+        "index.html:4253",
+        "index.html:4388",
+        "index.html:4638"
+      ]
+    },
+    {
+      "content": "const voweldamp = 53;\n                const vowelmin = Math.min(12, mouthThresholdValue * 0.5); // v",
+      "count": 2,
+      "locations": [
+        "index.html:2326",
+        "index.html:2327"
+      ]
+    },
+    {
+      "content": "// beware of CORS errors when using this locally. If you can't https, import the required libraries.",
+      "count": 2,
+      "locations": [
+        "script.js:571",
+        "script.js:572"
+      ]
+    },
+    {
+      "content": "// Save conversation history\n                saveUISettings();\n\n                return aiResponse;",
+      "count": 3,
+      "locations": [
+        "index.html:4259",
+        "index.html:4394",
+        "index.html:4644"
+      ]
+    },
+    {
+      "content": "// Azure TTS state\n            const azureConfig = { key: '', region: 'eastus', voice: 'en-US-JennyN",
+      "count": 2,
+      "locations": [
+        "index.html:1029",
+        "index.html:1030"
+      ]
+    },
+    {
+      "content": "function blink() {\n  if (!currentVrm) return; // Safety check\n  \n  var blinktimeout = Math.floor(Mat",
+      "count": 2,
+      "locations": [
+        "script.js:1325",
+        "script.js:1326"
+      ]
+    },
+    {
+      "content": "// Browser voice selection functions\nfunction getSelectedBrowserVoice() {\n  const browserVoiceSelect",
+      "count": 2,
+      "locations": [
+        "script.js:3765",
+        "script.js:3766"
+      ]
+    },
+    {
+      "content": "idleAction.setLoop(THREE.LoopRepeat);\n                    idleAction.reset();\n                    id",
+      "count": 2,
+      "locations": [
+        "index.html:1663",
+        "index.html:1705"
+      ]
+    },
+    {
+      "content": "// Restore background config\n    if (settings.backgroundConfig) {\n      Object.assign(backgroundConf",
+      "count": 2,
+      "locations": [
+        "script.js:4090",
+        "script.js:4091"
+      ]
+    },
+    {
+      "content": "} catch (error) {\n    console.warn('Error applying arm positions:', error);\n  }\n}",
+      "count": 2,
+      "locations": [
+        "script.js:2088",
+        "script.js:2089"
+      ]
+    },
+    {
+      "content": "// Initialize the transcriber using worker implementation\nasync function initializeTranscriber() {\n ",
+      "count": 2,
+      "locations": [
+        "script.js:2738",
+        "script.js:2739"
+      ]
+    },
+    {
+      "content": "parts: [{ text: msg.content }]\n                    });\n                });\n\n                // Add c",
+      "count": 2,
+      "locations": [
+        "index.html:4428",
+        "index.html:4529"
+      ]
+    },
+    {
+      "content": "// Add current message\n                contents.push({\n                    role: 'user',\n           ",
+      "count": 2,
+      "locations": [
+        "index.html:4431",
+        "index.html:4532"
+      ]
+    },
+    {
+      "content": "}\n                    }\n                }\n\n                if (fullResponse.trim() && onSentence) {",
+      "count": 2,
+      "locations": [
+        "index.html:4330",
+        "index.html:4490"
+      ]
+    },
+    {
+      "content": "}\n                        if (currentMixer) {\n                            cleanupMixer(currentMixer)",
+      "count": 2,
+      "locations": [
+        "index.html:1465",
+        "index.html:1610"
+      ]
+    },
+    {
+      "content": "// Keep history manageable\n                    if (conversationHistory.length > 20) {\n              ",
+      "count": 2,
+      "locations": [
+        "index.html:3974",
+        "index.html:3975"
+      ]
+    },
+    {
+      "content": "}\n\n                const reader = response.body.getReader();\n                const decoder = new Tex",
+      "count": 3,
+      "locations": [
+        "index.html:4109",
+        "index.html:4296",
+        "index.html:4456"
+      ]
+    },
+    {
+      "content": "console.log('✅ Auto-loaded idle and talking animations');\n                    } else {\n             ",
+      "count": 2,
+      "locations": [
+        "index.html:1629",
+        "index.html:1630"
+      ]
+    },
+    {
+      "content": "conversationHistory = conversationHistory.slice(-20);\n                }\n\n                // Save con",
+      "count": 3,
+      "locations": [
+        "index.html:4257",
+        "index.html:4392",
+        "index.html:4642"
+      ]
+    },
+    {
+      "content": "if (settings.micGain) {\n      if (document.getElementById('micGain')) document.getElementById('micGa",
+      "count": 2,
+      "locations": [
+        "script.js:4080",
+        "script.js:4081"
+      ]
+    },
+    {
+      "content": "// Combine audio chunks into a single Blob\n    const audioBlob = new Blob(audioChunks, { type: 'audi",
+      "count": 2,
+      "locations": [
+        "script.js:2808",
+        "script.js:2809"
+      ]
+    },
+    {
+      "content": "updateStatus('🔄', 'Loading Ollama models...');\n    \n    const models = await loadOllamaModels();\n  ",
+      "count": 2,
+      "locations": [
+        "script.js:4383",
+        "script.js:4384"
+      ]
+    },
+    {
+      "content": "cleanupAnimationAction(currentAnimationAction);\n                            currentAnimationAction =",
+      "count": 2,
+      "locations": [
+        "index.html:1463",
+        "index.html:1608"
+      ]
+    },
+    {
+      "content": "// Load idle animation first\n                    const idleUrl = URL.createObjectURL(idleFile);\n    ",
+      "count": 2,
+      "locations": [
+        "index.html:1589",
+        "index.html:1590"
+      ]
+    },
+    {
+      "content": "// Chat functions\n            async function sendChatMessage() {\n                const chatInput = d",
+      "count": 2,
+      "locations": [
+        "index.html:3750",
+        "index.html:3751"
+      ]
+    },
+    {
+      "content": "if (!vrm) {\n                    updateLoadingStatus('Please load a VRM avatar first');\n             ",
+      "count": 2,
+      "locations": [
+        "index.html:1387",
+        "index.html:1447"
+      ]
+    },
+    {
+      "content": "idleAction.reset();\n                    idleAction.fadeIn(0.3);\n                    idleAction.play(",
+      "count": 2,
+      "locations": [
+        "index.html:1664",
+        "index.html:1706"
+      ]
+    },
+    {
+      "content": "updateStatus('🎬', `Video background loaded (${fileSizeMB.toFixed(1)}MB)`);\n  } else {\n    // For im",
+      "count": 2,
+      "locations": [
+        "script.js:1556",
+        "script.js:1557"
+      ]
+    },
+    {
+      "content": "signal\n                });\n\n                cleanup();",
+      "count": 4,
+      "locations": [
+        "index.html:2049",
+        "index.html:4239",
+        "index.html:4373",
+        "index.html:4559"
+      ]
+    },
+    {
+      "content": "const messageEl = document.createElement('div');\n                messageEl.className = 'twitch-messa",
+      "count": 2,
+      "locations": [
+        "index.html:5476",
+        "index.html:5477"
+      ]
+    },
+    {
+      "content": "// Configure voice settings\n    utterance.rate = azureConfig.rate || 1.0;\n    utterance.pitch = Math",
+      "count": 2,
+      "locations": [
+        "script.js:3644",
+        "script.js:3645"
+      ]
+    },
+    {
+      "content": "while (true) {\n                    const {done, value} = await reader.read();\n                    if",
+      "count": 3,
+      "locations": [
+        "index.html:4115",
+        "index.html:4302",
+        "index.html:4462"
+      ]
+    },
+    {
+      "content": "buffer += decoder.decode(value, {stream: true});\n                    const lines = buffer.split('\\n'",
+      "count": 2,
+      "locations": [
+        "index.html:4306",
+        "index.html:4466"
+      ]
+    },
+    {
+      "content": "camera.position.add(cameraMovement);\n                    controls.update();\n                }\n      ",
+      "count": 2,
+      "locations": [
+        "index.html:5409",
+        "index.html:5410"
+      ]
+    },
+    {
+      "content": "/* Larger max-height for AI Configuration section */\n            #aiConfiguration {\n                ",
+      "count": 2,
+      "locations": [
+        "index.html:5802",
+        "index.html:5803"
+      ]
+    },
+    {
+      "content": "const response = await fetch('https://api.openai.com/v1/chat/completions', {\n                    met",
+      "count": 2,
+      "locations": [
+        "index.html:4278",
+        "index.html:4357"
+      ]
+    },
+    {
+      "content": "// Keep conversation history manageable\n  if (conversationHistory.length > 20) {\n    conversationHis",
+      "count": 6,
+      "locations": [
+        "script.js:3352",
+        "script.js:3353",
+        "script.js:3411",
+        "script.js:3412",
+        "script.js:3547",
+        "script.js:3548"
+      ]
+    },
+    {
+      "content": "if (conversationHistory.length > 20) {\n    conversationHistory = conversationHistory.slice(-20);\n  }",
+      "count": 3,
+      "locations": [
+        "script.js:3354",
+        "script.js:3413",
+        "script.js:3549"
+      ]
+    },
+    {
+      "content": "isProcessingTTS = false;\n    updateButtonStates();\n    return;\n  }",
+      "count": 2,
+      "locations": [
+        "script.js:3565",
+        "script.js:4602"
+      ]
+    },
+    {
+      "content": "</button>\n                        </div>\n                    </div>\n                </div>",
+      "count": 2,
+      "locations": [
+        "index.html:206",
+        "index.html:809"
+      ]
+    },
+    {
+      "content": "</div>\n                    </div>\n                </div>",
+      "count": 2,
+      "locations": [
+        "index.html:207",
+        "index.html:237"
+      ]
+    },
+    {
+      "content": "<!-- Shared System Prompt for All Providers -->\n                        <div class=\"control-group\">\n",
+      "count": 2,
+      "locations": [
+        "index.html:347",
+        "index.html:348"
+      ]
+    },
+    {
+      "content": "</div>\n                            \n                            <div class=\"control-group\">\n        ",
+      "count": 2,
+      "locations": [
+        "index.html:371",
+        "index.html:622"
+      ]
+    },
+    {
+      "content": "// Advanced camera and VRM movement tracking\n            let lastCameraPosition = null;\n            ",
+      "count": 2,
+      "locations": [
+        "index.html:930",
+        "index.html:931"
+      ]
+    },
+    {
+      "content": "function init() {\n                clock = new THREE.Clock();\n                scene = new THREE.Scene",
+      "count": 2,
+      "locations": [
+        "index.html:1034",
+        "index.html:1035"
+      ]
+    },
+    {
+      "content": "// Fix camera zoom limits\n                controls.minDistance = 0.1;  // Allow very close zoom\n    ",
+      "count": 2,
+      "locations": [
+        "index.html:1054",
+        "index.html:1055"
+      ]
+    },
+    {
+      "content": "// Update display values\n                    if (volEl) { const v=document.getElementById('ttsVolume",
+      "count": 2,
+      "locations": [
+        "index.html:1173",
+        "index.html:1174"
+      ]
+    },
+    {
+      "content": "// Update displays and apply\n                updateVRMPosition();\n                console.log('🎯 VR",
+      "count": 2,
+      "locations": [
+        "index.html:1251",
+        "index.html:1252"
+      ]
+    },
+    {
+      "content": "resetVRMPosition();\n                }catch(e){ console.error('VRM load error', e);}\n                ",
+      "count": 2,
+      "locations": [
+        "index.html:1360",
+        "index.html:1361"
+      ]
+    },
+    {
+      "content": "if (!file) return;\n    \n                if (!vrm) {\n                    updateLoadingStatus('Please ",
+      "count": 2,
+      "locations": [
+        "index.html:1385",
+        "index.html:1445"
+      ]
+    },
+    {
+      "content": "// Register VRMA loader plugin\n                    loader.register((parser) => {\n                   ",
+      "count": 2,
+      "locations": [
+        "index.html:1397",
+        "index.html:1398"
+      ]
+    },
+    {
+      "content": "currentAnimationAction = null;\n                        }\n                        if (currentMixer) {",
+      "count": 2,
+      "locations": [
+        "index.html:1464",
+        "index.html:1609"
+      ]
+    },
+    {
+      "content": "// Store both animations\n                        idleAnimation = idleClip;\n                        t",
+      "count": 2,
+      "locations": [
+        "index.html:1624",
+        "index.html:1625"
+      ]
+    },
+    {
+      "content": "const escapedText = text.replace(/[<>&'\"]/g, (char) => {\n                    const entities = { '<':",
+      "count": 4,
+      "locations": [
+        "index.html:1852",
+        "index.html:3830",
+        "index.html:3831",
+        "index.html:5572"
+      ]
+    },
+    {
+      "content": "console.log('🎭 Starting Azure SDK TTS with visemes');\n                isTTSPlaying = true;\n        ",
+      "count": 2,
+      "locations": [
+        "index.html:1870",
+        "index.html:1871"
+      ]
+    },
+    {
+      "content": "// Get audio data and play it through an audio element\n                                const audioDa",
+      "count": 2,
+      "locations": [
+        "index.html:1899",
+        "index.html:1900"
+      ]
+    },
+    {
+      "content": "async function speakWithAzureREST(text) {\n                console.log('🎙️ speakWithAzureREST called",
+      "count": 2,
+      "locations": [
+        "index.html:1968",
+        "index.html:1969"
+      ]
+    },
+    {
+      "content": "// Stop any currently playing TTS\n                if (currentTTSAudio) {\n                    current",
+      "count": 2,
+      "locations": [
+        "index.html:1990",
+        "index.html:5539"
+      ]
+    },
+    {
+      "content": "// Stop any currently playing TTS\n                if (currentTTSAudio) {\n                    current",
+      "count": 2,
+      "locations": [
+        "index.html:1991",
+        "index.html:5540"
+      ]
+    },
+    {
+      "content": "currentTTSAudio.pause();\n                    currentTTSAudio.currentTime = 0;\n                    is",
+      "count": 2,
+      "locations": [
+        "index.html:1993",
+        "index.html:5542"
+      ]
+    },
+    {
+      "content": "currentTTSAudio.currentTime = 0;\n                    isTTSPlaying = false;\n                    ttsIn",
+      "count": 2,
+      "locations": [
+        "index.html:1994",
+        "index.html:5543"
+      ]
+    },
+    {
+      "content": "isTTSPlaying = true;\n                isProcessingTTS = true;\n                isUsingVisemes = true;\n",
+      "count": 2,
+      "locations": [
+        "index.html:2003",
+        "index.html:2004"
+      ]
+    },
+    {
+      "content": "cleanup();\n\n                if (!response.ok) {\n                    const errorText = await response",
+      "count": 3,
+      "locations": [
+        "index.html:2051",
+        "index.html:4375",
+        "index.html:4561"
+      ]
+    },
+    {
+      "content": "// Calculate how long to wait from NOW to reach the correct timing\n                const currentTime",
+      "count": 2,
+      "locations": [
+        "index.html:2147",
+        "index.html:2148"
+      ]
+    },
+    {
+      "content": "if (!mouthMoved) {\n                            console.warn('No mouth movement system available duri",
+      "count": 2,
+      "locations": [
+        "index.html:2591",
+        "index.html:2592"
+      ]
+    },
+    {
+      "content": "function updateButtonStates() {\n                const listenBtn = document.getElementById('listenBtn",
+      "count": 2,
+      "locations": [
+        "index.html:2600",
+        "index.html:2601"
+      ]
+    },
+    {
+      "content": "// Essential UI Toggle Functions (from script.js)\n            function toggleSettings() {\n          ",
+      "count": 2,
+      "locations": [
+        "index.html:2712",
+        "index.html:2713"
+      ]
+    },
+    {
+      "content": "if (floatingChat) {\n                    const isHiddenByDisplay = floatingChat.style.display === 'no",
+      "count": 2,
+      "locations": [
+        "index.html:2755",
+        "index.html:2756"
+      ]
+    },
+    {
+      "content": "twitchSocket.onmessage = (event) => {\n                    const rawMessage = event.data.trim();\n    ",
+      "count": 2,
+      "locations": [
+        "index.html:2905",
+        "index.html:2906"
+      ]
+    },
+    {
+      "content": "if (statusEl && colors[className]) {\n                    statusEl.style.color = colors[className];\n ",
+      "count": 2,
+      "locations": [
+        "index.html:2946",
+        "index.html:2947"
+      ]
+    },
+    {
+      "content": "if (!chatContent || !chatOverlay || chatOverlay.style.display === 'none') {\n                    retu",
+      "count": 2,
+      "locations": [
+        "index.html:2991",
+        "index.html:5468"
+      ]
+    },
+    {
+      "content": "chatContent.appendChild(messageEl);\n                chatContent.scrollTop = chatContent.scrollHeight",
+      "count": 2,
+      "locations": [
+        "index.html:3007",
+        "index.html:5489"
+      ]
+    },
+    {
+      "content": "chatContent.scrollTop = chatContent.scrollHeight;\n\n                while (chatContent.children.lengt",
+      "count": 2,
+      "locations": [
+        "index.html:3009",
+        "index.html:5491"
+      ]
+    },
+    {
+      "content": "if (accumulatedMessages.length >= messageAccumulationTarget) {\n                    sendAccumulatedMe",
+      "count": 2,
+      "locations": [
+        "index.html:3025",
+        "index.html:3026"
+      ]
+    },
+    {
+      "content": "function updateAccumulationProgress() {\n                const count = accumulatedMessages.length;\n  ",
+      "count": 2,
+      "locations": [
+        "index.html:3047",
+        "index.html:3048"
+      ]
+    },
+    {
+      "content": "// Reusable timeout controller helper\n            function createAPITimeoutController(timeoutMs = 30",
+      "count": 2,
+      "locations": [
+        "index.html:3222",
+        "index.html:3223"
+      ]
+    },
+    {
+      "content": "if (settings.azureConfig) Object.assign(azureConfig, settings.azureConfig);\n                        ",
+      "count": 2,
+      "locations": [
+        "index.html:3303",
+        "index.html:3999"
+      ]
+    },
+    {
+      "content": "function updateLLMUI() {\n                // Update provider selection\n                const provider",
+      "count": 2,
+      "locations": [
+        "index.html:3317",
+        "index.html:3318"
+      ]
+    },
+    {
+      "content": "// Hide all provider configs first\n                    const geminiConfig = document.getElementById(",
+      "count": 2,
+      "locations": [
+        "index.html:3708",
+        "index.html:3709"
+      ]
+    },
+    {
+      "content": "// TTS queue for streaming sentences\n            let ttsQueue = [];\n            let isProcessingTTSQ",
+      "count": 2,
+      "locations": [
+        "index.html:3776",
+        "index.html:3777"
+      ]
+    },
+    {
+      "content": "console.log('📝 Sentence complete:', sentence);\n                                    ttsQueue.push(se",
+      "count": 3,
+      "locations": [
+        "index.html:3928",
+        "index.html:3935",
+        "index.html:3942"
+      ]
+    },
+    {
+      "content": "const settings = {\n                    showChatBubble: showChatBubble !== undefined ? showChatBubble",
+      "count": 2,
+      "locations": [
+        "index.html:4054",
+        "index.html:4055"
+      ]
+    },
+    {
+      "content": "const messages = [\n                    { role: 'system', content: systemMessage },\n                 ",
+      "count": 2,
+      "locations": [
+        "index.html:4079",
+        "index.html:4163"
+      ]
+    },
+    {
+      "content": "const messages = [\n                    { role: 'system', content: systemMessage },\n                 ",
+      "count": 2,
+      "locations": [
+        "index.html:4080",
+        "index.html:4164"
+      ]
+    },
+    {
+      "content": "{ role: 'system', content: systemMessage },\n                    ...conversationHistory,\n            ",
+      "count": 2,
+      "locations": [
+        "index.html:4081",
+        "index.html:4165"
+      ]
+    },
+    {
+      "content": "const options = {\n                    temperature: ollamaConfig.temperature,\n                    top",
+      "count": 2,
+      "locations": [
+        "index.html:4086",
+        "index.html:4171"
+      ]
+    },
+    {
+      "content": "temperature: ollamaConfig.temperature,\n                    top_p: ollamaConfig.top_p,\n              ",
+      "count": 2,
+      "locations": [
+        "index.html:4087",
+        "index.html:4172"
+      ]
+    },
+    {
+      "content": "const reader = response.body.getReader();\n                const decoder = new TextDecoder();\n       ",
+      "count": 6,
+      "locations": [
+        "index.html:4110",
+        "index.html:4111",
+        "index.html:4297",
+        "index.html:4298",
+        "index.html:4457",
+        "index.html:4458"
+      ]
+    },
+    {
+      "content": "const decoder = new TextDecoder();\n                let buffer = '';\n                let fullResponse",
+      "count": 3,
+      "locations": [
+        "index.html:4112",
+        "index.html:4299",
+        "index.html:4459"
+      ]
+    },
+    {
+      "content": "let fullResponse = '';\n\n                while (true) {\n                    const {done, value} = awa",
+      "count": 3,
+      "locations": [
+        "index.html:4114",
+        "index.html:4301",
+        "index.html:4461"
+      ]
+    },
+    {
+      "content": "onSentence(sentence);\n                                        }\n                                    ",
+      "count": 3,
+      "locations": [
+        "index.html:4136",
+        "index.html:4322",
+        "index.html:4482"
+      ]
+    },
+    {
+      "content": "}\n                                        fullResponse = fullResponse.slice(sentenceMatch[0].length)",
+      "count": 3,
+      "locations": [
+        "index.html:4137",
+        "index.html:4323",
+        "index.html:4483"
+      ]
+    },
+    {
+      "content": "// Handle any remaining text\n                if (fullResponse.trim() && onSentence) {\n              ",
+      "count": 2,
+      "locations": [
+        "index.html:4147",
+        "index.html:4148"
+      ]
+    },
+    {
+      "content": "if (fullResponse.trim() && onSentence) {\n                    onSentence(fullResponse.trim());\n      ",
+      "count": 3,
+      "locations": [
+        "index.html:4149",
+        "index.html:4334",
+        "index.html:4494"
+      ]
+    },
+    {
+      "content": "}),\n                    signal\n                });\n\n                cleanup();",
+      "count": 2,
+      "locations": [
+        "index.html:4238",
+        "index.html:4372"
+      ]
+    },
+    {
+      "content": "// Keep conversation history manageable\n                if (conversationHistory.length > 20) {\n     ",
+      "count": 6,
+      "locations": [
+        "index.html:4254",
+        "index.html:4255",
+        "index.html:4389",
+        "index.html:4390",
+        "index.html:4639",
+        "index.html:4640"
+      ]
+    },
+    {
+      "content": "if (conversationHistory.length > 20) {\n                    conversationHistory = conversationHistory",
+      "count": 3,
+      "locations": [
+        "index.html:4256",
+        "index.html:4391",
+        "index.html:4641"
+      ]
+    },
+    {
+      "content": "}\n\n                // Save conversation history\n                saveUISettings();",
+      "count": 3,
+      "locations": [
+        "index.html:4258",
+        "index.html:4393",
+        "index.html:4643"
+      ]
+    },
+    {
+      "content": "// Save conversation history\n                saveUISettings();\n\n                return aiResponse;\n ",
+      "count": 3,
+      "locations": [
+        "index.html:4260",
+        "index.html:4395",
+        "index.html:4645"
+      ]
+    },
+    {
+      "content": "if (!openaiConfig.key) {\n                    throw new Error('No OpenAI API key provided');\n        ",
+      "count": 2,
+      "locations": [
+        "index.html:4268",
+        "index.html:4343"
+      ]
+    },
+    {
+      "content": "{ role: 'developer', content: systemMessage },\n                    ...conversationHistory,\n         ",
+      "count": 2,
+      "locations": [
+        "index.html:4274",
+        "index.html:4350"
+      ]
+    },
+    {
+      "content": "method: 'POST',\n                    headers: {\n                        'Content-Type': 'application/",
+      "count": 2,
+      "locations": [
+        "index.html:4280",
+        "index.html:4359"
+      ]
+    },
+    {
+      "content": "'Content-Type': 'application/json',\n                        'Authorization': `Bearer ${openaiConfig.",
+      "count": 2,
+      "locations": [
+        "index.html:4282",
+        "index.html:4361"
+      ]
+    },
+    {
+      "content": "'Authorization': `Bearer ${openaiConfig.key}`\n                    },\n                    body: JSON.",
+      "count": 2,
+      "locations": [
+        "index.html:4283",
+        "index.html:4362"
+      ]
+    },
+    {
+      "content": "},\n                    body: JSON.stringify({\n                        model: openaiConfig.model,\n   ",
+      "count": 2,
+      "locations": [
+        "index.html:4284",
+        "index.html:4363"
+      ]
+    },
+    {
+      "content": "body: JSON.stringify({\n                        model: openaiConfig.model,\n                        me",
+      "count": 2,
+      "locations": [
+        "index.html:4285",
+        "index.html:4364"
+      ]
+    },
+    {
+      "content": "buffer += decoder.decode(value, {stream: true});\n                    const lines = buffer.split('\\n'",
+      "count": 2,
+      "locations": [
+        "index.html:4307",
+        "index.html:4467"
+      ]
+    },
+    {
+      "content": "if (content) {\n                                    fullResponse += content;\n                        ",
+      "count": 2,
+      "locations": [
+        "index.html:4316",
+        "index.html:4476"
+      ]
+    },
+    {
+      "content": "fullResponse += content;\n                                    const sentenceMatch = fullResponse.matc",
+      "count": 2,
+      "locations": [
+        "index.html:4317",
+        "index.html:4477"
+      ]
+    },
+    {
+      "content": "const sentenceMatch = fullResponse.match(/[^.!?]*[.!?]/);\n                                    if (se",
+      "count": 2,
+      "locations": [
+        "index.html:4318",
+        "index.html:4478"
+      ]
+    },
+    {
+      "content": "if (sentenceMatch) {\n                                        const sentence = sentenceMatch[0].trim(",
+      "count": 2,
+      "locations": [
+        "index.html:4319",
+        "index.html:4479"
+      ]
+    },
+    {
+      "content": "if (sentence.length > 10 && onSentence) {\n                                            onSentence(sen",
+      "count": 2,
+      "locations": [
+        "index.html:4321",
+        "index.html:4481"
+      ]
+    },
+    {
+      "content": "if (!response.ok) {\n                    const errorText = await response.text();\n                   ",
+      "count": 2,
+      "locations": [
+        "index.html:4377",
+        "index.html:4378"
+      ]
+    },
+    {
+      "content": "const systemInstruction = geminiConfig.system_instruction || document.getElementById('globalSystemMe",
+      "count": 2,
+      "locations": [
+        "index.html:4406",
+        "index.html:4407"
+      ]
+    },
+    {
+      "content": "if (conversationHistory.length === 0) {\n                    contents.push({\n                        ",
+      "count": 2,
+      "locations": [
+        "index.html:4413",
+        "index.html:4513"
+      ]
+    },
+    {
+      "content": "contents.push({\n                        role: 'user',\n                        parts: [{ text: system",
+      "count": 2,
+      "locations": [
+        "index.html:4414",
+        "index.html:4514"
+      ]
+    },
+    {
+      "content": "role: 'user',\n                        parts: [{ text: systemInstruction }]\n                    });\n ",
+      "count": 2,
+      "locations": [
+        "index.html:4415",
+        "index.html:4515"
+      ]
+    },
+    {
+      "content": "});\n\n                // Add current message\n                contents.push({\n                    role",
+      "count": 2,
+      "locations": [
+        "index.html:4430",
+        "index.html:4531"
+      ]
+    },
+    {
+      "content": "// Add current message\n                contents.push({\n                    role: 'user',\n           ",
+      "count": 2,
+      "locations": [
+        "index.html:4432",
+        "index.html:4533"
+      ]
+    },
+    {
+      "content": "contents.push({\n                    role: 'user',\n                    parts: [{ text: message }]\n   ",
+      "count": 2,
+      "locations": [
+        "index.html:4433",
+        "index.html:4534"
+      ]
+    },
+    {
+      "content": "});\n\n                const requestBody = {\n                    contents: contents,\n                 ",
+      "count": 2,
+      "locations": [
+        "index.html:4436",
+        "index.html:4537"
+      ]
+    },
+    {
+      "content": "const requestBody = {\n                    contents: contents,\n                    generationConfig: ",
+      "count": 2,
+      "locations": [
+        "index.html:4437",
+        "index.html:4538"
+      ]
+    },
+    {
+      "content": "console.log('Candidate content structure:', JSON.stringify(candidate.content, null, 2));\n\n          ",
+      "count": 2,
+      "locations": [
+        "index.html:4593",
+        "index.html:4594"
+      ]
+    },
+    {
+      "content": "whisperWorker.onerror = (error) => {\n                        console.error('❌ Whisper worker error:'",
+      "count": 2,
+      "locations": [
+        "index.html:4752",
+        "index.html:4753"
+      ]
+    },
+    {
+      "content": "// Use selected microphone if available\n                    if (selectedMicrophoneId) {\n            ",
+      "count": 2,
+      "locations": [
+        "index.html:4870",
+        "index.html:4871"
+      ]
+    },
+    {
+      "content": "function clearConversationHistory() {\n                console.log('clearConversationHistory called')",
+      "count": 2,
+      "locations": [
+        "index.html:5024",
+        "index.html:5025"
+      ]
+    },
+    {
+      "content": "console.log('📂 Model list refreshed:', availableModels.length, 'models found');\n            }\n    \n",
+      "count": 2,
+      "locations": [
+        "index.html:5112",
+        "index.html:5113"
+      ]
+    },
+    {
+      "content": "console.log('🎭 Loading selected model:', modelPath);\n\n                try {\n                    upd",
+      "count": 2,
+      "locations": [
+        "index.html:5130",
+        "index.html:5131"
+      ]
+    },
+    {
+      "content": "// Load default animations if available\n                    setTimeout(() => {\n                     ",
+      "count": 2,
+      "locations": [
+        "index.html:5186",
+        "index.html:5187"
+      ]
+    },
+    {
+      "content": "// lookAtTarget is a child of camera, so position is relative to camera\n                // Set targe",
+      "count": 2,
+      "locations": [
+        "index.html:5211",
+        "index.html:5212"
+      ]
+    },
+    {
+      "content": "// Set smile expression\n                expressionManager.setValue('joy', smileValue);\n             ",
+      "count": 2,
+      "locations": [
+        "index.html:5241",
+        "index.html:5242"
+      ]
+    },
+    {
+      "content": "function blink() {\n                if (!currentVrm || !currentVrm.userData?.vrm?.expressionManager) ",
+      "count": 2,
+      "locations": [
+        "index.html:5246",
+        "index.html:5247"
+      ]
+    },
+    {
+      "content": "// Don't process keys when typing in input fields\n                if (event.target.matches('input, t",
+      "count": 2,
+      "locations": [
+        "index.html:5296",
+        "index.html:5339"
+      ]
+    },
+    {
+      "content": "if (event.target.matches('input, textarea, select')) return;\n    \n                const key = event.",
+      "count": 2,
+      "locations": [
+        "index.html:5297",
+        "index.html:5340"
+      ]
+    },
+    {
+      "content": "if (keyStates.w) movement.z -= moveSpeed; // Forward\n                    if (keyStates.s) movement.z",
+      "count": 2,
+      "locations": [
+        "index.html:5378",
+        "index.html:5379"
+      ]
+    },
+    {
+      "content": "// Apply movement relative to camera orientation\n                    const worldMovement = new THREE",
+      "count": 2,
+      "locations": [
+        "index.html:5391",
+        "index.html:5392"
+      ]
+    },
+    {
+      "content": "// Arrow key camera movement (only when needed)\n                if (hasCameraMovement) {\n           ",
+      "count": 2,
+      "locations": [
+        "index.html:5399",
+        "index.html:5400"
+      ]
+    },
+    {
+      "content": "if (keyStates.arrowUp) cameraMovement.z += cameraSpeed;    // Forward\n                    if (keySta",
+      "count": 2,
+      "locations": [
+        "index.html:5404",
+        "index.html:5405"
+      ]
+    },
+    {
+      "content": "// Track mouse movement\n                renderer.domElement.addEventListener('mousemove', (event) =>",
+      "count": 2,
+      "locations": [
+        "index.html:5418",
+        "index.html:5419"
+      ]
+    },
+    {
+      "content": "// Update cursor tracking if enabled\n                    if (cursorTrackingEnabled) {\n              ",
+      "count": 2,
+      "locations": [
+        "index.html:5423",
+        "index.html:5424"
+      ]
+    },
+    {
+      "content": "// Add missing functions for enhanced functionality\n            function addMessage(message, role, u",
+      "count": 2,
+      "locations": [
+        "index.html:5461",
+        "index.html:5462"
+      ]
+    },
+    {
+      "content": "// Don't add messages if chat doesn't exist or is hidden\n                if (!chatContent || !chatOv",
+      "count": 2,
+      "locations": [
+        "index.html:5466",
+        "index.html:5467"
+      ]
+    },
+    {
+      "content": "while (chatContent.children.length > 50) {\n                    chatContent.removeChild(chatContent.f",
+      "count": 2,
+      "locations": [
+        "index.html:5492",
+        "index.html:5493"
+      ]
+    },
+    {
+      "content": "if (!selectedVoiceName) {\n                    // Auto-select female voice as fallback\n              ",
+      "count": 2,
+      "locations": [
+        "index.html:5596",
+        "index.html:5597"
+      ]
+    },
+    {
+      "content": "voice.name.toLowerCase().includes('samantha') ||\n                        voice.name.toLowerCase().in",
+      "count": 2,
+      "locations": [
+        "index.html:5615",
+        "index.html:5701"
+      ]
+    },
+    {
+      "content": "// Azure Voice Management Functions\n            async function fetchAzureVoices() {\n                ",
+      "count": 2,
+      "locations": [
+        "index.html:5632",
+        "index.html:5633"
+      ]
+    },
+    {
+      "content": "if (!azureKey || !azureRegion) {\n                    console.log('❌ Azure key and region required fo",
+      "count": 2,
+      "locations": [
+        "index.html:5637",
+        "index.html:5638"
+      ]
+    },
+    {
+      "content": "// Filter for neural voices and sort by locale\n                    const neuralVoices = voices\n     ",
+      "count": 2,
+      "locations": [
+        "index.html:5661",
+        "index.html:5662"
+      ]
+    },
+    {
+      "content": "function populateBrowserVoices() {\n                const browserVoiceSelect = document.getElementByI",
+      "count": 2,
+      "locations": [
+        "index.html:5677",
+        "index.html:5678"
+      ]
+    },
+    {
+      "content": "// Filter for English voices and sort them\n                const englishVoices = voices\n            ",
+      "count": 2,
+      "locations": [
+        "index.html:5687",
+        "index.html:5688"
+      ]
+    },
+    {
+      "content": "englishVoices.forEach(voice => {\n                    const option = document.createElement('option')",
+      "count": 2,
+      "locations": [
+        "index.html:5692",
+        "index.html:5693"
+      ]
+    },
+    {
+      "content": ".checkbox-label input[type=\"checkbox\"] {\n                margin-right: 8px;\n                transfor",
+      "count": 2,
+      "locations": [
+        "index.html:5757",
+        "index.html:5758"
+      ]
+    },
+    {
+      "content": "/* Custom scrollbar for webkit browsers */\n            .accordion-content::-webkit-scrollbar {\n     ",
+      "count": 2,
+      "locations": [
+        "index.html:5782",
+        "index.html:5783"
+      ]
+    },
+    {
+      "content": ".accordion-content::-webkit-scrollbar-track {\n                background: rgba(0, 0, 0, 0.1);\n      ",
+      "count": 2,
+      "locations": [
+        "index.html:5787",
+        "index.html:5788"
+      ]
+    },
+    {
+      "content": "/* Padding adjustments for scrollable content */\n            .accordion-content > .control-group:fir",
+      "count": 2,
+      "locations": [
+        "index.html:5911",
+        "index.html:5912"
+      ]
+    },
+    {
+      "content": ".preset-btn:hover {\n                background: rgba(255, 20, 147, 0.2);\n                border-colo",
+      "count": 2,
+      "locations": [
+        "index.html:5976",
+        "index.html:5977"
+      ]
+    },
+    {
+      "content": "@media (max-width: 768px) {\n                .title-logo {\n                    height: 45px;\n        ",
+      "count": 2,
+      "locations": [
+        "index.html:6045",
+        "index.html:6046"
+      ]
+    },
+    {
+      "content": "// Reusable timeout controller helper\nfunction createAPITimeoutController(timeoutMs = 30000) {\n  con",
+      "count": 2,
+      "locations": [
+        "script.js:30",
+        "script.js:31"
+      ]
+    },
+    {
+      "content": "var length = array.length;\n      for (var i = 0; i < length; i++) {\n        values += array[i];\n    ",
+      "count": 4,
+      "locations": [
+        "script.js:64",
+        "script.js:65",
+        "script.js:1140",
+        "script.js:1141"
+      ]
+    },
+    {
+      "content": "audioElement.onplay = function() {\n    isTTSPlaying = true;\n    processTTSAudio();\n    updateButtonS",
+      "count": 2,
+      "locations": [
+        "script.js:74",
+        "script.js:75"
+      ]
+    },
+    {
+      "content": "// Stop listening when TTS starts playing\n    if (isListening) {\n      stopListening();\n    }",
+      "count": 2,
+      "locations": [
+        "script.js:79",
+        "script.js:80"
+      ]
+    },
+    {
+      "content": "// Hide speech bubble when TTS ends\n    hideSpeechBubble();\n    // Return to idle animation\n    stop",
+      "count": 2,
+      "locations": [
+        "script.js:99",
+        "script.js:100"
+      ]
+    },
+    {
+      "content": "// Track camera changes for springbone physics\nlet lastCameraPosition = camera.position.clone();\nlet",
+      "count": 2,
+      "locations": [
+        "script.js:153",
+        "script.js:154"
+      ]
+    },
+    {
+      "content": "// Update last positions\n  lastCameraPosition.copy(camera.position);\n  lastCameraRotation.copy(camer",
+      "count": 2,
+      "locations": [
+        "script.js:181",
+        "script.js:182"
+      ]
+    },
+    {
+      "content": "// Mouse movement tracking for springbone physics\nlet mouseMovement = { x: 0, y: 0, intensity: 0 };\n",
+      "count": 2,
+      "locations": [
+        "script.js:186",
+        "script.js:187"
+      ]
+    },
+    {
+      "content": "// Convert mouse position to normalized device coordinates\n  const rect = renderer.domElement.getBou",
+      "count": 2,
+      "locations": [
+        "script.js:217",
+        "script.js:218"
+      ]
+    },
+    {
+      "content": "( gltf ) => {\n\n//THREE.VRMUtils.removeUnnecessaryVertices( gltf.scene ); Vroid VRM can't handle this",
+      "count": 2,
+      "locations": [
+        "script.js:463",
+        "script.js:464"
+      ]
+    },
+    {
+      "content": "//THREE.VRMUtils.removeUnnecessaryVertices( gltf.scene ); Vroid VRM can't handle this for some reaso",
+      "count": 2,
+      "locations": [
+        "script.js:465",
+        "script.js:466"
+      ]
+    },
+    {
+      "content": "scene.remove( currentVrm.scene );\n currentVrm.dispose();\n\n}",
+      "count": 2,
+      "locations": [
+        "script.js:472",
+        "script.js:473"
+      ]
+    },
+    {
+      "content": "// Apply saved VRM position\napplyVRMPosition();\n\n// Remove per-arm UI adjustments in favor of animat",
+      "count": 2,
+      "locations": [
+        "script.js:480",
+        "script.js:481"
+      ]
+    },
+    {
+      "content": "// Remove per-arm UI adjustments in favor of animations\n\n// Initialize simple idle/talking animation",
+      "count": 2,
+      "locations": [
+        "script.js:483",
+        "script.js:484"
+      ]
+    },
+    {
+      "content": "vrm.humanoid.getBoneNode( THREE.VRMSchema.HumanoidBoneName.Hips ).rotation.y = Math.PI;\nvrm.springBo",
+      "count": 2,
+      "locations": [
+        "script.js:491",
+        "script.js:492"
+      ]
+    },
+    {
+      "content": "// grid / axis helpers\n// Removed commented THREE.js helper code\n\n// animate",
+      "count": 2,
+      "locations": [
+        "script.js:576",
+        "script.js:577"
+      ]
+    },
+    {
+      "content": "// Check if TTS is playing and the audio volume is above the threshold\n    if (isTTSPlaying && curre",
+      "count": 2,
+      "locations": [
+        "script.js:604",
+        "script.js:605"
+      ]
+    },
+    {
+      "content": "function animate() {\nrequestAnimationFrame(animate);\n\nconst deltaTime = Math.min(clock.getDelta(), 0",
+      "count": 2,
+      "locations": [
+        "script.js:632",
+        "script.js:633"
+      ]
+    },
+    {
+      "content": "function updateWebSocketStatus(status, color) {\n  const statusEl = document.getElementById('websocke",
+      "count": 2,
+      "locations": [
+        "script.js:1059",
+        "script.js:1060"
+      ]
+    },
+    {
+      "content": "// Ollama model loading optimization variables\nlet isLoadingOllamaModels = false;\nlet ollamaModelsLo",
+      "count": 2,
+      "locations": [
+        "script.js:1103",
+        "script.js:1104"
+      ]
+    },
+    {
+      "content": "javascriptNode.onaudioprocess = function () {\n      var array = new Uint8Array(analyser.frequencyBin",
+      "count": 2,
+      "locations": [
+        "script.js:1135",
+        "script.js:1136"
+      ]
+    },
+    {
+      "content": "// audio in expressed as one number\n      var average = values / length;\n      var inputvolume = ave",
+      "count": 2,
+      "locations": [
+        "script.js:1145",
+        "script.js:1146"
+      ]
+    },
+    {
+      "content": "// move the interface slider\n              document.getElementById(\"inputlevel\").value = inputvolume",
+      "count": 2,
+      "locations": [
+        "script.js:1153",
+        "script.js:1154"
+      ]
+    },
+    {
+      "content": "// Enhanced body movement with smoother audio mapping",
+      "count": 2,
+      "locations": [
+        "script.js:1162",
+        "script.js:1163"
+      ]
+    },
+    {
+      "content": "// Improved damping and spring calculations \n      var damping = 750/(bodymotion/10);\n      var spri",
+      "count": 2,
+      "locations": [
+        "script.js:1167",
+        "script.js:1168"
+      ]
+    },
+    {
+      "content": "//look at camera (now handled by updateEyeTracking in main loop)\n      // lookAtTarget.position.x = ",
+      "count": 2,
+      "locations": [
+        "script.js:1304",
+        "script.js:1305"
+      ]
+    },
+    {
+      "content": "// blink\n\nfunction blink() {\n  if (!currentVrm) return; // Safety check",
+      "count": 2,
+      "locations": [
+        "script.js:1323",
+        "script.js:1324"
+      ]
+    },
+    {
+      "content": "// drag and drop + file handler\nwindow.addEventListener( 'dragover', function( event ) {\nevent.preve",
+      "count": 2,
+      "locations": [
+        "script.js:1379",
+        "script.js:1380"
+      ]
+    },
+    {
+      "content": "// handle window resizes\n\n\nwindow.addEventListener( 'resize', onWindowResize, false );",
+      "count": 2,
+      "locations": [
+        "script.js:1398",
+        "script.js:1399"
+      ]
+    },
+    {
+      "content": "renderer.setSize( window.innerWidth, window.innerHeight );\n\n}\n// interface handling",
+      "count": 2,
+      "locations": [
+        "script.js:1408",
+        "script.js:1409"
+      ]
+    },
+    {
+      "content": "// Background functions\nfunction loadBackground() {\n  const fileInput = document.getElementById('bac",
+      "count": 2,
+      "locations": [
+        "script.js:1520",
+        "script.js:1521"
+      ]
+    },
+    {
+      "content": "// Restore original positions\n  for (let i = 0; i < position.array.length; i++) {\n    position.array",
+      "count": 2,
+      "locations": [
+        "script.js:1631",
+        "script.js:1632"
+      ]
+    },
+    {
+      "content": "for (let i = 0; i < position.count; i++) {\n      const x = position.getX(i);\n      const y = positio",
+      "count": 2,
+      "locations": [
+        "script.js:1640",
+        "script.js:1641"
+      ]
+    },
+    {
+      "content": "video.addEventListener('error', (e) => {\n      console.error('Video loading error:', e);\n      conso",
+      "count": 2,
+      "locations": [
+        "script.js:1707",
+        "script.js:1708"
+      ]
+    },
+    {
+      "content": "// Apply curve effect after a small delay to ensure geometry is ready\n    setTimeout(() => {\n      a",
+      "count": 2,
+      "locations": [
+        "script.js:1782",
+        "script.js:1783"
+      ]
+    },
+    {
+      "content": "// Clear the temporary entry\n        localStorage.removeItem('background-media');\n        return;\n  ",
+      "count": 2,
+      "locations": [
+        "script.js:1899",
+        "script.js:1900"
+      ]
+    },
+    {
+      "content": "function applyVRMPosition() {\n  if (currentVrm && currentVrm.scene) {\n    // Apply position\n    curr",
+      "count": 2,
+      "locations": [
+        "script.js:1955",
+        "script.js:1956"
+      ]
+    },
+    {
+      "content": "// Cleanup - removed complex animation system, now using simple arm sliders\n// end\n\n// VRM motion se",
+      "count": 2,
+      "locations": [
+        "script.js:2149",
+        "script.js:2150"
+      ]
+    },
+    {
+      "content": "if (!personality || personality.trim() === '') {\n    alert('Please enter a character personality des",
+      "count": 2,
+      "locations": [
+        "script.js:2347",
+        "script.js:2348"
+      ]
+    },
+    {
+      "content": "Character Name: ${name}\nCharacter Personality: ${personality}\n\nImportant: You must roleplay as this ",
+      "count": 2,
+      "locations": [
+        "script.js:2359",
+        "script.js:2360"
+      ]
+    },
+    {
+      "content": "async function generateCharacter() {\n  const promptInput = document.getElementById('characterPrompt'",
+      "count": 2,
+      "locations": [
+        "script.js:2389",
+        "script.js:2390"
+      ]
+    },
+    {
+      "content": "// Show generating state\n  const originalBtnText = generateBtn.textContent;\n  generateBtn.textConten",
+      "count": 2,
+      "locations": [
+        "script.js:2402",
+        "script.js:2403"
+      ]
+    },
+    {
+      "content": "function updateChatDisplayCharacterName() {\n  // Update any existing chat messages or UI elements wi",
+      "count": 2,
+      "locations": [
+        "script.js:2490",
+        "script.js:2491"
+      ]
+    },
+    {
+      "content": "if (floatingChat && toggleBtn) {\n    const isHiddenByDisplay = floatingChat.style.display === 'none'",
+      "count": 2,
+      "locations": [
+        "script.js:2555",
+        "script.js:2556"
+      ]
+    },
+    {
+      "content": "// AI personality is now defined in the global system prompt textbox\n// Removed hardcoded aiPersonal",
+      "count": 2,
+      "locations": [
+        "script.js:2607",
+        "script.js:2608"
+      ]
+    },
+    {
+      "content": "// Removed aiPersonality object - personality is now fully customizable via the global system prompt",
+      "count": 2,
+      "locations": [
+        "script.js:2610",
+        "script.js:2611"
+      ]
+    },
+    {
+      "content": "const subtitle = createSubtitleElement();\n  \n  // Clear any existing subtitle timeouts\n  if (current",
+      "count": 2,
+      "locations": [
+        "script.js:2905",
+        "script.js:2953"
+      ]
+    },
+    {
+      "content": "const subtitle = createSubtitleElement();\n  \n  // Clear any existing subtitle timeouts\n  if (current",
+      "count": 2,
+      "locations": [
+        "script.js:2906",
+        "script.js:2954"
+      ]
+    },
+    {
+      "content": "// Clear any existing subtitle timeouts\n  if (currentSubtitleTimeout) {\n    clearTimeout(currentSubt",
+      "count": 4,
+      "locations": [
+        "script.js:2907",
+        "script.js:2908",
+        "script.js:2955",
+        "script.js:2956"
+      ]
+    },
+    {
+      "content": "if (currentSubtitleTimeout) {\n    clearTimeout(currentSubtitleTimeout);\n  }\n  \n  // Show subtitle co",
+      "count": 2,
+      "locations": [
+        "script.js:2909",
+        "script.js:2957"
+      ]
+    },
+    {
+      "content": "clearTimeout(currentSubtitleTimeout);\n  }\n  \n  // Show subtitle container\n  subtitle.style.display =",
+      "count": 2,
+      "locations": [
+        "script.js:2910",
+        "script.js:2958"
+      ]
+    },
+    {
+      "content": "const messageEl = document.createElement('div');\n  messageEl.className = 'twitch-message local-user-",
+      "count": 2,
+      "locations": [
+        "script.js:3213",
+        "script.js:3214"
+      ]
+    },
+    {
+      "content": "async function getOllamaResponse(message) {\n  if (!ollamaConfig.model) {\n    throw new Error('No Oll",
+      "count": 2,
+      "locations": [
+        "script.js:3273",
+        "script.js:3274"
+      ]
+    },
+    {
+      "content": "// Add seed if not random\n  if (ollamaConfig.seed !== 0) {\n    options.seed = ollamaConfig.seed;\n  }",
+      "count": 2,
+      "locations": [
+        "script.js:3299",
+        "script.js:3300"
+      ]
+    },
+    {
+      "content": "// Add to conversation history\n  conversationHistory.push({ role: 'user', content: message });\n  con",
+      "count": 3,
+      "locations": [
+        "script.js:3349",
+        "script.js:3408",
+        "script.js:3544"
+      ]
+    },
+    {
+      "content": "conversationHistory.push({ role: 'user', content: message });\n  conversationHistory.push({ role: 'as",
+      "count": 3,
+      "locations": [
+        "script.js:3350",
+        "script.js:3409",
+        "script.js:3545"
+      ]
+    },
+    {
+      "content": "conversationHistory.push({ role: 'assistant', content: aiResponse });\n\n  // Keep conversation histor",
+      "count": 3,
+      "locations": [
+        "script.js:3351",
+        "script.js:3410",
+        "script.js:3546"
+      ]
+    },
+    {
+      "content": "}\n  \n  // Save conversation history\n  saveUISettings();",
+      "count": 3,
+      "locations": [
+        "script.js:3356",
+        "script.js:3415",
+        "script.js:3551"
+      ]
+    },
+    {
+      "content": "// Save conversation history\n  saveUISettings();\n\n  return aiResponse;\n}",
+      "count": 3,
+      "locations": [
+        "script.js:3358",
+        "script.js:3417",
+        "script.js:3553"
+      ]
+    },
+    {
+      "content": "cleanup();\n\n  if (!response.ok) {\n    const errorText = await response.text();",
+      "count": 3,
+      "locations": [
+        "script.js:3397",
+        "script.js:3482",
+        "script.js:3738"
+      ]
+    },
+    {
+      "content": "if (!response.ok) {\n    const errorText = await response.text();\n    throw new Error(`OpenAI API err",
+      "count": 2,
+      "locations": [
+        "script.js:3399",
+        "script.js:3400"
+      ]
+    },
+    {
+      "content": "if (!data.candidates[0]) {\n    console.error('No first candidate in Gemini API response:', data);\n  ",
+      "count": 2,
+      "locations": [
+        "script.js:3503",
+        "script.js:3504"
+      ]
+    },
+    {
+      "content": "console.log('Candidate content structure:', JSON.stringify(candidate.content, null, 2));\n  \n  // Han",
+      "count": 2,
+      "locations": [
+        "script.js:3514",
+        "script.js:3515"
+      ]
+    },
+    {
+      "content": "// Setup audio processing for VRM mouth movement\n  setupTTSAudioProcessing(currentTTSAudio);\n  \n  aw",
+      "count": 2,
+      "locations": [
+        "script.js:3615",
+        "script.js:3616"
+      ]
+    },
+    {
+      "content": "// Stop any ongoing speech synthesis\n  if (speechSynthesis.speaking) {\n    speechSynthesis.cancel();",
+      "count": 2,
+      "locations": [
+        "script.js:3636",
+        "script.js:3637"
+      ]
+    },
+    {
+      "content": "// Show speech bubble when browser TTS starts\n      showSpeechBubble(text);\n      // Trigger talking",
+      "count": 2,
+      "locations": [
+        "script.js:3662",
+        "script.js:3663"
+      ]
+    },
+    {
+      "content": "if (!response.ok) {\n    const errorText = await response.text();\n    throw new Error(`HTTP ${respons",
+      "count": 2,
+      "locations": [
+        "script.js:3740",
+        "script.js:3741"
+      ]
+    },
+    {
+      "content": "if (!selectedVoiceName) {\n    // Auto-select female voice as fallback\n    return getAutoSelectedFema",
+      "count": 2,
+      "locations": [
+        "script.js:3770",
+        "script.js:3771"
+      ]
+    },
+    {
+      "content": "// Restore selection if it still exists\n  if (currentVoice && [...voiceSelect.options].find(opt => o",
+      "count": 2,
+      "locations": [
+        "script.js:3893",
+        "script.js:3894"
+      ]
+    },
+    {
+      "content": "englishVoices.forEach(voice => {\n    const option = document.createElement('option');\n    option.val",
+      "count": 2,
+      "locations": [
+        "script.js:3916",
+        "script.js:3917"
+      ]
+    },
+    {
+      "content": "// Save to localStorage\n  if (typeof(Storage) !== \"undefined\") {\n    localStorage.setItem('vu-vrm-br",
+      "count": 2,
+      "locations": [
+        "script.js:3945",
+        "script.js:3946"
+      ]
+    },
+    {
+      "content": "// Check if it's a network error\n    if (error.name === 'TypeError' && error.message.includes('fetch",
+      "count": 2,
+      "locations": [
+        "script.js:3997",
+        "script.js:3998"
+      ]
+    },
+    {
+      "content": "if (currentProvider === 'ollama') {\n    const modelSelect = document.getElementById('ollamaModel');\n",
+      "count": 2,
+      "locations": [
+        "script.js:4010",
+        "script.js:4326"
+      ]
+    },
+    {
+      "content": "// Initialize UI settings only (Ollama loads in DOMContentLoaded)\nsetTimeout(() => {\n  loadUISetting",
+      "count": 2,
+      "locations": [
+        "script.js:4027",
+        "script.js:4028"
+      ]
+    },
+    {
+      "content": "// Restore conversation history\n    if (settings.conversationHistory && Array.isArray(settings.conve",
+      "count": 2,
+      "locations": [
+        "script.js:4085",
+        "script.js:4086"
+      ]
+    },
+    {
+      "content": "// Update curve UI elements\n    if (document.getElementById('bgCurveX')) document.getElementById('bg",
+      "count": 2,
+      "locations": [
+        "script.js:4169",
+        "script.js:4170"
+      ]
+    },
+    {
+      "content": "function setOllamaValues(values) {\n  Object.keys(values).forEach(key => {\n    if (ollamaConfig.hasOw",
+      "count": 2,
+      "locations": [
+        "script.js:4246",
+        "script.js:4247"
+      ]
+    },
+    {
+      "content": "// Show/hide relevant sections\n  document.getElementById('ollamaConfig').style.display = currentProv",
+      "count": 2,
+      "locations": [
+        "script.js:4315",
+        "script.js:4316"
+      ]
+    },
+    {
+      "content": "// Toggle Settings Panel\nfunction toggleSettings() {\n  const panel = document.getElementById('settin",
+      "count": 2,
+      "locations": [
+        "script.js:4487",
+        "script.js:4488"
+      ]
+    },
+    {
+      "content": "// Toggle Password Visibility\nfunction togglePasswordVisibility(inputId, buttonElement) {\n  const in",
+      "count": 2,
+      "locations": [
+        "script.js:4517",
+        "script.js:4518"
+      ]
+    },
+    {
+      "content": "function testBrowserTTS() {\n  const text = \"This is a test of the browser's built-in text-to-speech.",
+      "count": 2,
+      "locations": [
+        "script.js:4591",
+        "script.js:4592"
+      ]
+    },
+    {
+      "content": "// Update display\n    document.getElementById('messageAccumulationValue').textContent = settings.mes",
+      "count": 2,
+      "locations": [
+        "script.js:4774",
+        "script.js:4775"
+      ]
+    },
+    {
+      "content": "function toggleStreamMode() {\n  const streamModeEnabled = document.getElementById('enableStreamMode'",
+      "count": 2,
+      "locations": [
+        "script.js:4786",
+        "script.js:4787"
+      ]
+    },
+    {
+      "content": "function processQueue() {\n  if (messageQueue.length === 0 || isProcessingTTS || isTTSPlaying) {\n    ",
+      "count": 2,
+      "locations": [
+        "script.js:4817",
+        "script.js:4818"
+      ]
+    },
+    {
+      "content": "// Use same exact configuration as main thread\n    transcriber = await pipeline('automatic-speech-re",
+      "count": 2,
+      "locations": [
+        "whisper-worker.js:39",
+        "whisper-worker.js:40"
+      ]
+    }
+  ],
+  "unusedFunctions": [],
+  "redundantEventHandlers": []
+}
