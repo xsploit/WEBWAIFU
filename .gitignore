@@ -53,3 +53,17 @@ dist/
 # Exclude from version control
 room.html
 script.js
+
+# Analysis and debug files
+*ANALYSIS*.md
+*REPORT*.md
+*-output.txt
+*-report.json
+code-analyzer.js
+deep-analysis.js
+function-differ.js
+generate-final-report.js
+diff-*.txt
+index copy*.html
+OLLAMA_SETUP.md
+AvatarSample_H.vrm
