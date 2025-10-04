@@ -49,3 +49,7 @@ build/
 dist/
 .claude/settings.local.json
 .claude
+
+# Exclude from version control
+room.html
+script.js
