@@ -1163,9 +1163,13 @@ RESPONSE FORMAT:
                 // Update VRM expression based on UI controls
                 updateVRMExpression();
 
-                // Process TTS audio in main loop instead of separate RAF
+                // Ensure TTS processing loop matches playback state without heavy RAF work
                 if (isTTSPlaying) {
-                    processTTSAudio();
+                    if (!ttsProcessingIntervalId) {
+                        startTTSAudioProcessingLoop();
+                    }
+                } else if (ttsProcessingIntervalId) {
+                    stopTTSAudioProcessingLoop();
                 }
 
                 // PERFORMANCE: Update expressions ONCE per frame after all setValue calls
@@ -1870,7 +1874,7 @@ RESPONSE FORMAT:
                     </speak>`;
 
                 console.log('🎭 Starting Azure SDK TTS with visemes');
-                isTTSPlaying = true;
+                setTTSPlayingState(true);
                 isProcessingTTS = true;
                 isUsingVisemes = true;
 
@@ -1931,7 +1935,7 @@ RESPONSE FORMAT:
 
                                 audioElement.onended = () => {
                                     URL.revokeObjectURL(audioUrl);
-                                    isTTSPlaying = false;
+                                    setTTSPlayingState(false);
                                     isProcessingTTS = false;
                                     isUsingVisemes = false;
 
@@ -1947,7 +1951,7 @@ RESPONSE FORMAT:
                             } else {
                                 console.error('❌ Speech SDK: Error synthesizing speech:', result.errorDetails);
                                 // Only stop on error
-                            isTTSPlaying = false;
+                            setTTSPlayingState(false);
                             isProcessingTTS = false;
                             isUsingVisemes = false;
                             stopTalkingAnimationForTTS();
@@ -1956,7 +1960,7 @@ RESPONSE FORMAT:
                         },
                         error => {
                             console.error('❌ Speech SDK: SpeakSsmlAsync error:', error);
-                            isTTSPlaying = false;
+                            setTTSPlayingState(false);
                             isProcessingTTS = false;
                             isUsingVisemes = false;
                             stopTalkingAnimationForTTS();
@@ -1992,7 +1996,7 @@ RESPONSE FORMAT:
                 if (currentTTSAudio) {
                     currentTTSAudio.pause();
                     currentTTSAudio.currentTime = 0;
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     ttsInputVolume = 0;
                 }
 
@@ -2001,7 +2005,7 @@ RESPONSE FORMAT:
                 currentTTSAudio.src = URL.createObjectURL(ttsResult.audioBlob);
                 currentTTSAudio.crossOrigin = 'anonymous';
 
-                isTTSPlaying = true;
+                setTTSPlayingState(true);
                 isProcessingTTS = true;
                 isUsingVisemes = true;
                 startTalkingAnimationForTTS();
@@ -2013,7 +2017,7 @@ RESPONSE FORMAT:
 
                 currentTTSAudio.onended = () => {
                     URL.revokeObjectURL(currentTTSAudio.src);
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     isProcessingTTS = false;
                     isUsingVisemes = false;
                     stopTalkingAnimationForTTS();
@@ -2027,7 +2031,7 @@ RESPONSE FORMAT:
 
                 currentTTSAudio.onerror = () => {
                     console.error('Azure TTS audio playback failed');
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     isProcessingTTS = false;
                     isUsingVisemes = false;
                     stopTalkingAnimationForTTS();
@@ -2503,19 +2507,19 @@ RESPONSE FORMAT:
                     u.rate = azureConfig.rate||1.0; u.pitch = Math.max(0, Math.min(2, ((azureConfig.pitch||0)+12)/24)); u.volume = azureConfig.volume||0.9;
                     u.onstart = ()=>{
                         console.log('🎤 Browser TTS started');
-                        isTTSPlaying = true;
+                        setTTSPlayingState(true);
                         isBrowserTTSActive = true;
                         startTalkingAnimationForTTS();
                         // TTS audio processing now handled by main animation loop
                     };
                     u.onend = ()=>{
-                        isTTSPlaying = false;
+                        setTTSPlayingState(false);
                         isBrowserTTSActive = false;
                         stopTalkingAnimationForTTS();
                         resolve();
                     };
                     u.onerror = ()=>{
-                        isTTSPlaying = false;
+                        setTTSPlayingState(false);
                         isBrowserTTSActive = false;
                         stopTalkingAnimationForTTS();
                         resolve();
@@ -2540,6 +2544,39 @@ RESPONSE FORMAT:
                 ttsAnalyser.connect(ttsAudioContext.destination);
 
                 // TTS audio processing now handled by main animation loop
+            }
+
+
+            // Dedicated interval to process TTS audio outside the render loop
+            function startTTSAudioProcessingLoop() {
+                if (ttsProcessingIntervalId) return;
+
+                ttsProcessingIntervalId = setInterval(() => {
+                    if (!isTTSPlaying) {
+                        stopTTSAudioProcessingLoop();
+                        return;
+                    }
+                    processTTSAudio();
+                }, TTS_PROCESS_INTERVAL_MS);
+            }
+
+            function stopTTSAudioProcessingLoop() {
+                if (ttsProcessingIntervalId) {
+                    clearInterval(ttsProcessingIntervalId);
+                    ttsProcessingIntervalId = null;
+                }
+            }
+
+            function setTTSPlayingState(playing) {
+                if (isTTSPlaying === playing) return;
+
+                isTTSPlaying = playing;
+
+                if (playing) {
+                    startTTSAudioProcessingLoop();
+                } else {
+                    stopTTSAudioProcessingLoop();
+                }
             }
 
             function processTTSAudio() {
@@ -3253,6 +3290,8 @@ RESPONSE FORMAT:
             let ttsInputVolume = 0;
             let currentTTSAudio = null;
             let isTTSPlaying = false;
+            const TTS_PROCESS_INTERVAL_MS = Math.round(1000 / 30); // ~30 Hz update cadence for TTS processing
+            let ttsProcessingIntervalId = null;
             let isProcessingTTS = false;
             let isBrowserTTSActive = false;
             let isUsingVisemes = false; // Flag to disable audio-reactive movement when using precise visemes
@@ -3964,7 +4003,7 @@ RESPONSE FORMAT:
                 if (isPlayingAudio || audioQueue.length === 0) return;
 
                 isPlayingAudio = true;
-                isTTSPlaying = true;
+                setTTSPlayingState(true);
 
                 // Start talking animation once at the beginning
                 startTalkingAnimationForTTS();
@@ -3985,7 +4024,7 @@ RESPONSE FORMAT:
                 // Queue is now empty - stop everything
                 isPlayingAudio = false;
                 isProcessingTTS = false;
-                isTTSPlaying = false;
+                setTTSPlayingState(false);
                 isUsingVisemes = false;
                 stopTalkingAnimationForTTS();
                 applyVisemeToVRM(vrm || currentVrm, 0, 0);
@@ -5690,7 +5729,7 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 if (currentTTSAudio) {
                     currentTTSAudio.pause();
                     currentTTSAudio.currentTime = 0;
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     ttsInputVolume = 0;
                 }
                 
@@ -5704,11 +5743,12 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 // Setup audio processing for VRM mouth movement
                 setupTTSAudioProcessing(currentTTSAudio);
                 
+                setTTSPlayingState(true);
                 await currentTTSAudio.play();
                 
                 currentTTSAudio.onended = () => {
                     URL.revokeObjectURL(audioUrl);
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     ttsInputVolume = 0;
                     isProcessingTTS = false;
                     updateButtonStates();
