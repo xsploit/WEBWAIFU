@@ -233,6 +233,15 @@
                             </label>
                         </div>
                         <div class="control-group">
+                            <label>TTS Provider</label>
+                            <select id="ttsProvider" onchange="handleTTSProviderChange()">
+                                <option value="auto">Auto (Azure ➜ Edge)</option>
+                                <option value="azure">Azure Speech (Paid)</option>
+                                <option value="edge">Edge Speech (Free)</option>
+                                <option value="browser">Browser (Built-in)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
                             <label>Azure TTS Key (Optional)</label>
                             <div class="input-with-eye">
                                 <input type="password" id="azureKey" placeholder="Leave empty to use browser TTS" onchange="updateAzureConfig()">
@@ -248,6 +257,7 @@
                             <div style="display: flex; gap: 5px; align-items: center;">
                                 <select id="voiceSelect" onchange="updateAzureConfig()" style="flex: 1;">
                                     <option value="en-US-JennyNeural">Jenny (US)</option>
+                                    <option value="en-US-AvaMultilingualNeural">Ava (US)</option>
                                     <option value="en-US-AshleyNeural">Ashley (US)</option>
                                     <option value="en-US-GuyNeural">Guy (US)</option>
                                     <option value="en-GB-SoniaNeural">Sonia (UK)</option>
@@ -927,6 +937,7 @@ RESPONSE FORMAT:
             import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
             import { VRMLoaderPlugin } from '@pixiv/three-vrm';
             import { VRMAnimationLoaderPlugin, createVRMAnimationClip } from '@pixiv/three-vrm-animation';
+            import { Communicate, VoicesManager } from 'https://cdn.jsdelivr.net/npm/edge-tts-universal@1.3.2/dist/browser.js';
     
             let scene, camera, renderer, controls, clock;
             let vrm = null;
@@ -1053,7 +1064,10 @@ RESPONSE FORMAT:
     
     
             // Azure TTS state
-            const azureConfig = { key: '', region: 'eastus', voice: 'en-US-JennyNeural', rate: 1.0, pitch: 1.3, volume: 0.9, browserVoice: 'auto' };
+            const azureConfig = { key: '', region: 'eastus', voice: 'en-US-JennyNeural', rate: 1.0, pitch: 1.3, volume: 0.9, browserVoice: 'auto', provider: 'auto' };
+            const TTS_PROVIDERS = { AUTO: 'auto', AZURE: 'azure', EDGE: 'edge', BROWSER: 'browser' };
+            let edgeVoicesCache = null;
+            let edgeVoicesPromise = null;
             let speechSynthesizer = null;
     
             function init() {
@@ -1163,9 +1177,13 @@ RESPONSE FORMAT:
                 // Update VRM expression based on UI controls
                 updateVRMExpression();
 
-                // Process TTS audio in main loop instead of separate RAF
+                // Ensure TTS processing loop matches playback state without heavy RAF work
                 if (isTTSPlaying) {
-                    processTTSAudio();
+                    if (!ttsProcessingIntervalId) {
+                        startTTSAudioProcessingLoop();
+                    }
+                } else if (ttsProcessingIntervalId) {
+                    stopTTSAudioProcessingLoop();
                 }
 
                 // PERFORMANCE: Update expressions ONCE per frame after all setValue calls
@@ -1193,12 +1211,14 @@ RESPONSE FORMAT:
                     const keyEl = document.getElementById('azureKey');
                     const regionEl = document.getElementById('azureRegion');
                     const voiceEl = document.getElementById('voiceSelect');
+                    const providerEl = document.getElementById('ttsProvider');
                     const volEl = document.getElementById('ttsVolume');
                     const pitchEl = document.getElementById('ttsPitch');
                     const rateEl = document.getElementById('ttsRate');
                     if (keyEl) azureConfig.key = keyEl.value.trim();
                     if (regionEl) azureConfig.region = regionEl.value.trim() || 'eastus';
                     if (voiceEl) azureConfig.voice = voiceEl.value;
+                    if (providerEl) azureConfig.provider = providerEl.value || TTS_PROVIDERS.AUTO;
                     if (volEl) azureConfig.volume = parseFloat(volEl.value) || 0.9;
                     if (pitchEl) azureConfig.pitch = parseFloat(pitchEl.value) || 0;
                     if (rateEl) azureConfig.rate = parseFloat(rateEl.value) || 1.0;
@@ -1212,21 +1232,45 @@ RESPONSE FORMAT:
                     saveLLMSettings();
                 };
                 window.refreshAzureVoices = async function(){
-                    // Minimal voice list fetch
+                    const voiceSelect = document.getElementById('voiceSelect');
+                    if (!voiceSelect) return;
+
+                    const providerSetting = getSelectedTTSProviderSetting();
+                    const resolvedProvider = resolveTTSProviderPreference();
+
+                    if (resolvedProvider !== TTS_PROVIDERS.AZURE) {
+                        const edgeLoaded = await populateVoiceSelectWithEdgeVoices();
+                        if (!edgeLoaded && providerSetting === TTS_PROVIDERS.AZURE) {
+                            console.warn('Azure provider selected but credentials are missing; no Azure voices loaded');
+                        }
+                        return;
+                    }
+
+                    if (!azureConfig.key || !azureConfig.region) {
+                        await populateVoiceSelectWithEdgeVoices();
+                        return;
+                    }
+
                     try{
-                        if (!azureConfig.key || !azureConfig.region) return;
                         const res = await fetch(`https://${azureConfig.region}.tts.speech.microsoft.com/cognitiveservices/voices/list`, { headers: { 'Ocp-Apim-Subscription-Key': azureConfig.key } });
-                        if (!res.ok) return;
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
                         const voices = await res.json();
-                        const voiceSelect = document.getElementById('voiceSelect');
-                        if (!voiceSelect) return;
-                        const cur = voiceSelect.value;
+                        const currentValue = azureConfig.voice || voiceSelect.value;
                         voiceSelect.innerHTML = '';
                         voices.filter(v=>v.VoiceType==='Neural' && v.Locale.startsWith('en')).slice(0,200).forEach(v=>{
-                            const opt = document.createElement('option'); opt.value = v.ShortName; opt.textContent = `${v.DisplayName} (${v.Locale})`; voiceSelect.appendChild(opt);
+                            const opt = document.createElement('option');
+                            opt.value = v.ShortName;
+                            opt.textContent = `${v.DisplayName} (${v.Locale})`;
+                            voiceSelect.appendChild(opt);
                         });
-                        if (cur) voiceSelect.value = cur;
-                    }catch(e){ console.warn('Azure voices fetch failed', e); }
+                        if (currentValue) {
+                            voiceSelect.value = currentValue;
+                        }
+                        azureConfig.voice = voiceSelect.value;
+                    }catch(e){
+                        console.warn('Azure voices fetch failed', e);
+                        await populateVoiceSelectWithEdgeVoices();
+                    }
                 };
                 window.testTTS = async function(){
                     try{ await speakTextWithAzure('Hi! I am ready.'); }catch(e){ console.error(e); }
@@ -1236,7 +1280,110 @@ RESPONSE FORMAT:
                 };
                 window.toggleSubtitles = function(){}; // no-op placeholder
             }
-    
+
+            function getSelectedTTSProviderSetting() {
+                return azureConfig.provider || TTS_PROVIDERS.AUTO;
+            }
+
+            function resolveTTSProviderPreference() {
+                const setting = getSelectedTTSProviderSetting();
+                if (setting === TTS_PROVIDERS.AUTO) {
+                    return (azureConfig.key && azureConfig.region) ? TTS_PROVIDERS.AZURE : TTS_PROVIDERS.EDGE;
+                }
+                return setting;
+            }
+
+            async function loadEdgeVoices() {
+                if (edgeVoicesCache) {
+                    return edgeVoicesCache;
+                }
+
+                if (!edgeVoicesPromise) {
+                    edgeVoicesPromise = VoicesManager.create()
+                        .then(manager => {
+                            const voices = manager?.voices || [];
+                            edgeVoicesCache = voices;
+                            return voices;
+                        })
+                        .catch(error => {
+                            edgeVoicesPromise = null;
+                            throw error;
+                        });
+                }
+
+                return edgeVoicesPromise;
+            }
+
+            async function populateVoiceSelectWithEdgeVoices() {
+                const voiceSelect = document.getElementById('voiceSelect');
+                if (!voiceSelect) return false;
+
+                try {
+                    const voices = await loadEdgeVoices();
+                    if (!Array.isArray(voices) || voices.length === 0) {
+                        return false;
+                    }
+
+                    const currentValue = azureConfig.voice || voiceSelect.value;
+                    const englishVoices = voices.filter(v => v.Locale?.toLowerCase().startsWith('en'));
+                    const voiceList = englishVoices.length > 0 ? englishVoices : voices;
+                    const sortedVoices = [...voiceList].sort((a, b) => {
+                        const localeCompare = (a.Locale || '').localeCompare(b.Locale || '');
+                        if (localeCompare !== 0) return localeCompare;
+                        return (a.ShortName || '').localeCompare(b.ShortName || '');
+                    });
+
+                    voiceSelect.innerHTML = '';
+
+                    sortedVoices.forEach(voice => {
+                        const option = document.createElement('option');
+                        option.value = voice.ShortName;
+                        const display = voice.FriendlyName || voice.DisplayName || voice.ShortName;
+                        option.textContent = `${display} (${voice.Locale})`;
+                        voiceSelect.appendChild(option);
+                    });
+
+                    if (currentValue && sortedVoices.some(voice => voice.ShortName === currentValue)) {
+                        voiceSelect.value = currentValue;
+                    }
+
+                    azureConfig.voice = voiceSelect.value;
+                    return true;
+                } catch (error) {
+                    console.warn('Edge voices fetch failed', error);
+                    return false;
+                }
+            }
+
+            function formatSignedPercent(value) {
+                const rounded = Math.round(value);
+                const clamped = Math.max(-100, Math.min(100, rounded));
+                const sign = clamped >= 0 ? '+' : '';
+                return `${sign}${clamped}%`;
+            }
+
+            function formatSignedHz(value) {
+                const rounded = Math.round(value);
+                const clamped = Math.max(-300, Math.min(300, rounded));
+                const sign = clamped >= 0 ? '+' : '';
+                return `${sign}${clamped}Hz`;
+            }
+
+            function handleTTSProviderChange() {
+                const providerEl = document.getElementById('ttsProvider');
+                if (providerEl) {
+                    azureConfig.provider = providerEl.value || TTS_PROVIDERS.AUTO;
+                }
+
+                saveLLMSettings();
+                updateAzureConfig();
+                if (typeof window.refreshAzureVoices === 'function') {
+                    window.refreshAzureVoices();
+                }
+            }
+
+            window.handleTTSProviderChange = handleTTSProviderChange;
+
             async function loadDefaultVRM(){
                 try{
                     const url = './assets/models/AvatarSample_H.vrm';
@@ -1870,7 +2017,7 @@ RESPONSE FORMAT:
                     </speak>`;
 
                 console.log('🎭 Starting Azure SDK TTS with visemes');
-                isTTSPlaying = true;
+                setTTSPlayingState(true);
                 isProcessingTTS = true;
                 isUsingVisemes = true;
 
@@ -1931,7 +2078,7 @@ RESPONSE FORMAT:
 
                                 audioElement.onended = () => {
                                     URL.revokeObjectURL(audioUrl);
-                                    isTTSPlaying = false;
+                                    setTTSPlayingState(false);
                                     isProcessingTTS = false;
                                     isUsingVisemes = false;
 
@@ -1947,7 +2094,7 @@ RESPONSE FORMAT:
                             } else {
                                 console.error('❌ Speech SDK: Error synthesizing speech:', result.errorDetails);
                                 // Only stop on error
-                            isTTSPlaying = false;
+                            setTTSPlayingState(false);
                             isProcessingTTS = false;
                             isUsingVisemes = false;
                             stopTalkingAnimationForTTS();
@@ -1956,7 +2103,7 @@ RESPONSE FORMAT:
                         },
                         error => {
                             console.error('❌ Speech SDK: SpeakSsmlAsync error:', error);
-                            isTTSPlaying = false;
+                            setTTSPlayingState(false);
                             isProcessingTTS = false;
                             isUsingVisemes = false;
                             stopTalkingAnimationForTTS();
@@ -1992,8 +2139,9 @@ RESPONSE FORMAT:
                 if (currentTTSAudio) {
                     currentTTSAudio.pause();
                     currentTTSAudio.currentTime = 0;
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     ttsInputVolume = 0;
+                    stopTalkingAnimationForTTS();
                 }
 
                 // Create audio element and play
@@ -2001,7 +2149,7 @@ RESPONSE FORMAT:
                 currentTTSAudio.src = URL.createObjectURL(ttsResult.audioBlob);
                 currentTTSAudio.crossOrigin = 'anonymous';
 
-                isTTSPlaying = true;
+                setTTSPlayingState(true);
                 isProcessingTTS = true;
                 isUsingVisemes = true;
                 startTalkingAnimationForTTS();
@@ -2013,7 +2161,7 @@ RESPONSE FORMAT:
 
                 currentTTSAudio.onended = () => {
                     URL.revokeObjectURL(currentTTSAudio.src);
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     isProcessingTTS = false;
                     isUsingVisemes = false;
                     stopTalkingAnimationForTTS();
@@ -2027,7 +2175,7 @@ RESPONSE FORMAT:
 
                 currentTTSAudio.onerror = () => {
                     console.error('Azure TTS audio playback failed');
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     isProcessingTTS = false;
                     isUsingVisemes = false;
                     stopTalkingAnimationForTTS();
@@ -2503,19 +2651,19 @@ RESPONSE FORMAT:
                     u.rate = azureConfig.rate||1.0; u.pitch = Math.max(0, Math.min(2, ((azureConfig.pitch||0)+12)/24)); u.volume = azureConfig.volume||0.9;
                     u.onstart = ()=>{
                         console.log('🎤 Browser TTS started');
-                        isTTSPlaying = true;
+                        setTTSPlayingState(true);
                         isBrowserTTSActive = true;
                         startTalkingAnimationForTTS();
                         // TTS audio processing now handled by main animation loop
                     };
                     u.onend = ()=>{
-                        isTTSPlaying = false;
+                        setTTSPlayingState(false);
                         isBrowserTTSActive = false;
                         stopTalkingAnimationForTTS();
                         resolve();
                     };
                     u.onerror = ()=>{
-                        isTTSPlaying = false;
+                        setTTSPlayingState(false);
                         isBrowserTTSActive = false;
                         stopTalkingAnimationForTTS();
                         resolve();
@@ -2540,6 +2688,39 @@ RESPONSE FORMAT:
                 ttsAnalyser.connect(ttsAudioContext.destination);
 
                 // TTS audio processing now handled by main animation loop
+            }
+
+
+            // Dedicated interval to process TTS audio outside the render loop
+            function startTTSAudioProcessingLoop() {
+                if (ttsProcessingIntervalId) return;
+
+                ttsProcessingIntervalId = setInterval(() => {
+                    if (!isTTSPlaying) {
+                        stopTTSAudioProcessingLoop();
+                        return;
+                    }
+                    processTTSAudio();
+                }, TTS_PROCESS_INTERVAL_MS);
+            }
+
+            function stopTTSAudioProcessingLoop() {
+                if (ttsProcessingIntervalId) {
+                    clearInterval(ttsProcessingIntervalId);
+                    ttsProcessingIntervalId = null;
+                }
+            }
+
+            function setTTSPlayingState(playing) {
+                if (isTTSPlaying === playing) return;
+
+                isTTSPlaying = playing;
+
+                if (playing) {
+                    startTTSAudioProcessingLoop();
+                } else {
+                    stopTTSAudioProcessingLoop();
+                }
             }
 
             function processTTSAudio() {
@@ -3253,6 +3434,8 @@ RESPONSE FORMAT:
             let ttsInputVolume = 0;
             let currentTTSAudio = null;
             let isTTSPlaying = false;
+            const TTS_PROCESS_INTERVAL_MS = Math.round(1000 / 30); // ~30 Hz update cadence for TTS processing
+            let ttsProcessingIntervalId = null;
             let isProcessingTTS = false;
             let isBrowserTTSActive = false;
             let isUsingVisemes = false; // Flag to disable audio-reactive movement when using precise visemes
@@ -3436,9 +3619,14 @@ RESPONSE FORMAT:
                 if (document.getElementById('azureKey')) document.getElementById('azureKey').value = azureConfig.key;
                 if (document.getElementById('azureRegion')) document.getElementById('azureRegion').value = azureConfig.region;
                 if (document.getElementById('voiceSelect')) document.getElementById('voiceSelect').value = azureConfig.voice;
+                if (document.getElementById('ttsProvider')) document.getElementById('ttsProvider').value = azureConfig.provider || TTS_PROVIDERS.AUTO;
                 if (document.getElementById('ttsVolume')) document.getElementById('ttsVolume').value = azureConfig.volume;
                 if (document.getElementById('ttsPitch')) document.getElementById('ttsPitch').value = azureConfig.pitch;
                 if (document.getElementById('ttsRate')) document.getElementById('ttsRate').value = azureConfig.rate;
+
+                if (typeof window.refreshAzureVoices === 'function') {
+                    window.refreshAzureVoices();
+                }
 
             }
 
@@ -3919,6 +4107,7 @@ RESPONSE FORMAT:
                 if (document.getElementById('azureKey')) azureConfig.key = document.getElementById('azureKey').value;
                 if (document.getElementById('azureRegion')) azureConfig.region = document.getElementById('azureRegion').value;
                 if (document.getElementById('voiceSelect')) azureConfig.voice = document.getElementById('voiceSelect').value;
+                if (document.getElementById('ttsProvider')) azureConfig.provider = document.getElementById('ttsProvider').value || TTS_PROVIDERS.AUTO;
                 if (document.getElementById('ttsVolume')) azureConfig.volume = parseFloat(document.getElementById('ttsVolume').value) || 0.9;
                 if (document.getElementById('ttsPitch')) azureConfig.pitch = parseFloat(document.getElementById('ttsPitch').value) || 0;
                 if (document.getElementById('ttsRate')) azureConfig.rate = parseFloat(document.getElementById('ttsRate').value) || 1.0;
@@ -3964,7 +4153,7 @@ RESPONSE FORMAT:
                 if (isPlayingAudio || audioQueue.length === 0) return;
 
                 isPlayingAudio = true;
-                isTTSPlaying = true;
+                setTTSPlayingState(true);
 
                 // Start talking animation once at the beginning
                 startTalkingAnimationForTTS();
@@ -3985,7 +4174,7 @@ RESPONSE FORMAT:
                 // Queue is now empty - stop everything
                 isPlayingAudio = false;
                 isProcessingTTS = false;
-                isTTSPlaying = false;
+                setTTSPlayingState(false);
                 isUsingVisemes = false;
                 stopTalkingAnimationForTTS();
                 applyVisemeToVRM(vrm || currentVrm, 0, 0);
@@ -5655,18 +5844,51 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                     return;
                 }
 
-                // Try Azure TTS first, then fallback to browser TTS
-                if (azureConfig.key && azureConfig.region) {
+                const providerSetting = getSelectedTTSProviderSetting();
+                const canUseAzure = !!(azureConfig.key && azureConfig.region);
+                const attempts = [];
+
+                if (providerSetting === TTS_PROVIDERS.BROWSER) {
+                    attempts.push(TTS_PROVIDERS.BROWSER);
+                } else if (providerSetting === TTS_PROVIDERS.AZURE) {
+                    if (canUseAzure) {
+                        attempts.push(TTS_PROVIDERS.AZURE);
+                    } else {
+                        attempts.push(TTS_PROVIDERS.EDGE);
+                    }
+                } else if (providerSetting === TTS_PROVIDERS.EDGE) {
+                    attempts.push(TTS_PROVIDERS.EDGE);
+                } else {
+                    if (canUseAzure) attempts.push(TTS_PROVIDERS.AZURE);
+                    attempts.push(TTS_PROVIDERS.EDGE);
+                }
+
+                if (!attempts.includes(TTS_PROVIDERS.BROWSER)) {
+                    attempts.push(TTS_PROVIDERS.BROWSER);
+                }
+
+                for (const provider of attempts) {
                     try {
-                        await speakWithAzure(text);
-                        return;
+                        if (provider === TTS_PROVIDERS.AZURE) {
+                            await speakWithAzure(text);
+                            return;
+                        }
+                        if (provider === TTS_PROVIDERS.EDGE) {
+                            await speakWithEdgeTTS(text);
+                            return;
+                        }
+                        if (provider === TTS_PROVIDERS.BROWSER) {
+                            await speakWithBrowserTTS(text);
+                            return;
+                        }
                     } catch (error) {
-                        console.warn('Azure TTS failed, falling back to browser TTS:', error);
+                        console.warn(`${provider} TTS failed, trying next option:`, error);
                     }
                 }
-                
-                // Fallback to browser's built-in TTS
-                await speakWithBrowserTTS(text);
+
+                console.error('All TTS providers failed; no speech played');
+                isProcessingTTS = false;
+                updateButtonStates();
             }
 
             async function speakWithAzure(text) {
@@ -5690,29 +5912,114 @@ Make the character interesting and unique. No extra text, just the JSON.`;
                 if (currentTTSAudio) {
                     currentTTSAudio.pause();
                     currentTTSAudio.currentTime = 0;
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     ttsInputVolume = 0;
+                    stopTalkingAnimationForTTS();
                 }
                 
                 // Create audio element and play
                 const audioUrl = URL.createObjectURL(ttsResult.audioBlob);
                 currentTTSAudio = new Audio(audioUrl);
-                
+
                 // Store the text for speech bubble display
                 currentTTSAudio.setAttribute('data-text', text);
-                
+
                 // Setup audio processing for VRM mouth movement
                 setupTTSAudioProcessing(currentTTSAudio);
-                
+
+                isBrowserTTSActive = false;
+                setTTSPlayingState(true);
+                currentTTSAudio.onplay = () => {
+                    startTalkingAnimationForTTS();
+                };
                 await currentTTSAudio.play();
-                
-                currentTTSAudio.onended = () => {
+
+                const handleAzurePlaybackEnd = () => {
                     URL.revokeObjectURL(audioUrl);
-                    isTTSPlaying = false;
+                    setTTSPlayingState(false);
                     ttsInputVolume = 0;
                     isProcessingTTS = false;
                     updateButtonStates();
+                    stopTalkingAnimationForTTS();
                 };
+
+                currentTTSAudio.onended = handleAzurePlaybackEnd;
+                currentTTSAudio.onerror = (event) => {
+                    console.error('Azure TTS audio playback error', event);
+                    handleAzurePlaybackEnd();
+                };
+            }
+
+            async function speakWithEdgeTTS(text) {
+                // Stop any currently playing TTS
+                if (currentTTSAudio) {
+                    currentTTSAudio.pause();
+                    currentTTSAudio.currentTime = 0;
+                    setTTSPlayingState(false);
+                    ttsInputVolume = 0;
+                }
+
+                const voiceName = azureConfig.voice || 'en-US-JennyNeural';
+                const rateOffsetPercent = ((azureConfig.rate || 1.0) - 1) * 100;
+                const pitchSemitones = azureConfig.pitch || 0;
+                const volumeOffsetPercent = ((azureConfig.volume ?? 0.9) - 1) * 100;
+
+                const communicate = new Communicate(text, {
+                    voice: voiceName,
+                    rate: formatSignedPercent(rateOffsetPercent),
+                    pitch: formatSignedHz(pitchSemitones * 12),
+                    volume: formatSignedPercent(volumeOffsetPercent)
+                });
+
+                const audioChunks = [];
+
+                for await (const chunk of communicate.stream()) {
+                    if (!chunk) continue;
+                    const type = typeof chunk.type === 'string' ? chunk.type.toLowerCase() : '';
+                    if (type === 'audio' && chunk.data) {
+                        audioChunks.push(chunk.data);
+                    }
+                }
+
+                if (audioChunks.length === 0) {
+                    throw new Error('Edge TTS returned no audio data');
+                }
+
+                const audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                currentTTSAudio = new Audio(audioUrl);
+                currentTTSAudio.setAttribute('data-text', text);
+
+                currentVisemeQueue = [];
+                isUsingVisemes = false;
+                isBrowserTTSActive = false;
+
+                setupTTSAudioProcessing(currentTTSAudio);
+
+                let playbackEnded = false;
+                const cleanupPlayback = () => {
+                    if (playbackEnded) return;
+                    playbackEnded = true;
+                    URL.revokeObjectURL(audioUrl);
+                    setTTSPlayingState(false);
+                    ttsInputVolume = 0;
+                    stopTalkingAnimationForTTS();
+                    isProcessingTTS = false;
+                    updateButtonStates();
+                };
+
+                currentTTSAudio.onplay = () => {
+                    startTalkingAnimationForTTS();
+                };
+
+                currentTTSAudio.onended = cleanupPlayback;
+                currentTTSAudio.onerror = (event) => {
+                    console.error('Edge TTS audio playback error', event);
+                    cleanupPlayback();
+                };
+
+                setTTSPlayingState(true);
+                await currentTTSAudio.play();
             }
 
 
